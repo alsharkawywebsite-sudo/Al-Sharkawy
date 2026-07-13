@@ -383,6 +383,30 @@ function AdminProducts() {
               )}
             </div>
 
+            {formData.discount_type !== "none" && (
+              <div className="p-4 bg-gray-50 border border-gray-100 rounded-lg flex flex-col gap-1">
+                <h4 className="text-sm font-semibold text-gray-700">معاينة السعر بعد الخصم</h4>
+                <p className="text-xs text-gray-500">
+                  يقوم النظام بتقريب السعر النهائي ليكون بدون كسور لتسهيل الحساب (مثلاً: 14.5 تصبح 15).
+                </p>
+                <div className="mt-2 text-sm">
+                  {(() => {
+                    const base = sizes.length > 0 ? parseFloat(sizes[0].price || "0") : parseFloat(formData.base_price || "0");
+                    if (isNaN(base) || base <= 0) return <span className="text-red-500">أدخل السعر الأساسي أو سعر الحجم الأول للمعاينة.</span>;
+                    const val = parseFloat(formData.discount_value || "0");
+                    const type = formData.discount_type;
+                    const final = Math.round(Math.max(0, type === "percentage" ? base - (base * val) / 100 : base - val));
+                    return (
+                      <div className="flex gap-4 items-center">
+                        <div>السعر الأصلي: <span className="line-through text-gray-400">{base} ج.م</span></div>
+                        <div className="font-bold text-green-600">السعر النهائي بعد التقريب: {final} ج.م</div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
+
             <div className="border-t pt-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold">السعر والأحجام</h3>

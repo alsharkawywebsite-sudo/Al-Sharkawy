@@ -9,12 +9,12 @@ export function cn(...inputs: ClassValue[]) {
 export function calculateDiscountedPrice(price: number, discountType: "none" | "percentage" | "fixed" | null, discountValue: number | null): number {
   if (!discountType || discountType === "none" || !discountValue) return price;
   if (discountType === "percentage") {
-    return Math.max(0, price - (price * discountValue) / 100);
+    return Math.round(Math.max(0, price - (price * discountValue) / 100));
   }
   if (discountType === "fixed") {
-    return Math.max(0, price - discountValue);
+    return Math.round(Math.max(0, price - discountValue));
   }
-  return price;
+  return Math.round(price);
 }
 
 export function getProductDisplayPrice(product: Product, size?: ProductSize | null): { original: number; final: number; hasDiscount: boolean } {
