@@ -9,8 +9,6 @@ export function AdminSidebar({ onClose }: { onClose?: () => void }) {
     { name: "الفئات", path: "/admin/categories", icon: <Tags className="h-5 w-5" /> },
     { name: "المنتجات", path: "/admin/products", icon: <Utensils className="h-5 w-5" /> },
     { name: "العروض", path: "/admin/offers", icon: <Percent className="h-5 w-5" /> },
-    { name: "الطلبات", path: "/admin/orders", icon: <ShoppingBag className="h-5 w-5" /> },
-    { name: "الإعدادات", path: "/admin/settings", icon: <Settings className="h-5 w-5" /> },
   ];
 
   return (
