@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, Tags, Utensils, Percent, ShoppingBag, Settings, X } from "lucide-react";
+import { LayoutDashboard, Tags, Utensils, Percent, ShoppingBag, Settings, X, Home } from "lucide-react";
 
 export function AdminSidebar({ onClose }: { onClose?: () => void }) {
   const location = useLocation();
@@ -49,6 +49,16 @@ export function AdminSidebar({ onClose }: { onClose?: () => void }) {
           })}
         </ul>
       </nav>
+
+      <div className="p-4 mt-auto">
+        <Link
+          to="/"
+          className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-alabaster/70 hover:bg-white/10 hover:text-white"
+        >
+          <Home className="h-5 w-5" />
+          <span className="font-medium">الرجوع للموقع</span>
+        </Link>
+      </div>
     </aside>
   );
 }

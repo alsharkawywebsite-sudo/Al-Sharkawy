@@ -111,14 +111,15 @@ function AdminCategories() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.slug) {
-      toast.error("الاسم والرابط (slug) مطلوبان");
+    if (!formData.name) {
+      toast.error("الاسم مطلوب");
       return;
     }
     if (editingCat) {
       updateMut.mutate(formData);
     } else {
-      createMut.mutate(formData);
+      const newSlug = Date.now().toString();
+      createMut.mutate({ ...formData, slug: newSlug });
     }
   };
 
@@ -141,7 +142,6 @@ function AdminCategories() {
               <TableRow>
                 <TableHead className="text-right">الصورة</TableHead>
                 <TableHead className="text-right">الاسم</TableHead>
-                <TableHead className="text-right">الرابط (Slug)</TableHead>
                 <TableHead className="text-right">الترتيب</TableHead>
                 <TableHead className="text-right">إجراءات</TableHead>
               </TableRow>
@@ -163,7 +163,6 @@ function AdminCategories() {
                   )}
                 </TableCell>
                 <TableCell className="font-medium">{cat.name}</TableCell>
-                <TableCell>{cat.slug}</TableCell>
                 <TableCell>{cat.sort_order}</TableCell>
                 <TableCell>
                   <div className="flex gap-2">
@@ -205,17 +204,7 @@ function AdminCategories() {
                 placeholder="مثال: بيتزا"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="slug">الرابط (Slug) *</Label>
-              <Input
-                id="slug"
-                value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                placeholder="مثال: pizza"
-                dir="ltr"
-                className="text-left"
-              />
-            </div>
+
             <div className="space-y-2">
               <Label htmlFor="image_url">رابط الصورة (Image URL)</Label>
               <Input
