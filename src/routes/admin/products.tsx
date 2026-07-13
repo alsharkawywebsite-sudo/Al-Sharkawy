@@ -350,16 +350,7 @@ function AdminProducts() {
               />
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-              <div className="space-y-0.5">
-                <Label>حالة المنتج</Label>
-                <div className="text-sm text-gray-500">المنتج النشط يظهر في الموقع</div>
-              </div>
-              <Switch
-                checked={formData.is_active}
-                onCheckedChange={(c) => setFormData({ ...formData, is_active: c })}
-              />
-            </div>
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
