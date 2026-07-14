@@ -118,8 +118,8 @@ function OffersPage() {
               </div>
 
               <Link
-                to="/product/$id"
-                params={{ id: featuredOffer.product_id ?? featuredOffer.id }}
+                to="/offer/$id"
+                params={{ id: featuredOffer.id }}
                 className="block relative w-full md:w-1/2 lg:w-[40%] aspect-[4/3] md:aspect-auto overflow-hidden bg-cream shrink-0"
               >
                 {featuredOffer.image_url && (
@@ -135,8 +135,8 @@ function OffersPage() {
               <div className="flex flex-1 flex-col p-4 sm:p-6 md:p-8 justify-center">
                 <div className="flex-1">
                   <Link
-                    to="/product/$id"
-                    params={{ id: featuredOffer.product_id ?? featuredOffer.id }}
+                    to="/offer/$id"
+                    params={{ id: featuredOffer.id }}
                     className="hover:text-crimson transition-colors"
                   >
                     <h3 className="font-display text-lg sm:text-2xl font-semibold text-ink mb-2 leading-snug">
@@ -228,8 +228,8 @@ function OffersPage() {
                     </div>
 
                     <Link
-                      to="/product/$id"
-                      params={{ id: offer.product_id ?? offer.id }}
+                      to="/offer/$id"
+                      params={{ id: offer.id }}
                       className="block aspect-square w-full shrink-0 overflow-hidden bg-cream"
                     >
                       {offer.image_url && (
@@ -245,8 +245,8 @@ function OffersPage() {
                     <div className="flex flex-1 flex-col p-2.5 sm:p-3">
                       <div className="flex-1">
                         <Link
-                          to="/product/$id"
-                          params={{ id: offer.product_id ?? offer.id }}
+                          to="/offer/$id"
+                          params={{ id: offer.id }}
                           className="hover:text-crimson transition-colors"
                         >
                           <h3 className="font-display text-[12px] sm:text-base font-semibold text-ink mb-1 leading-snug">

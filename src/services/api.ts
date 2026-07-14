@@ -160,6 +160,16 @@ export async function getAdminOffers(): Promise<Offer[]> {
   return (data ?? []) as Offer[];
 }
 
+export async function getOfferById(id: string): Promise<Offer | null> {
+  const { data, error } = await supabase
+    .from("offers")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) throw error;
+  return (data as Offer | null) ?? null;
+}
+
 export async function createOffer(payload: Partial<Offer>): Promise<Offer> {
   const { data, error } = await supabase.from("offers").insert(payload).select().single();
   if (error) throw error;
@@ -199,6 +209,7 @@ export const api = {
   deleteProduct,
   getOffers,
   getAdminOffers,
+  getOfferById,
   createOffer,
   updateOffer,
   deleteOffer,

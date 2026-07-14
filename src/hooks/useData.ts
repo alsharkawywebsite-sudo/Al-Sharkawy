@@ -5,6 +5,7 @@ import {
   getMenuCategories,
   getMenuItems,
   getOffers,
+  getOfferById,
   getProductById,
 } from "@/services/api";
 
@@ -54,6 +55,15 @@ export function useProduct(id: string) {
   return useQuery({
     queryKey: ["product", id],
     queryFn: () => getProductById(id),
+    staleTime: FIVE_MINUTES,
+    enabled: Boolean(id),
+  });
+}
+
+export function useOffer(id: string) {
+  return useQuery({
+    queryKey: ["offer", id],
+    queryFn: () => getOfferById(id),
     staleTime: FIVE_MINUTES,
     enabled: Boolean(id),
   });
