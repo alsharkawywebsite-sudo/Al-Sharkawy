@@ -11,7 +11,16 @@ import { useFavorites } from "@/store/favorites";
 import type { Product } from "@/types";
 import { getProductDisplayPrice } from "@/lib/utils";
 
+type MenuSearch = {
+  category?: string;
+};
+
 export const Route = createFileRoute("/menu")({
+  validateSearch: (search: Record<string, unknown>): MenuSearch => {
+    return {
+      category: search.category as string | undefined,
+    };
+  },
   component: MenuPage,
 });
 
@@ -51,6 +60,7 @@ function MenuHero({ query, onQueryChange }: { query: string; onQueryChange: (v: 
 }
 
 function MenuPage() {
+  const { category: activeCategoryId } = Route.useSearch();
   const { data: menuCategories, isLoading: isCatLoading, isError: isCatErr } = useMenuCategories();
   const { data: menuItems, isLoading: isItemsLoading, isError: isItemsErr } = useMenuItems();
   const { addItem } = useCart();
@@ -87,9 +97,11 @@ function MenuPage() {
   };
 
   return (
-    <main className="min-h-screen bg-alabaster">
+    <main className="min-h-screen flex flex-col bg-alabaster">
       <Nav isDarkHero />
-      <MenuHero query={query} onQueryChange={setQuery} />
+      
+      <div className="flex-1 flex flex-col">
+        <MenuHero query={query} onQueryChange={setQuery} />
 
       {(isCatLoading || isItemsLoading) && (
         <div className="py-32 text-center text-ink/60">جاري التحميل...</div>
@@ -99,30 +111,43 @@ function MenuPage() {
       )}
 
       {!isCatLoading && !isItemsLoading && !isCatErr && !isItemsErr && (
-        <>
+        <div className="flex-1 flex flex-col">
           <div className="sticky top-16 sm:top-[72px] z-40 bg-alabaster/80 backdrop-blur-xl border-b border-black/5 shadow-sm">
             <div className="mx-auto max-w-7xl px-4 sm:px-6">
               <div className="flex overflow-x-auto hide-scrollbar py-3 gap-2">
-                {categories.map((cat, i) => (
-                  <a
+                <Link
+                  to="/menu"
+                  search={{}}
+                  className={`shrink-0 rounded-full px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold transition-colors ${
+                    !activeCategoryId
+                      ? "bg-crimson text-white shadow-md"
+                      : "bg-white text-ink/70 hover:bg-cream hover:text-crimson"
+                  }`}
+                >
+                  الكل
+                </Link>
+                {categories.map((cat) => (
+                  <Link
                     key={cat.id}
-                    href={`#cat-${cat.slug}`}
+                    to="/menu"
+                    search={{ category: cat.id }}
                     className={`shrink-0 rounded-full px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold transition-colors ${
-                      i === 0
+                      activeCategoryId === cat.id
                         ? "bg-crimson text-white shadow-md"
                         : "bg-white text-ink/70 hover:bg-cream hover:text-crimson"
                     }`}
                   >
                     {cat.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="bg-alabaster pb-20 pt-8">
+          <div className="bg-alabaster flex-1 pb-20 pt-8">
             <div className="mx-auto max-w-7xl px-4 sm:px-6">
               {categories.map((cat) => {
+                if (activeCategoryId && activeCategoryId !== cat.id) return null;
                 const catItems = filteredItems.filter((it) => it.category_id === cat.id);
                 if (catItems.length === 0) return null;
 
@@ -253,9 +278,10 @@ function MenuPage() {
               )}
             </div>
           </div>
-        </>
+        </div>
       )}
 
+      </div>
       <Footer />
     </main>
   );
