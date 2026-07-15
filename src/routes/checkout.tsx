@@ -324,10 +324,12 @@ function CheckoutForm() {
 
 function CheckoutPage() {
   return (
-    <main className="min-h-screen bg-alabaster">
+    <main className="min-h-screen bg-alabaster flex flex-col">
       <Nav isDarkHero />
       <CheckoutHero />
-      <CheckoutForm />
+      <div className="flex-1">
+        <CheckoutForm />
+      </div>
       <Footer />
     </main>
   );
