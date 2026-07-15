@@ -40,8 +40,10 @@ function getSnapshot(): CartLine[] {
   return cache;
 }
 
+const EMPTY_CART: CartLine[] = [];
+
 function getServerSnapshot(): CartLine[] {
-  return [];
+  return EMPTY_CART;
 }
 
 // Cross-tab sync.

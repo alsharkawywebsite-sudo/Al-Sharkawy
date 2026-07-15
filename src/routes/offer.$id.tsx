@@ -87,10 +87,13 @@ function OfferDetailPage() {
   const favorite = isFavorite(offer.id);
 
   const handleAdd = () => {
+    // order_items.product_id must reference products — never use offer.id.
+    // offer_sizes are not product_sizes; omit size FK to avoid 409 conflicts.
+    const linkedProductId = offer.product_id ?? null;
     addItem({
       key: activeSize ? `offer:${offer.id}:${activeSize.id}` : `offer:${offer.id}`,
-      productId: offer.id,
-      sizeId: activeSize?.id ?? null,
+      productId: linkedProductId ?? `offer:${offer.id}`,
+      sizeId: null,
       sizeName: activeSize?.name ?? null,
       title: offer.title,
       description: offer.description,

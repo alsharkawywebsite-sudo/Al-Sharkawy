@@ -60,3 +60,48 @@ export type CartLine = {
   unitPrice: number;
   quantity: number;
 };
+
+export type OrderStatus = "pending" | "confirmed" | "preparing" | "delivered" | "cancelled";
+
+export type Order = {
+  id: string;
+  user_id: string | null;
+  status: OrderStatus | string;
+  subtotal: number;
+  discount_total: number;
+  final_total: number;
+  notes: string | null;
+  created_at: string;
+};
+
+export type OrderItem = {
+  id: string;
+  order_id: string;
+  product_id: string;
+  product_size_id: string | null;
+  quantity: number;
+  unit_price: number;
+  discount_applied: number;
+};
+
+export type CheckoutCustomer = {
+  name: string;
+  phone: string;
+  address: string;
+  notes?: string;
+};
+
+export type CreateOrderPayload = {
+  customer: CheckoutCustomer;
+  items: Array<{
+    productId: string;
+    sizeId: string | null;
+    quantity: number;
+    unitPrice: number;
+    title?: string;
+    sizeName?: string | null;
+  }>;
+  subtotal: number;
+  deliveryFee: number;
+  discountTotal?: number;
+};

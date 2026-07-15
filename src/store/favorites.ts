@@ -36,7 +36,8 @@ function subscribe(l: () => void) {
 }
 
 const getSnapshot = () => cache;
-const getServerSnapshot = () => [] as string[];
+const EMPTY_FAVORITES: string[] = [];
+const getServerSnapshot = () => EMPTY_FAVORITES;
 
 if (typeof window !== "undefined") {
   window.addEventListener("storage", (event) => {

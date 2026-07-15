@@ -176,13 +176,13 @@ function CartContent() {
               </div>
             </div>
 
-            <button
-              type="button"
+            <Link
+              to="/checkout"
               className="w-full rounded-full bg-crimson py-3.5 text-sm font-semibold text-white transition-all hover:bg-crimson-deep shadow-md hover:shadow-elevated active:scale-95 flex items-center justify-center gap-2"
             >
               إتمام الطلب
               <ArrowRight className="h-4 w-4" />
-            </button>
+            </Link>
             <p className="mt-4 text-center text-[11px] text-ink/50">
               الأسعار شاملة ضريبة القيمة المضافة.
             </p>
