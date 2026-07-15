@@ -9,6 +9,7 @@ import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
 import type { ProductSize } from "@/types";
 import { getProductDisplayPrice } from "@/lib/utils";
+import { ProductDetailSkeleton } from "@/components/ProductCardSkeleton";
 export const Route = createFileRoute("/product/$id")({
   component: ProductPage,
 });
@@ -42,7 +43,9 @@ function ProductPage() {
     return (
       <main className="min-h-screen bg-alabaster flex flex-col">
         <Nav />
-        <div className="flex-1 grid place-items-center py-32 text-ink/60">جاري التحميل...</div>
+        <div className="flex-1">
+          <ProductDetailSkeleton />
+        </div>
         <Footer />
       </main>
     );
@@ -113,7 +116,7 @@ function ProductPage() {
             العودة
           </button>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 md:items-start">
             <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-cream shadow-sm ring-1 ring-black/5">
               <div className="absolute top-4 left-4 right-4 z-10 flex justify-between items-start pointer-events-none">
                 <div className="flex gap-2 flex-wrap">
@@ -201,7 +204,7 @@ function ProductPage() {
                 </div>
               )}
 
-              <div className="flex items-center gap-4 mt-auto">
+              <div className="flex items-center gap-4 mt-8">
                 <div className="flex items-center justify-between bg-white border border-black/10 rounded-full h-12 sm:h-14 w-32 px-1 shadow-sm">
                   <button
                     onClick={() => setQuantity((q) => Math.max(1, q - 1))}

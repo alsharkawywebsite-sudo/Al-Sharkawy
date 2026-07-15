@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { useCategories } from "@/hooks/useData";
+import { CategoryCardSkeleton } from "@/components/ProductCardSkeleton";
 
 export const Route = createFileRoute("/categories")({
   component: CategoriesPage,
@@ -51,7 +52,15 @@ function CategoriesPage() {
           </div>
 
           {isLoading ? (
-            <div className="py-16 text-center text-ink/60">جاري التحميل...</div>
+            <div
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+              role="status"
+              aria-label="جاري التحميل"
+            >
+              {Array.from({ length: 8 }, (_, i) => (
+                <CategoryCardSkeleton key={i} />
+              ))}
+            </div>
           ) : isError ? (
             <div className="py-16 text-center text-ink/60">تعذّر تحميل الفئات.</div>
           ) : (

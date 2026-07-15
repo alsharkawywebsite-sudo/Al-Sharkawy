@@ -8,6 +8,7 @@ import { useMenuItems } from "@/hooks/useData";
 import { useFavorites } from "@/store/favorites";
 import { useCart } from "@/store/cart";
 import type { Product } from "@/types";
+import { ProductCardSkeletonGrid } from "@/components/ProductCardSkeleton";
 
 export const Route = createFileRoute("/favorites")({
   component: FavoritesPage,
@@ -55,7 +56,7 @@ function FavoritesPage() {
           </div>
 
           {isLoading ? (
-            <div className="py-20 text-center text-ink/60">جاري التحميل...</div>
+            <ProductCardSkeletonGrid count={4} />
           ) : isError ? (
             <div className="py-20 text-center text-ink/60">تعذّر تحميل المفضلة.</div>
           ) : favorites.length > 0 ? (

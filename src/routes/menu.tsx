@@ -10,6 +10,8 @@ import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
 import type { Product } from "@/types";
 import { getProductDisplayPrice } from "@/lib/utils";
+import { ProductCardSkeletonGrid } from "@/components/ProductCardSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type MenuSearch = {
   category?: string;
@@ -103,11 +105,31 @@ function MenuPage() {
       <div className="flex-1 flex flex-col">
         <MenuHero query={query} onQueryChange={setQuery} />
 
-      {(isCatLoading || isItemsLoading) && (
-        <div className="py-32 text-center text-ink/60">جاري التحميل...</div>
-      )}
       {(isCatErr || isItemsErr) && (
         <div className="py-32 text-center text-ink/60">تعذّر تحميل القائمة.</div>
+      )}
+
+      {(isCatLoading || isItemsLoading) && !isCatErr && !isItemsErr && (
+        <div className="flex-1 flex flex-col">
+          <div className="sticky top-16 sm:top-[72px] z-40 bg-alabaster/80 backdrop-blur-xl border-b border-black/5 shadow-sm">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6">
+              <div className="flex overflow-x-auto hide-scrollbar py-3 gap-2">
+                {Array.from({ length: 5 }, (_, i) => (
+                  <Skeleton key={i} className="h-9 w-20 shrink-0 rounded-full bg-black/10" />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="bg-alabaster flex-1 pb-20 pt-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6">
+              <Skeleton className="mb-5 mx-auto h-7 w-36 bg-black/10" />
+              <ProductCardSkeletonGrid
+                count={8}
+                className="grid grid-cols-2 gap-2.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4"
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       {!isCatLoading && !isItemsLoading && !isCatErr && !isItemsErr && (

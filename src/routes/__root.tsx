@@ -13,6 +13,10 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 
+/** Google Fonts stylesheet — `display=swap` avoids invisible text (FOIT) while fonts load. */
+const GOOGLE_FONTS_HREF =
+  "https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap";
+
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -96,10 +100,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap",
-      },
+      // Preload font CSS early; apply non-blocking with display=swap in RootShell.
+      { rel: "preload", as: "style", href: GOOGLE_FONTS_HREF },
     ],
   }),
   shellComponent: RootShell,
@@ -113,6 +115,16 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="ar" dir="rtl">
       <head>
         <HeadContent />
+        {/* media=print = non-blocking; script flips to all when ready. URL includes display=swap. */}
+        <link rel="stylesheet" href={GOOGLE_FONTS_HREF} media="print" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var h=${JSON.stringify(GOOGLE_FONTS_HREF)};document.querySelectorAll('link[rel="stylesheet"][href="'+h+'"]').forEach(function(l){function a(){l.media="all"}l.addEventListener("load",a);if(l.sheet)a()});})();`,
+          }}
+        />
+        <noscript>
+          <link rel="stylesheet" href={GOOGLE_FONTS_HREF} />
+        </noscript>
       </head>
       <body>
         {children}

@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useOffer } from "@/hooks/useData";
 import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
+import { ProductDetailSkeleton } from "@/components/ProductCardSkeleton";
 
 export const Route = createFileRoute("/offer/$id")({
   component: OfferDetailPage,
@@ -35,7 +36,9 @@ function OfferDetailPage() {
     return (
       <main className="min-h-screen bg-alabaster flex flex-col">
         <Nav />
-        <div className="flex-1 grid place-items-center py-32 text-ink/60">جاري التحميل...</div>
+        <div className="flex-1">
+          <ProductDetailSkeleton />
+        </div>
         <Footer />
       </main>
     );

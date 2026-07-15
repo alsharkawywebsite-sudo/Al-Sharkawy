@@ -10,6 +10,10 @@ import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
 import type { Product } from "@/types";
 import { getProductDisplayPrice } from "@/lib/utils";
+import {
+  CategoryCardSkeletonGrid,
+  ProductCardSkeletonGrid,
+} from "@/components/ProductCardSkeleton";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -90,9 +94,6 @@ function Hero() {
 function CategoriesSection() {
   const { data: categories, isLoading, isError } = useCategories();
 
-  if (isLoading) {
-    return <div className="py-20 text-center text-ink/60">جاري التحميل...</div>;
-  }
   if (isError) {
     return <div className="py-20 text-center text-ink/60">تعذّر تحميل الفئات.</div>;
   }
@@ -115,6 +116,9 @@ function CategoriesSection() {
           </Link>
         </div>
 
+        {isLoading ? (
+          <CategoryCardSkeletonGrid count={6} />
+        ) : (
         <div className="grid grid-cols-3 gap-2.5 sm:gap-4 md:grid-cols-6">
           {safeCategories.map((c) => (
             <Link
@@ -141,6 +145,7 @@ function CategoriesSection() {
             </Link>
           ))}
         </div>
+        )}
       </div>
     </section>
   );
@@ -151,9 +156,6 @@ function FeaturedSection() {
   const { addItem } = useCart();
   const { isFavorite, toggle } = useFavorites();
 
-  if (isLoading) {
-    return <div className="py-20 text-center text-ink/60">جاري التحميل...</div>;
-  }
   if (isError) {
     return <div className="py-20 text-center text-ink/60">تعذّر تحميل الأطباق.</div>;
   }
@@ -198,6 +200,11 @@ function FeaturedSection() {
           </Link>
         </div>
 
+        {isLoading ? (
+          <div className="mt-6">
+            <ProductCardSkeletonGrid count={4} />
+          </div>
+        ) : (
         <div className="mt-6 grid grid-cols-2 gap-2.5 sm:gap-5 md:grid-cols-4">
           {safeFeatured.map((p) => {
             const size = p.product_sizes?.[0];
@@ -308,6 +315,7 @@ function FeaturedSection() {
             );
           })}
         </div>
+        )}
       </div>
     </section>
   );

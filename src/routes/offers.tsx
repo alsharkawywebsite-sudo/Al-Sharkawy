@@ -7,6 +7,8 @@ import { useOffers } from "@/hooks/useData";
 import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
 import type { Offer } from "@/types";
+import { ProductCardSkeletonGrid } from "@/components/ProductCardSkeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const Route = createFileRoute("/offers")({
   component: OffersPage,
@@ -25,7 +27,29 @@ function OffersPage() {
     return (
       <main className="min-h-screen bg-alabaster flex flex-col">
         <Nav />
-        <div className="flex-1 grid place-items-center py-20 text-ink/60">جاري التحميل...</div>
+        <div className="flex-1 bg-alabaster pb-20 pt-28">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6">
+            <Skeleton className="mb-5 mx-auto h-7 w-40 bg-black/10" />
+            <div className="mb-12 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+              <div className="flex flex-col md:flex-row">
+                <Skeleton className="aspect-[4/3] w-full rounded-none bg-black/10 md:aspect-square md:w-1/2 lg:aspect-[4/3] lg:w-[40%]" />
+                <div className="flex flex-1 flex-col gap-3 p-4 sm:p-6 md:p-8">
+                  <Skeleton className="h-7 w-3/4 bg-black/10" />
+                  <Skeleton className="h-4 w-full bg-black/10" />
+                  <Skeleton className="h-4 w-5/6 bg-black/10" />
+                  <div className="mt-auto flex items-end justify-between border-t border-black/5 pt-4">
+                    <Skeleton className="h-10 w-28 bg-black/10" />
+                    <Skeleton className="h-11 w-32 rounded-full bg-black/10" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <ProductCardSkeletonGrid
+              count={4}
+              className="grid grid-cols-2 gap-2.5 sm:gap-5 md:grid-cols-3 lg:grid-cols-4"
+            />
+          </div>
+        </div>
         <Footer />
       </main>
     );
@@ -97,7 +121,7 @@ function OffersPage() {
             </h2>
 
             <article className="group relative flex flex-col md:flex-row overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated">
-              <div className="pointer-events-none absolute inset-x-2 top-2 sm:inset-x-3 sm:top-3 z-10 flex items-start justify-between">
+              <div className="pointer-events-none absolute inset-x-2 top-2 sm:inset-x-3 sm:top-3 md:inset-x-auto md:right-0 md:left-auto md:w-1/2 lg:w-[40%] md:px-3 z-10 flex items-start justify-between">
                 <div className="flex gap-1 flex-wrap">
                   {featuredOffer.discount_value != null && (
                     <div className="pointer-events-auto flex items-center gap-1 rounded-full bg-crimson/95 py-1 px-3 shadow-sm">
@@ -122,7 +146,7 @@ function OffersPage() {
               <Link
                 to="/offer/$id"
                 params={{ id: featuredOffer.id }}
-                className="block relative w-full md:w-1/2 lg:w-[40%] aspect-[4/3] md:aspect-auto overflow-hidden bg-cream shrink-0"
+                className="block relative w-full md:w-1/2 lg:w-[40%] aspect-[4/3] md:aspect-square lg:aspect-[4/3] overflow-hidden bg-cream shrink-0"
               >
                 {featuredOffer.image_url && (
                   <img
