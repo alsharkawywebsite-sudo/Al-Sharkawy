@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
-import heroGrill from "@/assets/hero-grill.jpg";
+import heroGrill from "@/assets/hero-grill.webp";
 import { useCart } from "@/store/cart";
 
 export const Route = createFileRoute("/cart")({

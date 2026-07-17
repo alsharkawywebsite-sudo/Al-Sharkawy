@@ -1,4 +1,4 @@
-import logoAsset from "@/assets/logo.jpg";
+import logoAsset from "@/assets/logo.webp";
 
 export function Footer() {
   return (

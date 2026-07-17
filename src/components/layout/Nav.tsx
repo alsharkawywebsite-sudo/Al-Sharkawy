@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Menu, ShoppingBag, Heart } from "lucide-react";
-import logoAsset from "@/assets/logo.jpg";
+import logoAsset from "@/assets/logo.webp";
 import { Link } from "@tanstack/react-router";
 import { useCart } from "@/store/cart";
 

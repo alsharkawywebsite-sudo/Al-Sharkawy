@@ -4,7 +4,7 @@ import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { Search, Star, Heart, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
-import heroGrill from "@/assets/hero-grill.jpg";
+import heroGrill from "@/assets/hero-grill.webp";
 import { useMenuCategories, useMenuItems } from "@/hooks/useData";
 import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";

@@ -3,7 +3,7 @@ import { FormEvent, useState } from "react";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { ArrowRight, CheckCircle2, ClipboardList, Loader2 } from "lucide-react";
-import heroGrill from "@/assets/hero-grill.jpg";
+import heroGrill from "@/assets/hero-grill.webp";
 import { useCart } from "@/store/cart";
 import { createOrder } from "@/services/api";
 import { notifyNewOrder } from "@/lib/notify-order.functions";

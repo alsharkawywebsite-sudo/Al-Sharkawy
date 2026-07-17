@@ -4,7 +4,7 @@ import { Search, ChevronLeft, Star, Heart, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
-import heroGrill from "@/assets/hero-grill.jpg";
+import heroGrill from "@/assets/hero-grill.webp";
 import { useCategories, useFeaturedProducts } from "@/hooks/useData";
 import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
@@ -28,8 +28,8 @@ function Hero() {
         <img
           src={heroGrill}
           alt=""
-          width={1600}
-          height={1280}
+          width={1200}
+          height={960}
           className="h-full w-full object-cover object-center opacity-60"
         />
         <div className="absolute inset-0 bg-linear-to-l from-charcoal/95 via-charcoal/70 to-charcoal/30" />
