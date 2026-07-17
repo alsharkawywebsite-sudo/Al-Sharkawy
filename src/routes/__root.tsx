@@ -87,13 +87,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "مطعم الشرقاوي — كفتة وكباب مشوي على الفحم، حواوشي، وكبدة إسكندراني بأعلى جودة. تجربة مشويات مصرية أصيلة تحت إشراف خبراء الشوي.",
       },
       { name: "author", content: "El-Sharkawy" },
-      { property: "og:title", content: "الشرقاوي | El-Sharkawy — مشويات مصرية أصيلة" },
+      { property: "og:title", content: "الشرقاوي" },
       {
         property: "og:description",
-        content: "كفتة، كباب، حواوشي، وكبدة إسكندراني على الفحم. تجربة مشويات مصرية فاخرة.",
+        content: "مطعم الشرقاوي - أفضل المشويات المصرية الأصيلة على الفحم.",
       },
+      { property: "og:image", content: "/og-image.png" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "الشرقاوي" },
+      {
+        name: "twitter:description",
+        content: "مطعم الشرقاوي - أفضل المشويات المصرية الأصيلة على الفحم.",
+      },
+      { name: "twitter:image", content: "/og-image.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
