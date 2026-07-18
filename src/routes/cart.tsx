@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Minus, Plus, Trash2, ShoppingBag, ArrowRight } from "lucide-react";
 import heroGrill from "@/assets/hero-grill.webp";
 import { useCart } from "@/store/cart";
+import { useSiteSettings } from "@/hooks/useData";
 
 export const Route = createFileRoute("/cart")({
   component: CartPage,
@@ -36,11 +37,12 @@ function CartHero() {
   );
 }
 
-const DELIVERY_FEE = 35;
-
 function CartContent() {
   const { items, subtotal, updateQuantity, removeItem } = useCart();
-  const total = subtotal + (items.length > 0 ? DELIVERY_FEE : 0);
+  const { data: settings } = useSiteSettings();
+  const deliveryMessage = settings?.delivery_message;
+  
+  const total = subtotal; // Delivery fee is calculated later
 
   if (items.length === 0) {
     return (
@@ -66,7 +68,7 @@ function CartContent() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:py-16">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-        <div className="lg:col-span-8 flex flex-col gap-4">
+        <div className="lg:col-span-7 flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-black/5 pb-4 mb-2">
             <h2 className="font-display text-xl font-semibold text-ink">مراجعة الطلبات</h2>
             <span className="text-sm font-semibold text-ink/60">
@@ -146,7 +148,7 @@ function CartContent() {
           </div>
         </div>
 
-        <div className="lg:col-span-4">
+        <div className="lg:col-span-5">
           <div className="sticky top-24 rounded-3xl bg-white p-6 shadow-card ring-1 ring-black/5">
             <h2 className="font-display text-lg font-semibold text-ink mb-6">ملخص الطلب</h2>
 
@@ -157,14 +159,19 @@ function CartContent() {
                   {toArabicDigits(subtotal)} <span className="text-[10px] text-ink/70">ج.م</span>
                 </div>
               </div>
-              <div className="flex justify-between items-center text-ink/80">
+              <div className="flex justify-between items-start text-ink/80 text-sm">
                 <span>رسوم التوصيل</span>
-                <div className="font-display font-semibold text-ink">
-                  {toArabicDigits(DELIVERY_FEE)}{" "}
-                  <span className="text-[10px] text-ink/70">ج.م</span>
-                </div>
+                <span className="text-left max-w-[60%] text-xs text-ink/60 leading-relaxed">
+                  تُحدد في خطوة الدفع حسب المسافة
+                </span>
               </div>
             </div>
+
+            {deliveryMessage && (
+              <div className="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-100 text-xs text-amber-900 leading-relaxed">
+                {deliveryMessage}
+              </div>
+            )}
 
             <hr className="my-6 border-black/5" />
 
@@ -195,10 +202,12 @@ function CartContent() {
 
 function CartPage() {
   return (
-    <main className="min-h-screen bg-alabaster">
+    <main className="min-h-screen flex flex-col bg-alabaster">
       <Nav isDarkHero />
-      <CartHero />
-      <CartContent />
+      <div className="flex-1 flex flex-col">
+        <CartHero />
+        <CartContent />
+      </div>
       <Footer />
     </main>
   );

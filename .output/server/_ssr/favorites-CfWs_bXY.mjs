@@ -1,4 +1,4 @@
-import { n as __toESM } from "../_runtime.mjs";
+import { r as __toESM } from "../_runtime.mjs";
 import { u as require_react } from "../_libs/@floating-ui/react-dom+[...].mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/favorites-CfWs_bXY.js
 var import_react = /* @__PURE__ */ __toESM(require_react());

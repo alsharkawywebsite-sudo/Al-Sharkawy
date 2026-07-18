@@ -1,6 +1,6 @@
 import { A as require_jsx_runtime } from "../_libs/@radix-ui/react-alert-dialog+[...].mjs";
 import { g as Link, v as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
-import { C as ChevronLeft, n as Utensils, t as X, u as Percent, v as House, y as Heart } from "../_libs/lucide-react.mjs";
+import { T as ChevronLeft, b as House, f as Percent, n as Utensils, t as X, x as Heart } from "../_libs/lucide-react.mjs";
 import { t as Footer } from "./Footer-Bpr8tAUF.mjs";
 //#region node_modules/.nitro/vite/services/ssr/assets/site-menu-HDF0Ya9p.js
 var import_jsx_runtime = require_jsx_runtime();

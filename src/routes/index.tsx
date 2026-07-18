@@ -323,11 +323,13 @@ function FeaturedSection() {
 
 function Index() {
   return (
-    <main className="min-h-screen bg-alabaster">
+    <main className="min-h-screen flex flex-col bg-alabaster">
       <Nav isDarkHero />
-      <Hero />
-      <CategoriesSection />
-      <FeaturedSection />
+      <div className="flex-1 flex flex-col">
+        <Hero />
+        <CategoriesSection />
+        <FeaturedSection />
+      </div>
       <Footer />
     </main>
   );

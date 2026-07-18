@@ -317,8 +317,8 @@ function CheckoutPage() {
   return (
     <main className="min-h-screen bg-alabaster flex flex-col">
       <Nav isDarkHero />
-      <CheckoutHero />
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col">
+        <CheckoutHero />
         <CheckoutForm />
       </div>
       <Footer />
