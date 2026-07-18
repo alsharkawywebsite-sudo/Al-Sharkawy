@@ -6,6 +6,7 @@ import { ArrowRight, CheckCircle2, ClipboardList, Loader2 } from "lucide-react";
 import heroGrill from "@/assets/hero-grill.webp";
 import { useCart } from "@/store/cart";
 import { createOrder } from "@/services/api";
+import { useSiteSettings } from "@/hooks/useData";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,7 +23,7 @@ function toArabicDigits(n: number): string {
     .replace(/\d/g, (d) => arabicDigits[Number(d)]);
 }
 
-const DELIVERY_FEE = 35;
+const DELIVERY_FEE = 0;
 
 function CheckoutHero() {
   return (
@@ -85,6 +86,12 @@ function CheckoutForm() {
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submittedOrderId, setSubmittedOrderId] = useState<string | null>(null);
+  
+  const { data: settings } = useSiteSettings();
+  const deliveryMessage = settings?.delivery_message;
+  const deliveryFeeMin = settings?.delivery_fee_min;
+  const deliveryFeeMax = settings?.delivery_fee_max;
+  const showDeliveryRange = deliveryFeeMin && deliveryFeeMax;
 
   if (submittedOrderId) {
     return <OrderSuccess orderId={submittedOrderId} />;
@@ -260,12 +267,16 @@ function CheckoutForm() {
                   {toArabicDigits(subtotal)} <span className="text-[10px] text-ink/70">ج.م</span>
                 </div>
               </div>
-              <div className="flex justify-between items-center text-ink/80">
-                <span>رسوم التوصيل</span>
-                <div className="font-display font-semibold text-ink">
-                  {toArabicDigits(DELIVERY_FEE)} <span className="text-[10px] text-ink/70">ج.م</span>
+              {deliveryMessage && (
+                <div className="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-100 text-sm text-amber-900 leading-relaxed">
+                  <p>{deliveryMessage}</p>
+                  {showDeliveryRange && (
+                    <p className="mt-2 font-medium">
+                      عادةً تكون رسوم التوصيل بين {toArabicDigits(Number(deliveryFeeMin))} و {toArabicDigits(Number(deliveryFeeMax))} جنيه.
+                    </p>
+                  )}
                 </div>
-              </div>
+              )}
             </div>
 
             <hr className="my-5 border-black/5" />

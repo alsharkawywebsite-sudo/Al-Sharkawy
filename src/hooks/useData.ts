@@ -68,3 +68,11 @@ export function useOffer(id: string) {
     enabled: Boolean(id),
   });
 }
+
+export function useSiteSettings() {
+  return useQuery({
+    queryKey: ["siteSettings"],
+    queryFn: () => import("@/services/api").then((m) => m.getSiteSettings()),
+    staleTime: FIVE_MINUTES,
+  });
+}

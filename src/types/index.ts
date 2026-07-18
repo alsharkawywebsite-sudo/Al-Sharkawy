@@ -1,5 +1,11 @@
 export * from "./database.types";
 
+export type SiteSetting = {
+  key: string;
+  value: string | null;
+  updated_at: string;
+};
+
 export type Category = {
   id: string;
   name: string;

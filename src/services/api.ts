@@ -270,6 +270,24 @@ export async function getAdminOrders(): Promise<Order[]> {
   return (data ?? []) as Order[];
 }
 
+// ---- Settings -------------------------------------------------------------
+
+export async function getSiteSettings(): Promise<Record<string, string>> {
+  const { data, error } = await supabase.from("site_settings").select("*");
+  if (error) throw error;
+  return (data ?? []).reduce((acc: Record<string, string>, curr: any) => {
+    if (curr.value !== null) acc[curr.key] = curr.value;
+    return acc;
+  }, {});
+}
+
+export async function updateSiteSetting(key: string, value: string): Promise<void> {
+  const { error } = await supabase
+    .from("site_settings")
+    .upsert({ key, value, updated_at: new Date().toISOString() });
+  if (error) throw error;
+}
+
 // Convenience aggregate for callers already using the previous `api.*` surface.
 export const api = {
   getCategories,
@@ -292,4 +310,6 @@ export const api = {
   deleteOffer,
   createOrder,
   getAdminOrders,
+  getSiteSettings,
+  updateSiteSetting,
 };
