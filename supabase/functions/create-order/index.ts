@@ -194,6 +194,9 @@ serve(async (req) => {
     }
 
     const deliveryFee = Number(payload.deliveryFee) || 0;
+    if (!Number.isFinite(deliveryFee) || deliveryFee < 0) {
+      throw new Error("رسوم التوصيل غير صالحة");
+    }
     const serverFinalTotal = serverSubtotal + deliveryFee;
 
     // 2) Insert order

@@ -20,17 +20,7 @@ function OfferDetailPage() {
   const { addItem } = useCart();
   const { isFavorite, toggle } = useFavorites();
 
-  const [selectedSizeId, setSelectedSizeId] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
-
-  const sizes = useMemo(
-    () => (offer?.offer_sizes ?? []).filter((s) => s.is_active !== false),
-    [offer],
-  );
-  const activeSize = useMemo(
-    () => (selectedSizeId ? sizes.find((s) => s.id === selectedSizeId) : sizes[0]) ?? null,
-    [selectedSizeId, sizes],
-  );
 
   if (isLoading) {
     return (
@@ -82,9 +72,9 @@ function OfferDetailPage() {
     );
   }
 
-  // السعر: لو فيه حجم مختار ياخد سعره، غير كده ياخد new_price
+  // السعر: يأخذ new_price أو يعتمد على الخصم
   const basePrice = Number(offer.new_price ?? offer.discount_value ?? 0);
-  const unitPrice = activeSize ? Number(activeSize.price) : basePrice;
+  const unitPrice = basePrice;
   const originalPrice = offer.old_price != null ? Number(offer.old_price) : null;
   const hasDiscount = originalPrice != null && originalPrice > unitPrice;
   const favorite = isFavorite(offer.id);
@@ -94,10 +84,10 @@ function OfferDetailPage() {
     // offer_sizes are not product_sizes; omit size FK to avoid 409 conflicts.
     const linkedProductId = offer.product_id ?? null;
     addItem({
-      key: activeSize ? `offer:${offer.id}:${activeSize.id}` : `offer:${offer.id}`,
+      key: `offer:${offer.id}`,
       productId: linkedProductId ?? `offer:${offer.id}`,
       sizeId: null,
-      sizeName: activeSize?.name ?? null,
+      sizeName: null,
       title: offer.title,
       description: offer.description,
       imageUrl: offer.image_url,
@@ -193,27 +183,7 @@ function OfferDetailPage() {
                 </p>
               )}
 
-              {sizes.length > 0 && (
-                <div className="mb-8">
-                  <h2 className="text-sm font-semibold text-ink mb-3">اختر الحجم:</h2>
-                  <div className="grid grid-cols-3 gap-3">
-                    {sizes.map((size) => (
-                      <button
-                        key={size.id}
-                        onClick={() => setSelectedSizeId(size.id)}
-                        className={`py-3 px-4 rounded-xl border text-sm sm:text-base font-medium transition-all duration-200 ${
-                          activeSize?.id === size.id
-                            ? "border-crimson bg-crimson/5 text-crimson shadow-sm"
-                            : "border-black/10 bg-white text-ink/70 hover:border-black/20 hover:bg-black/[0.02]"
-                        }`}
-                      >
-                        <div>{size.name}</div>
-                        <div className="text-xs opacity-70 mt-0.5">{size.price} ج.م</div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+
 
               <div className="flex items-center gap-4 mt-auto">
                 <div className="flex items-center justify-between bg-white border border-black/10 rounded-full h-12 sm:h-14 w-32 px-1 shadow-sm">
