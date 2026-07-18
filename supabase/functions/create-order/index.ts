@@ -195,8 +195,8 @@ serve(async (req) => {
       };
       await sendTelegramMessage(formatOrderHtml(telegramPayload));
     } catch (telegramErr) {
-      console.error("[telegram] error:", telegramErr);
-      // We don't throw here to ensure the client gets the success response even if Telegram fails
+      console.error("[telegram] internal error:", telegramErr);
+      throw new Error("تعذر تأكيد الطلب في الوقت الحالي. يُرجى المحاولة مرة أخرى بعد قليل، أو التواصل مع المطعم مباشرة إذا كان الطلب عاجلًا.");
     }
 
     return new Response(JSON.stringify(order), {
