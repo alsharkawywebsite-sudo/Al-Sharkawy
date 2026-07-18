@@ -6,7 +6,6 @@ import { ArrowRight, CheckCircle2, ClipboardList, Loader2 } from "lucide-react";
 import heroGrill from "@/assets/hero-grill.webp";
 import { useCart } from "@/store/cart";
 import { createOrder } from "@/services/api";
-import { notifyNewOrder } from "@/lib/notify-order.functions";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -143,25 +142,6 @@ function CheckoutForm() {
         items: orderItems,
         subtotal,
         deliveryFee: DELIVERY_FEE,
-      });
-
-      // Fire-and-forget: must not delay or break checkout UX.
-      void notifyNewOrder({
-        data: {
-          orderId: order.id,
-          customer,
-          items: items.map((item) => ({
-            title: item.title,
-            sizeName: item.sizeName,
-            quantity: item.quantity,
-            unitPrice: item.unitPrice,
-          })),
-          subtotal,
-          deliveryFee: DELIVERY_FEE,
-          finalTotal: subtotal + DELIVERY_FEE,
-        },
-      }).catch((err) => {
-        console.error("[telegram] notify call failed:", err);
       });
 
       clear();

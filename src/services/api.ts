@@ -247,97 +247,18 @@ function toError(err: unknown, fallback: string): Error {
 }
 
 export async function createOrder(payload: CreateOrderPayload): Promise<Order> {
-  if (!payload.items.length) {
-    throw new Error("السلة فارغة");
+  const { data, error } = await supabase.functions.invoke("create-order", {
+    body: payload,
+  });
+
+  if (error) {
+    throw toError(error, "تعذر إنشاء الطلب");
+  }
+  if (data && data.error) {
+    throw new Error(data.error);
   }
 
-  const finalTotal = payload.subtotal + payload.deliveryFee - (payload.discountTotal ?? 0);
-
-  // 1) Create parent order first and wait for the returned id.
-  const { data: order, error } = await supabase
-    .from("orders")
-    .insert({
-      status: "pending",
-      subtotal: payload.subtotal,
-      discount_total: payload.discountTotal ?? 0,
-      final_total: finalTotal,
-      notes: formatOrderNotes(payload),
-    })
-    .select()
-    .single();
-  if (error) throw toError(error, "تعذر إنشاء الطلب");
-  if (!order?.id) throw new Error("تعذر إنشاء الطلب: لم يُرجع رقم الطلب");
-
-  const orderId = (order as Order).id;
-
-  // 2) Validate FKs against live rows (stale cart size ids / offer ids must not 409).
-  const candidateProductIds = [
-    ...new Set(
-      payload.items
-        .map((item) => asUuidOrNull(item.productId))
-        .filter((id): id is string => Boolean(id)),
-    ),
-  ];
-  const candidateSizeIds = [
-    ...new Set(
-      payload.items
-        .map((item) => asUuidOrNull(item.sizeId))
-        .filter((id): id is string => Boolean(id)),
-    ),
-  ];
-
-  const validProductIds = new Set<string>();
-  if (candidateProductIds.length > 0) {
-    const { data: products, error: productsError } = await supabase
-      .from("products")
-      .select("id")
-      .in("id", candidateProductIds);
-    if (productsError) {
-      await supabase.from("orders").delete().eq("id", orderId);
-      throw toError(productsError, "تعذر التحقق من المنتجات");
-    }
-    for (const row of products ?? []) validProductIds.add((row as { id: string }).id);
-  }
-
-  const validSizeIds = new Set<string>();
-  if (candidateSizeIds.length > 0) {
-    const { data: sizes, error: sizesError } = await supabase
-      .from("product_sizes")
-      .select("id")
-      .in("id", candidateSizeIds);
-    if (sizesError) {
-      await supabase.from("orders").delete().eq("id", orderId);
-      throw toError(sizesError, "تعذر التحقق من أحجام المنتجات");
-    }
-    for (const row of sizes ?? []) validSizeIds.add((row as { id: string }).id);
-  }
-
-  const rows = payload.items
-    .map((item) => {
-      const productId = asUuidOrNull(item.productId);
-      if (!productId || !validProductIds.has(productId)) return null;
-      const sizeId = asUuidOrNull(item.sizeId);
-      return {
-        order_id: orderId,
-        product_id: productId,
-        product_size_id: sizeId && validSizeIds.has(sizeId) ? sizeId : null,
-        quantity: item.quantity,
-        unit_price: item.unitPrice,
-        discount_applied: 0,
-      };
-    })
-    .filter((row): row is NonNullable<typeof row> => row != null);
-
-  // Offer-only carts (no linked product) still succeed — details live in notes.
-  if (rows.length > 0) {
-    const { error: itemsError } = await supabase.from("order_items").insert(rows);
-    if (itemsError) {
-      await supabase.from("orders").delete().eq("id", orderId);
-      throw toError(itemsError, "تعذر حفظ أصناف الطلب");
-    }
-  }
-
-  return order as Order;
+  return data as Order;
 }
 
 export async function getAdminOrders(): Promise<Order[]> {

@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-DGeXAQPT.js";var t=e();function n(){return(0,t.jsx)(`div`,{className:`bg-white rounded-3xl p-4 lg:p-8 shadow-sm ring-1 ring-black/5 min-h-[400px] flex items-center justify-center`,children:(0,t.jsx)(`h2`,{className:`text-xl lg:text-2xl font-semibold text-ink/40`,children:`صفحة الإعدادات - قريباً`})})}export{n as component};
