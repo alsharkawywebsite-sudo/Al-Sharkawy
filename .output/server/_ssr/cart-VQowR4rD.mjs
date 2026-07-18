@@ -5,7 +5,7 @@ import { c as useSiteSettings } from "./useData-DckFcT4d.mjs";
 import { t as Footer } from "./Footer-Bpr8tAUF.mjs";
 import { n as useCart, t as Nav } from "./Nav-CSTrzMem.mjs";
 import { t as hero_grill_default } from "./hero-grill-II9PeXys.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/cart-Co9pEHi6.js
+//#region node_modules/.nitro/vite/services/ssr/assets/cart-VQowR4rD.js
 var import_jsx_runtime = require_jsx_runtime();
 var arabicDigits = "٠١٢٣٤٥٦٧٨٩";
 function toArabicDigits(n) {
@@ -40,6 +40,9 @@ function CartContent() {
 	const { items, subtotal, updateQuantity, removeItem } = useCart();
 	const { data: settings } = useSiteSettings();
 	const deliveryMessage = settings?.delivery_message;
+	const deliveryFeeMin = settings?.delivery_fee_min;
+	const deliveryFeeMax = settings?.delivery_fee_max;
+	const showDeliveryRange = deliveryFeeMin && deliveryFeeMax;
 	const total = subtotal;
 	if (items.length === 0) return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 		className: "mx-auto max-w-7xl px-4 py-20 sm:px-6 flex flex-col items-center text-center",
@@ -181,9 +184,18 @@ function CartContent() {
 								})]
 							})]
 						}),
-						deliveryMessage && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+						deliveryMessage && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 							className: "mt-4 p-4 rounded-xl bg-amber-50 border border-amber-100 text-xs text-amber-900 leading-relaxed",
-							children: deliveryMessage
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: deliveryMessage }), showDeliveryRange && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+								className: "mt-2 font-medium",
+								children: [
+									"عادةً تكون رسوم التوصيل بين ",
+									toArabicDigits(Number(deliveryFeeMin)),
+									" و ",
+									toArabicDigits(Number(deliveryFeeMax)),
+									" جنيه."
+								]
+							})]
 						}),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsx)("hr", { className: "my-6 border-black/5" }),
 						/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {

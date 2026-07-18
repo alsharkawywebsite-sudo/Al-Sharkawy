@@ -8,10 +8,10 @@ import { t as Toaster } from "../_libs/sonner.mjs";
 import { t as Route$16 } from "./menu-83GlP62k.mjs";
 import { t as Route$17 } from "./offer._id-BWUmwPt3.mjs";
 import { t as Route$18 } from "./product._id-DlEBp5HS.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BuTUXfXS.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-DcNS-I1A.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
-var styles_default = "/assets/styles-DPAhThbk.css";
+var styles_default = "/assets/styles-D8_9UpAF.css";
 function reportLovableError(error, context = {}) {
 	if (typeof window === "undefined") return;
 	window.__lovableEvents?.captureException?.(error, {
@@ -227,7 +227,7 @@ var $$splitComponentImporter$11 = () => import("./checkout-Bxu-W7UN.mjs");
 var Route$11 = createFileRoute("/checkout")({ component: lazyRouteComponent($$splitComponentImporter$11, "component") });
 var $$splitComponentImporter$10 = () => import("./categories-DlXu2E-1.mjs");
 var Route$10 = createFileRoute("/categories")({ component: lazyRouteComponent($$splitComponentImporter$10, "component") });
-var $$splitComponentImporter$9 = () => import("./cart-Co9pEHi6.mjs");
+var $$splitComponentImporter$9 = () => import("./cart-VQowR4rD.mjs");
 var Route$9 = createFileRoute("/cart")({ component: lazyRouteComponent($$splitComponentImporter$9, "component") });
 var $$splitComponentImporter$8 = () => import("./admin-D9HoJFNR.mjs");
 var Route$8 = createFileRoute("/admin")({ component: lazyRouteComponent($$splitComponentImporter$8, "component") });

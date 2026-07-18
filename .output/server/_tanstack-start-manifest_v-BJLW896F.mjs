@@ -1,4 +1,4 @@
-//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-DjdMFRPC.js
+//#region node_modules/.nitro/vite/services/ssr/assets/_tanstack-start-manifest_v-BJLW896F.js
 var tsrStartManifest = () => ({ routes: {
 	__root__: {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/__root.tsx",
@@ -16,7 +16,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/product/$id"
 		],
 		preloads: [
-			"/assets/index-vN5WtgqR.js",
+			"/assets/index-BCI7DZkB.js",
 			"/assets/jsx-runtime-DUAcabCT.js",
 			"/assets/link-Chech-jk.js",
 			"/assets/useMatch-B_IwaUwo.js",
@@ -27,14 +27,14 @@ var tsrStartManifest = () => ({ routes: {
 		scripts: [{ attrs: {
 			type: "module",
 			async: !0,
-			src: "/assets/index-vN5WtgqR.js"
+			src: "/assets/index-BCI7DZkB.js"
 		} }]
 	},
 	"/": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/index.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/routes-Bkzep4Jr.js",
+			"/assets/routes-C8VGnrCF.js",
 			"/assets/utils-Bci9Q4ml.js",
 			"/assets/chevron-left-Y-cDMoGL.js",
 			"/assets/Footer-DHuFbEA2.js",
@@ -44,7 +44,7 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/star-CJG5wAAy.js",
 			"/assets/hero-grill-BIOIBlO6.js",
 			"/assets/ProductCardSkeleton-I5dEwBIU.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/admin": {
@@ -59,8 +59,8 @@ var tsrStartManifest = () => ({ routes: {
 			"/admin/"
 		],
 		preloads: [
-			"/assets/admin-BF6W_Zt9.js",
-			"/assets/supabase-CzAxyyEi.js",
+			"/assets/admin-CePXnHct.js",
+			"/assets/supabase-B940qf-u.js",
 			"/assets/createLucideIcon-CLQ5Hlf7.js",
 			"/assets/house-C1S32NKb.js",
 			"/assets/menu-qdMJRAqW.js",
@@ -73,7 +73,7 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/cart.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/cart-CoEq8Hnu.js",
+			"/assets/cart-ibJy52xs.js",
 			"/assets/arrow-right-BYJBTyyP.js",
 			"/assets/Footer-DHuFbEA2.js",
 			"/assets/minus-Bs8HAfvJ.js",
@@ -81,55 +81,55 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/Nav-BfCC3Ft8.js",
 			"/assets/trash-2-BSJfMgI6.js",
 			"/assets/hero-grill-BIOIBlO6.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/categories": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/categories.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/categories-Bpu1TtgI.js",
+			"/assets/categories-Dqtpzyct.js",
 			"/assets/Footer-DHuFbEA2.js",
 			"/assets/search-BXY5cBIP.js",
 			"/assets/Nav-BfCC3Ft8.js",
 			"/assets/ProductCardSkeleton-I5dEwBIU.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/checkout": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/checkout.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/checkout-CKdjwHe5.js",
+			"/assets/checkout-B-D-ucXx.js",
 			"/assets/label-RfF-47H6.js",
-			"/assets/api-pssV7lZU.js",
+			"/assets/api-D8rIMqlZ.js",
 			"/assets/utils-Bci9Q4ml.js",
 			"/assets/createLucideIcon-CLQ5Hlf7.js",
 			"/assets/arrow-right-BYJBTyyP.js",
 			"/assets/Footer-DHuFbEA2.js",
 			"/assets/Nav-BfCC3Ft8.js",
 			"/assets/hero-grill-BIOIBlO6.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/favorites": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/favorites.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/favorites-DQh80bna.js",
+			"/assets/favorites-DmIcrRpV.js",
 			"/assets/Footer-DHuFbEA2.js",
 			"/assets/Nav-BfCC3Ft8.js",
 			"/assets/favorites-C_BKFID0.js",
 			"/assets/star-CJG5wAAy.js",
 			"/assets/ProductCardSkeleton-I5dEwBIU.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/menu": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/menu.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/menu-CnGkSrs9.js",
+			"/assets/menu-B5VcQKmC.js",
 			"/assets/utils-Bci9Q4ml.js",
 			"/assets/Footer-DHuFbEA2.js",
 			"/assets/search-BXY5cBIP.js",
@@ -138,19 +138,19 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/star-CJG5wAAy.js",
 			"/assets/hero-grill-BIOIBlO6.js",
 			"/assets/ProductCardSkeleton-I5dEwBIU.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/offers": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/offers.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/offers-tSOfmYIT.js",
+			"/assets/offers-6nBxn0OU.js",
 			"/assets/Footer-DHuFbEA2.js",
 			"/assets/Nav-BfCC3Ft8.js",
 			"/assets/favorites-C_BKFID0.js",
 			"/assets/ProductCardSkeleton-I5dEwBIU.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/site-menu": {
@@ -169,10 +169,10 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/admin/categories.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/categories-BZBPVp4P.js",
-			"/assets/table-DfXME_J6.js",
+			"/assets/categories-2nBD_Hrk.js",
+			"/assets/table-Mg_VAtWC.js",
 			"/assets/label-RfF-47H6.js",
-			"/assets/api-pssV7lZU.js",
+			"/assets/api-D8rIMqlZ.js",
 			"/assets/plus-AFfXUG-X.js",
 			"/assets/trash-2-BSJfMgI6.js"
 		]
@@ -180,17 +180,17 @@ var tsrStartManifest = () => ({ routes: {
 	"/admin/login": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/admin/login.tsx",
 		children: void 0,
-		preloads: ["/assets/login-gM7EJQ6K.js"]
+		preloads: ["/assets/login-CEJMPCsz.js"]
 	},
 	"/admin/offers": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/admin/offers.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/offers-BRG5TRkG.js",
-			"/assets/select-DunHm1Dy.js",
-			"/assets/table-DfXME_J6.js",
+			"/assets/offers-CLVi2-Yp.js",
+			"/assets/select-tjaOsil3.js",
+			"/assets/table-Mg_VAtWC.js",
 			"/assets/label-RfF-47H6.js",
-			"/assets/api-pssV7lZU.js",
+			"/assets/api-D8rIMqlZ.js",
 			"/assets/utils-Bci9Q4ml.js",
 			"/assets/plus-AFfXUG-X.js",
 			"/assets/trash-2-BSJfMgI6.js"
@@ -205,11 +205,11 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/admin/products.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/products-BAaQ8WiB.js",
-			"/assets/select-DunHm1Dy.js",
-			"/assets/table-DfXME_J6.js",
+			"/assets/products-Dc_Z2cSJ.js",
+			"/assets/select-tjaOsil3.js",
+			"/assets/table-Mg_VAtWC.js",
 			"/assets/label-RfF-47H6.js",
-			"/assets/api-pssV7lZU.js",
+			"/assets/api-D8rIMqlZ.js",
 			"/assets/plus-AFfXUG-X.js",
 			"/assets/trash-2-BSJfMgI6.js"
 		]
@@ -218,16 +218,16 @@ var tsrStartManifest = () => ({ routes: {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/admin/settings.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/settings-CNoWW0zX.js",
-			"/assets/api-pssV7lZU.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/settings-iAddY_1S.js",
+			"/assets/api-D8rIMqlZ.js",
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/offer/$id": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/offer.$id.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/offer._id-CTQKPu61.js",
+			"/assets/offer._id-8VpKR_kw.js",
 			"/assets/arrow-right-BYJBTyyP.js",
 			"/assets/Footer-DHuFbEA2.js",
 			"/assets/minus-Bs8HAfvJ.js",
@@ -235,14 +235,14 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/Nav-BfCC3Ft8.js",
 			"/assets/favorites-C_BKFID0.js",
 			"/assets/ProductCardSkeleton-I5dEwBIU.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/product/$id": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/product.$id.tsx",
 		children: void 0,
 		preloads: [
-			"/assets/product._id-VVBlhWGP.js",
+			"/assets/product._id-B1qeeWCn.js",
 			"/assets/utils-Bci9Q4ml.js",
 			"/assets/arrow-right-BYJBTyyP.js",
 			"/assets/Footer-DHuFbEA2.js",
@@ -252,13 +252,13 @@ var tsrStartManifest = () => ({ routes: {
 			"/assets/favorites-C_BKFID0.js",
 			"/assets/star-CJG5wAAy.js",
 			"/assets/ProductCardSkeleton-I5dEwBIU.js",
-			"/assets/useData-BBI-st6g.js"
+			"/assets/useData-CfMpbeMb.js"
 		]
 	},
 	"/admin/": {
 		filePath: "/home/omsa/Downloads/project-guardian-main/src/routes/admin/index.tsx",
 		children: void 0,
-		preloads: ["/assets/admin-P3WIBcij.js", "/assets/api-pssV7lZU.js"]
+		preloads: ["/assets/admin-CQpX-5wN.js", "/assets/api-D8rIMqlZ.js"]
 	}
 } });
 //#endregion

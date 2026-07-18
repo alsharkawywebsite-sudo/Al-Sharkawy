@@ -41,6 +41,9 @@ function CartContent() {
   const { items, subtotal, updateQuantity, removeItem } = useCart();
   const { data: settings } = useSiteSettings();
   const deliveryMessage = settings?.delivery_message;
+  const deliveryFeeMin = settings?.delivery_fee_min;
+  const deliveryFeeMax = settings?.delivery_fee_max;
+  const showDeliveryRange = deliveryFeeMin && deliveryFeeMax;
   
   const total = subtotal; // Delivery fee is calculated later
 
@@ -169,7 +172,12 @@ function CartContent() {
 
             {deliveryMessage && (
               <div className="mt-4 p-4 rounded-xl bg-amber-50 border border-amber-100 text-xs text-amber-900 leading-relaxed">
-                {deliveryMessage}
+                <p>{deliveryMessage}</p>
+                {showDeliveryRange && (
+                  <p className="mt-2 font-medium">
+                    عادةً تكون رسوم التوصيل بين {toArabicDigits(Number(deliveryFeeMin))} و {toArabicDigits(Number(deliveryFeeMax))} جنيه.
+                  </p>
+                )}
               </div>
             )}
 
