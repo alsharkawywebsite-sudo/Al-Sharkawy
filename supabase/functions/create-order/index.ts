@@ -123,17 +123,92 @@ serve(async (req) => {
       throw new Error("السلة فارغة");
     }
 
-    const finalTotal = payload.subtotal + payload.deliveryFee - (payload.discountTotal ?? 0);
+    // 1) Validate items & Calculate totals
+    const candidateProductIds = [...new Set(payload.items.map((i: any) => asUuidOrNull(i.productId)).filter(Boolean))];
+    const candidateSizeIds = [...new Set(payload.items.map((i: any) => asUuidOrNull(i.sizeId)).filter(Boolean))];
 
-    // 1) Insert order
+    if (candidateProductIds.length === 0) throw new Error("السلة فارغة أو الأصناف غير صالحة");
+
+    const { data: productsData } = await supabase
+      .from("products")
+      .select("id, name, base_price, is_active, discount_type, discount_value")
+      .in("id", candidateProductIds);
+    const productMap = new Map(productsData?.map((p: any) => [p.id, p]) || []);
+
+    let sizesData: any[] = [];
+    if (candidateSizeIds.length > 0) {
+      const res = await supabase
+        .from("product_sizes")
+        .select("id, product_id, name, price, is_active")
+        .in("id", candidateSizeIds);
+      sizesData = res.data || [];
+    }
+    const sizeMap = new Map(sizesData.map((s: any) => [s.id, s]));
+
+    let serverSubtotal = 0;
+    const validItems: any[] = [];
+
+    for (const item of payload.items) {
+      const productId = asUuidOrNull(item.productId);
+      if (!productId) throw new Error("معرف المنتج غير صالح");
+      
+      const product = productMap.get(productId);
+      if (!product) throw new Error("المنتج غير موجود");
+      if (product.is_active === false) throw new Error(`المنتج غير متاح: ${product.name}`);
+
+      let originalPrice = product.base_price || 0;
+      let sizeName = null;
+      let sizeId = asUuidOrNull(item.sizeId);
+
+      if (sizeId) {
+        const size = sizeMap.get(sizeId);
+        if (!size) throw new Error("الحجم غير موجود");
+        if (size.product_id !== productId) throw new Error("الحجم لا يتبع لهذا المنتج");
+        if (size.is_active === false) throw new Error(`الحجم غير متاح: ${size.name}`);
+        originalPrice = size.price;
+        sizeName = size.name;
+      }
+
+      let unitPrice = originalPrice;
+      if (product.discount_type && product.discount_type !== "none" && product.discount_value) {
+        if (product.discount_type === "percentage") {
+          unitPrice = Math.round(Math.max(0, originalPrice - (originalPrice * product.discount_value) / 100));
+        } else if (product.discount_type === "fixed") {
+          unitPrice = Math.round(Math.max(0, originalPrice - product.discount_value));
+        }
+      }
+      
+      const quantity = Math.max(1, parseInt(item.quantity) || 1);
+      
+      serverSubtotal += unitPrice * quantity;
+      
+      validItems.push({
+        product_id: productId,
+        product_size_id: sizeId,
+        quantity: quantity,
+        unitPrice: unitPrice, 
+        discount_applied: (originalPrice - unitPrice) * quantity,
+        title: product.name,
+        sizeName: sizeName
+      });
+    }
+
+    const deliveryFee = Number(payload.deliveryFee) || 0;
+    const serverFinalTotal = serverSubtotal + deliveryFee;
+
+    // 2) Insert order
     const { data: order, error } = await supabase
       .from("orders")
       .insert({
         status: "pending",
-        subtotal: payload.subtotal,
-        discount_total: payload.discountTotal ?? 0,
-        final_total: finalTotal,
-        notes: formatOrderNotes(payload),
+        subtotal: serverSubtotal,
+        discount_total: 0,
+        final_total: serverFinalTotal,
+        notes: formatOrderNotes({
+          customer: payload.customer,
+          deliveryFee: deliveryFee,
+          items: validItems
+        }),
       })
       .select()
       .single();
@@ -143,37 +218,15 @@ serve(async (req) => {
 
     const orderId = order.id;
 
-    // 2) Validate FKs
-    const candidateProductIds = [...new Set(payload.items.map((i: any) => asUuidOrNull(i.productId)).filter(Boolean))];
-    const candidateSizeIds = [...new Set(payload.items.map((i: any) => asUuidOrNull(i.sizeId)).filter(Boolean))];
-
-    const validProductIds = new Set<string>();
-    if (candidateProductIds.length > 0) {
-      const { data: products } = await supabase.from("products").select("id").in("id", candidateProductIds);
-      for (const row of products ?? []) validProductIds.add(row.id);
-    }
-
-    const validSizeIds = new Set<string>();
-    if (candidateSizeIds.length > 0) {
-      const { data: sizes } = await supabase.from("product_sizes").select("id").in("id", candidateSizeIds);
-      for (const row of sizes ?? []) validSizeIds.add(row.id);
-    }
-
-    const rows = payload.items
-      .map((item: any) => {
-        const productId = asUuidOrNull(item.productId);
-        if (!productId || !validProductIds.has(productId)) return null;
-        const sizeId = asUuidOrNull(item.sizeId);
-        return {
-          order_id: orderId,
-          product_id: productId,
-          product_size_id: sizeId && validSizeIds.has(sizeId) ? sizeId : null,
-          quantity: item.quantity,
-          unit_price: item.unitPrice,
-          discount_applied: 0,
-        };
-      })
-      .filter(Boolean);
+    // 3) Insert order_items
+    const rows = validItems.map((item: any) => ({
+      order_id: orderId,
+      product_id: item.product_id,
+      product_size_id: item.product_size_id,
+      quantity: item.quantity,
+      unit_price: item.unitPrice,
+      discount_applied: item.discount_applied,
+    }));
 
     if (rows.length > 0) {
       const { error: itemsError } = await supabase.from("order_items").insert(rows);
@@ -183,15 +236,15 @@ serve(async (req) => {
       }
     }
 
-    // 3) Send Telegram
+    // 4) Send Telegram
     try {
       const telegramPayload = {
         orderId,
         customer: payload.customer,
-        items: payload.items,
-        subtotal: payload.subtotal,
-        deliveryFee: payload.deliveryFee,
-        finalTotal,
+        items: validItems,
+        subtotal: serverSubtotal,
+        deliveryFee: deliveryFee,
+        finalTotal: serverFinalTotal,
       };
       await sendTelegramMessage(formatOrderHtml(telegramPayload));
     } catch (telegramErr) {

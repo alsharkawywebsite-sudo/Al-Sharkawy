@@ -1,38 +1,47 @@
-import { createFileRoute, redirect, Outlet, useLocation } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useLocation, useRouter } from "@tanstack/react-router";
 import { supabase } from "@/lib/supabase";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/admin")({
-  beforeLoad: async ({ location }) => {
-    if (location.pathname === "/admin/login") {
-      return;
-    }
-    
-    // Skip auth check on server side because localStorage is not available in SSR
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    
-    if (!session) {
-      throw redirect({ to: "/admin/login" });
-    }
-  },
   component: AdminLayout,
 });
 
 function AdminLayout() {
   const location = useLocation();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const isLoginPage = location.pathname === "/admin/login";
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!mounted) return;
+      if (isLoginPage && user) {
+        router.navigate({ to: "/admin", replace: true });
+      } else if (!isLoginPage && !user) {
+        router.navigate({ to: "/admin/login", replace: true });
+      } else {
+        setIsAuthChecked(true);
+      }
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [isLoginPage, router]);
 
   if (isLoginPage) {
     return <Outlet />;
+  }
+
+  if (!isAuthChecked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-alabaster">
+        <div className="text-xl text-ink/50">جاري التحقق...</div>
+      </div>
+    );
   }
 
   // Determine title from path
