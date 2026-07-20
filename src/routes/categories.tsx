@@ -70,6 +70,7 @@ function CategoriesPage() {
                   <Link
                     key={c.id}
                     to="/menu"
+                    search={{ category: c.id }}
                     className="group flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-black/5 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-crimson/10"
                   >
                     <div className="aspect-square w-full overflow-hidden p-2 sm:p-3 bg-white">
