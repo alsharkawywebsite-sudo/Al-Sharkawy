@@ -16,7 +16,7 @@ export function Footer() {
           </div>
         </div>
         <p className="text-xs text-muted-foreground">
-          © {new Date().getFullYear()} الشرقاوي · بيت المشويات المصرية الأصيلة
+          © {new Date().getFullYear()} الشرقاوي · الطعم الأصلي
         </p>
       </div>
     </footer>
