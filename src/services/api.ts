@@ -76,6 +76,33 @@ export async function getAdminProducts(): Promise<Product[]> {
 }
 
 export async function getFeaturedProducts(): Promise<Product[]> {
+  const { data: setting } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "featured_products")
+    .maybeSingle();
+
+  let ids: string[] = [];
+  if (setting?.value) {
+    try {
+      ids = JSON.parse(setting.value);
+    } catch {}
+  }
+
+  if (ids.length > 0) {
+    const { data, error } = await supabase
+      .from("products")
+      .select(PRODUCT_SELECT)
+      .in("id", ids)
+      .eq("is_active", true);
+    if (error) throw error;
+    // Keep order
+    return ids
+      .map((id) => data.find((p) => p.id === id))
+      .filter(Boolean) as Product[];
+  }
+
+  // Fallback
   const { data, error } = await supabase
     .from("products")
     .select(PRODUCT_SELECT)

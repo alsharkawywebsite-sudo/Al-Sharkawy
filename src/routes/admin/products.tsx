@@ -38,8 +38,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Edit2, Trash2, Plus, X } from "lucide-react";
+import { Edit2, Trash2, Plus, X, Star } from "lucide-react";
 import { toast } from "sonner";
+import { useSiteSettings } from "@/hooks/useData";
 
 export const Route = createFileRoute("/admin/products")({
   component: AdminProducts,
@@ -55,11 +56,16 @@ function AdminProducts() {
     queryKey: ["adminCategories"],
     queryFn: api.getCategories,
   });
+  const { data: settings, refetch: refetchSettings } = useSiteSettings();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isFeaturedOpen, setIsFeaturedOpen] = useState(false);
   const [editingProd, setEditingProd] = useState<any>(null);
   const [deletingProd, setDeletingProd] = useState<any>(null);
+
+  // Featured State
+  const [selectedFeatured, setSelectedFeatured] = useState<string[]>([]);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -163,6 +169,45 @@ function AdminProducts() {
     onError: (err: any) => toast.error(err.message || "حدث خطأ"),
   });
 
+  const handleOpenFeatured = () => {
+    if (settings?.featured_products) {
+      try {
+        const ids = JSON.parse(settings.featured_products);
+        setSelectedFeatured(Array.isArray(ids) ? ids : []);
+      } catch {
+        setSelectedFeatured([]);
+      }
+    } else {
+      setSelectedFeatured([]);
+    }
+    setIsFeaturedOpen(true);
+  };
+
+  const saveFeaturedMut = useMutation({
+    mutationFn: async (ids: string[]) => {
+      await api.updateSiteSetting("featured_products", JSON.stringify(ids));
+    },
+    onSuccess: () => {
+      toast.success("تم حفظ المنتجات المميزة بنجاح");
+      refetchSettings();
+      queryClient.invalidateQueries({ queryKey: ["featuredProducts"] });
+      setIsFeaturedOpen(false);
+    },
+    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+  });
+
+  const handleToggleFeatured = (id: string) => {
+    if (selectedFeatured.includes(id)) {
+      setSelectedFeatured(selectedFeatured.filter((pid) => pid !== id));
+    } else {
+      if (selectedFeatured.length >= 4) {
+        toast.error("يمكنك اختيار 4 منتجات كحد أقصى");
+        return;
+      }
+      setSelectedFeatured([...selectedFeatured, id]);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.category_id) {
@@ -206,10 +251,16 @@ function AdminProducts() {
     <div className="bg-white rounded-3xl p-4 lg:p-8 shadow-sm ring-1 ring-black/5 min-h-[400px]">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 className="text-xl lg:text-2xl font-semibold text-ink">إدارة المنتجات</h2>
-        <Button onClick={handleOpenCreate} className="gap-2 w-full sm:w-auto">
-          <Plus className="w-4 h-4" />
-          إضافة منتج
-        </Button>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <Button onClick={handleOpenFeatured} variant="outline" className="gap-2 w-full sm:w-auto">
+            <Star className="w-4 h-4 text-yellow-500" />
+            الأطباق المميزة
+          </Button>
+          <Button onClick={handleOpenCreate} className="gap-2 w-full sm:w-auto">
+            <Plus className="w-4 h-4" />
+            إضافة منتج
+          </Button>
+        </div>
       </div>
 
       {isLoadingProducts ? (
@@ -503,6 +554,59 @@ function AdminProducts() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Featured Products Dialog */}
+      <Dialog open={isFeaturedOpen} onOpenChange={setIsFeaturedOpen}>
+        <DialogContent dir="rtl" className="max-w-xl max-h-[90vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle>الأطباق المميزة (الرئيسية)</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 flex-1 overflow-y-auto">
+            <p className="text-sm text-gray-500 mb-4">
+              اختر 4 منتجات بحد أقصى لعرضها في الصفحة الرئيسية.
+              (تم اختيار {selectedFeatured.length} من 4)
+            </p>
+            <div className="space-y-2">
+              {products
+                .filter((p: any) => p.is_active)
+                .map((prod: any) => (
+                  <label
+                    key={prod.id}
+                    className="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                  >
+                    <Switch
+                      checked={selectedFeatured.includes(prod.id)}
+                      onCheckedChange={() => handleToggleFeatured(prod.id)}
+                    />
+                    {prod.image_url ? (
+                      <img
+                        src={prod.image_url}
+                        alt={prod.name}
+                        className="w-10 h-10 object-cover rounded"
+                      />
+                    ) : (
+                      <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-xs">
+                        بدون
+                      </div>
+                    )}
+                    <span className="font-medium flex-1">{prod.name}</span>
+                    <span className="text-sm text-gray-500">
+                      {categories.find((c: any) => c.id === prod.category_id)?.name}
+                    </span>
+                  </label>
+                ))}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              onClick={() => saveFeaturedMut.mutate(selectedFeatured)}
+              disabled={saveFeaturedMut.isPending}
+            >
+              {saveFeaturedMut.isPending ? "جاري الحفظ..." : "حفظ التغييرات"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
