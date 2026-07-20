@@ -45,6 +45,7 @@ export type Offer = {
   discount_type: "percentage" | "fixed" | null;
   discount_value: number | null;
   is_active: boolean | null;
+  is_featured?: boolean | null;
   product_id?: string | null;
   old_price?: number | null;
   new_price?: number | null;

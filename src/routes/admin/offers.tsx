@@ -74,6 +74,7 @@ function AdminOffers() {
     discount_type: "fixed",
     discount_value: "",
     is_active: true,
+    is_featured: false,
     product_id: "",
     old_price: "",
     new_price: "",
@@ -89,6 +90,7 @@ function AdminOffers() {
       discount_type: "none",
       discount_value: "",
       is_active: true,
+      is_featured: false,
       product_id: "",
       old_price: "",
       new_price: "",
@@ -112,6 +114,7 @@ function AdminOffers() {
       discount_type: offer.discount_type || "none",
       discount_value: offer.discount_value?.toString() || "",
       is_active: offer.is_active ?? true,
+      is_featured: offer.is_featured ?? false,
       product_id: offer.product_id || "",
       old_price: offer.old_price?.toString() || "",
       new_price: offer.new_price?.toString() || "",
@@ -246,6 +249,7 @@ function AdminOffers() {
       discount_type: formData.discount_type as "none" | "percentage" | "fixed",
       discount_value: formData.discount_type === "none" ? null : (formData.discount_value ? parseFloat(formData.discount_value) : null),
       is_active: formData.is_active,
+      is_featured: formData.is_featured,
       product_id: formData.product_id ? formData.product_id : null,
       old_price: formData.old_price ? parseFloat(formData.old_price) : null,
       new_price: formData.new_price ? parseFloat(formData.new_price) : null,
@@ -304,7 +308,14 @@ function AdminOffers() {
                         </div>
                       )}
                     </TableCell>
-                    <TableCell className="font-medium">{offer.title}</TableCell>
+                    <TableCell className="font-medium">
+                      {offer.title}
+                      {offer.is_featured && (
+                        <span className="ml-2 inline-flex items-center gap-1 bg-yellow-100 text-yellow-800 text-[10px] px-2 py-0.5 rounded-full font-bold">
+                          ⭐ مميز
+                        </span>
+                      )}
+                    </TableCell>
                     <TableCell>
                       {offer.new_price != null ? (
                         <div className="flex flex-col">
@@ -524,15 +535,33 @@ function AdminOffers() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between rounded-md border p-3">
-              <Label htmlFor="is_active" className="cursor-pointer">
-                العرض نشط
-              </Label>
-              <Switch
-                id="is_active"
-                checked={formData.is_active}
-                onCheckedChange={(v) => setFormData({ ...formData, is_active: v })}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center justify-between rounded-md border p-3">
+                <Label htmlFor="is_active" className="cursor-pointer">
+                  العرض نشط
+                </Label>
+                <Switch
+                  id="is_active"
+                  checked={formData.is_active}
+                  onCheckedChange={(v) => setFormData({ ...formData, is_active: v })}
+                />
+              </div>
+
+              <div className="flex flex-col justify-center rounded-md border p-3">
+                <div className="flex items-center justify-between mb-1">
+                  <Label htmlFor="is_featured" className="cursor-pointer">
+                    عرض مميز
+                  </Label>
+                  <Switch
+                    id="is_featured"
+                    checked={formData.is_featured}
+                    onCheckedChange={(v) => setFormData({ ...formData, is_featured: v })}
+                  />
+                </div>
+                <p className="text-[10px] text-gray-500 mt-1">
+                  يُفضّل اختيار عرض واحد فقط كعرض مميز ليظهر في الواجهة كبطل الصفحة.
+                </p>
+              </div>
             </div>
 
             <DialogFooter>

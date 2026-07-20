@@ -79,8 +79,8 @@ function OffersPage() {
     );
   }
 
-  const featuredOffer = safeOffers[0];
-  const regularOffers = safeOffers.slice(1);
+  const featuredOffer = safeOffers.find((offer) => offer.is_featured) ?? safeOffers[0];
+  const regularOffers = safeOffers.filter((offer) => offer.id !== featuredOffer.id);
 
   const addOfferToCart = (offer: Offer) => {
     // Never fall back to offer.id — order_items.product_id FK targets products only.
