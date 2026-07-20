@@ -86,7 +86,7 @@ function AdminOffers() {
       title: "",
       description: "",
       image_url: "",
-      discount_type: "fixed",
+      discount_type: "none",
       discount_value: "",
       is_active: true,
       product_id: "",
@@ -109,7 +109,7 @@ function AdminOffers() {
       title: offer.title || "",
       description: offer.description || "",
       image_url: offer.image_url || "",
-      discount_type: offer.discount_type || "fixed",
+      discount_type: offer.discount_type || "none",
       discount_value: offer.discount_value?.toString() || "",
       is_active: offer.is_active ?? true,
       product_id: offer.product_id || "",
@@ -124,6 +124,77 @@ function AdminOffers() {
   const handleOpenDelete = (offer: any) => {
     setDeletingOffer(offer);
     setIsDeleteOpen(true);
+  };
+
+  const syncDiscount = (oldVal: string, type: string, dValStr: string, newVal: string, changed: "old" | "discount" | "new") => {
+    let old = parseFloat(oldVal);
+    let newP = parseFloat(newVal);
+    let dVal = parseFloat(dValStr);
+    let savings = formData.savings;
+    let newType = type;
+
+    if (changed === "old" || changed === "discount") {
+      if (!isNaN(old) && type !== "none" && !isNaN(dVal)) {
+        if (type === "percentage") {
+          const final = Math.round(Math.max(0, old - (old * dVal) / 100));
+          newP = final;
+          savings = `وفّر ${Math.round(old - final)} ج.م`;
+        } else {
+          const final = Math.round(Math.max(0, old - dVal));
+          newP = final;
+          savings = `وفّر ${dVal} ج.م`;
+        }
+      } else if (type === "none") {
+        newP = isNaN(old) ? NaN : old;
+        savings = "";
+        dVal = NaN;
+      }
+    } else if (changed === "new") {
+      if (!isNaN(old) && !isNaN(newP)) {
+        if (newP >= old) {
+          newType = "none";
+          dVal = NaN;
+          savings = "";
+        } else {
+          const diff = old - newP;
+          if (type === "percentage") {
+            dVal = Math.round((diff / old) * 100);
+          } else {
+            newType = "fixed";
+            dVal = diff;
+          }
+          savings = `وفّر ${diff} ج.م`;
+        }
+      }
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      old_price: isNaN(old) ? "" : old.toString(),
+      new_price: isNaN(newP) ? "" : newP.toString(),
+      discount_type: newType,
+      discount_value: isNaN(dVal) ? "" : dVal.toString(),
+      savings,
+    }));
+  };
+
+  const handleProductSelect = (pid: string) => {
+    if (pid === NO_PRODUCT) {
+      setFormData((prev) => ({ ...prev, product_id: "" }));
+      return;
+    }
+    const p = products.find((x: any) => x.id === pid);
+    let baseStr = "";
+    if (p) {
+      const base = p.product_sizes && p.product_sizes.length > 0 ? p.product_sizes[0].price : p.base_price;
+      if (base) baseStr = base.toString();
+    }
+    setFormData((prev) => {
+      const newOld = prev.old_price || baseStr;
+      // schedule sync via effect or call directly if we know state
+      setTimeout(() => syncDiscount(newOld, prev.discount_type, prev.discount_value, prev.new_price, "old"), 0);
+      return { ...prev, product_id: pid, old_price: newOld };
+    });
   };
 
   // Mutations
@@ -172,8 +243,8 @@ function AdminOffers() {
       title: formData.title,
       description: formData.description || null,
       image_url: formData.image_url || null,
-      discount_type: formData.discount_type as "percentage" | "fixed",
-      discount_value: formData.discount_value ? parseFloat(formData.discount_value) : null,
+      discount_type: formData.discount_type as "none" | "percentage" | "fixed",
+      discount_value: formData.discount_type === "none" ? null : (formData.discount_value ? parseFloat(formData.discount_value) : null),
       is_active: formData.is_active,
       product_id: formData.product_id ? formData.product_id : null,
       old_price: formData.old_price ? parseFloat(formData.old_price) : null,
@@ -334,9 +405,7 @@ function AdminOffers() {
               <Label>المنتج المرتبط</Label>
               <Select
                 value={formData.product_id || NO_PRODUCT}
-                onValueChange={(v) =>
-                  setFormData({ ...formData, product_id: v === NO_PRODUCT ? "" : v })
-                }
+                onValueChange={handleProductSelect}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="اختر منتجاً (اختياري)" />
@@ -364,7 +433,7 @@ function AdminOffers() {
                   type="number"
                   step="0.01"
                   value={formData.old_price}
-                  onChange={(e) => setFormData({ ...formData, old_price: e.target.value })}
+                  onChange={(e) => syncDiscount(e.target.value, formData.discount_type, formData.discount_value, formData.new_price, "old")}
                   placeholder="اختياري"
                 />
               </div>
@@ -375,7 +444,7 @@ function AdminOffers() {
                   type="number"
                   step="0.01"
                   value={formData.new_price}
-                  onChange={(e) => setFormData({ ...formData, new_price: e.target.value })}
+                  onChange={(e) => syncDiscount(formData.old_price, formData.discount_type, formData.discount_value, e.target.value, "new")}
                   placeholder="السعر النهائي المعروض"
                 />
               </div>
@@ -387,28 +456,51 @@ function AdminOffers() {
                 <Label>نوع الخصم</Label>
                 <Select
                   value={formData.discount_type}
-                  onValueChange={(v) => setFormData({ ...formData, discount_type: v })}
+                  onValueChange={(v) => syncDiscount(formData.old_price, v, formData.discount_value, formData.new_price, "discount")}
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="none">بدون خصم</SelectItem>
                     <SelectItem value="percentage">نسبة مئوية (%)</SelectItem>
                     <SelectItem value="fixed">مبلغ ثابت</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="discount_value">قيمة الخصم</Label>
-                <Input
-                  id="discount_value"
-                  type="number"
-                  step="0.01"
-                  value={formData.discount_value}
-                  onChange={(e) => setFormData({ ...formData, discount_value: e.target.value })}
-                />
-              </div>
+              {formData.discount_type !== "none" && (
+                <div className="space-y-2">
+                  <Label htmlFor="discount_value">قيمة الخصم</Label>
+                  <Input
+                    id="discount_value"
+                    type="number"
+                    step="0.01"
+                    value={formData.discount_value}
+                    onChange={(e) => syncDiscount(formData.old_price, formData.discount_type, e.target.value, formData.new_price, "discount")}
+                  />
+                </div>
+              )}
             </div>
+
+            {formData.discount_type !== "none" && (
+              <div className="p-4 bg-gray-50 border border-gray-100 rounded-lg flex flex-col gap-1">
+                <h4 className="text-sm font-semibold text-gray-700">معاينة السعر بعد الخصم</h4>
+                <div className="mt-2 text-sm">
+                  {(() => {
+                    const old = parseFloat(formData.old_price);
+                    const newP = parseFloat(formData.new_price);
+                    if (isNaN(old) || isNaN(newP)) return <span className="text-red-500">أدخل الأسعار للمعاينة.</span>;
+                    if (newP > old) return <span className="text-red-500">السعر الجديد يجب أن يكون أقل من السعر القديم.</span>;
+                    return (
+                      <div className="flex gap-4 items-center">
+                        <div>السعر الأصلي: <span className="line-through text-gray-400">{old} ج.م</span></div>
+                        <div className="font-bold text-green-600">السعر النهائي بعد التقريب: {newP} ج.م</div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            )}
 
             {/* حقول إضافية */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
