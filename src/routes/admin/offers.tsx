@@ -38,7 +38,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Edit2, Trash2, Plus } from "lucide-react";
+import { Edit2, Trash2, Plus, Star } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/offers")({
@@ -46,6 +46,7 @@ export const Route = createFileRoute("/admin/offers")({
 });
 
 const NO_PRODUCT = "__none__";
+const NO_OFFER = "__none__";
 
 function AdminOffers() {
   const queryClient = useQueryClient();
@@ -63,6 +64,8 @@ function AdminOffers() {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isFeaturedModalOpen, setIsFeaturedModalOpen] = useState(false);
+  const [selectedFeaturedId, setSelectedFeaturedId] = useState<string>(NO_OFFER);
   const [editingOffer, setEditingOffer] = useState<any>(null);
   const [deletingOffer, setDeletingOffer] = useState<any>(null);
 
@@ -74,7 +77,6 @@ function AdminOffers() {
     discount_type: "fixed",
     discount_value: "",
     is_active: true,
-    is_featured: false,
     product_id: "",
     old_price: "",
     new_price: "",
@@ -90,7 +92,6 @@ function AdminOffers() {
       discount_type: "none",
       discount_value: "",
       is_active: true,
-      is_featured: false,
       product_id: "",
       old_price: "",
       new_price: "",
@@ -114,7 +115,6 @@ function AdminOffers() {
       discount_type: offer.discount_type || "none",
       discount_value: offer.discount_value?.toString() || "",
       is_active: offer.is_active ?? true,
-      is_featured: offer.is_featured ?? false,
       product_id: offer.product_id || "",
       old_price: offer.old_price?.toString() || "",
       new_price: offer.new_price?.toString() || "",
@@ -231,6 +231,30 @@ function AdminOffers() {
     onError: (err: any) => toast.error(err.message || "حدث خطأ"),
   });
 
+  const setFeaturedMut = useMutation({
+    mutationFn: async (offerId: string) => {
+      const currentFeatured = offers.filter((o: any) => o.is_featured && o.id !== offerId);
+      const promises = currentFeatured.map((o: any) => api.updateOffer(o.id, { is_featured: false }));
+      await Promise.all(promises);
+
+      if (offerId !== NO_OFFER) {
+        await api.updateOffer(offerId, { is_featured: true });
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["adminOffers"] });
+      toast.success("تم تحديث العرض المميز بنجاح");
+      setIsFeaturedModalOpen(false);
+    },
+    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+  });
+
+  const handleOpenFeaturedModal = () => {
+    const featuredOffer = offers.find((o: any) => o.is_featured);
+    setSelectedFeaturedId(featuredOffer ? featuredOffer.id : NO_OFFER);
+    setIsFeaturedModalOpen(true);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title) {
@@ -249,7 +273,6 @@ function AdminOffers() {
       discount_type: formData.discount_type as "none" | "percentage" | "fixed",
       discount_value: formData.discount_type === "none" ? null : (formData.discount_value ? parseFloat(formData.discount_value) : null),
       is_active: formData.is_active,
-      is_featured: formData.is_featured,
       product_id: formData.product_id ? formData.product_id : null,
       old_price: formData.old_price ? parseFloat(formData.old_price) : null,
       new_price: formData.new_price ? parseFloat(formData.new_price) : null,
@@ -268,10 +291,20 @@ function AdminOffers() {
     <div className="bg-white rounded-3xl p-4 lg:p-8 shadow-sm ring-1 ring-black/5 min-h-[400px]">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 className="text-xl lg:text-2xl font-semibold text-ink">إدارة العروض</h2>
-        <Button onClick={handleOpenCreate} className="gap-2 w-full sm:w-auto">
-          <Plus className="w-4 h-4" />
-          إضافة عرض
-        </Button>
+        <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <Button
+            variant="outline"
+            onClick={handleOpenFeaturedModal}
+            className="gap-2 w-full sm:w-auto"
+          >
+            <Star className="w-4 h-4 text-yellow-500" />
+            العرض المميز
+          </Button>
+          <Button onClick={handleOpenCreate} className="gap-2 w-full sm:w-auto">
+            <Plus className="w-4 h-4" />
+            إضافة عرض
+          </Button>
+        </div>
       </div>
 
       {isLoading ? (
@@ -535,7 +568,7 @@ function AdminOffers() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <div className="flex items-center justify-between rounded-md border p-3">
                 <Label htmlFor="is_active" className="cursor-pointer">
                   العرض نشط
@@ -546,22 +579,6 @@ function AdminOffers() {
                   onCheckedChange={(v) => setFormData({ ...formData, is_active: v })}
                 />
               </div>
-
-              <div className="flex flex-col justify-center rounded-md border p-3">
-                <div className="flex items-center justify-between mb-1">
-                  <Label htmlFor="is_featured" className="cursor-pointer">
-                    عرض مميز
-                  </Label>
-                  <Switch
-                    id="is_featured"
-                    checked={formData.is_featured}
-                    onCheckedChange={(v) => setFormData({ ...formData, is_featured: v })}
-                  />
-                </div>
-                <p className="text-[10px] text-gray-500 mt-1">
-                  يُفضّل اختيار عرض واحد فقط كعرض مميز ليظهر في الواجهة كبطل الصفحة.
-                </p>
-              </div>
             </div>
 
             <DialogFooter>
@@ -570,6 +587,44 @@ function AdminOffers() {
               </Button>
             </DialogFooter>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Featured Offer Modal */}
+      <Dialog open={isFeaturedModalOpen} onOpenChange={setIsFeaturedModalOpen}>
+        <DialogContent dir="rtl" className="max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>تحديد العرض المميز</DialogTitle>
+          </DialogHeader>
+          <div className="py-4 space-y-4">
+            <p className="text-sm text-gray-500">
+              اختر عرضاً واحداً ليكون العرض الرئيسي في الصفحة الرئيسية.
+            </p>
+            <Select
+              value={selectedFeaturedId}
+              onValueChange={setSelectedFeaturedId}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="اختر العرض المميز" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={NO_OFFER}>بدون عرض مميز</SelectItem>
+                {offers.filter((o: any) => o.is_active).map((o: any) => (
+                  <SelectItem key={o.id} value={o.id}>
+                    {o.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <DialogFooter>
+            <Button
+              onClick={() => setFeaturedMut.mutate(selectedFeaturedId)}
+              disabled={setFeaturedMut.isPending}
+            >
+              {setFeaturedMut.isPending ? "جاري الحفظ..." : "حفظ التغييرات"}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
 
