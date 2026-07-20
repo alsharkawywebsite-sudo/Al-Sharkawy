@@ -39,8 +39,7 @@ function MenuHero({ query, onQueryChange }: { query: string; onQueryChange: (v: 
           قائمة <span className="text-amber-glow">الطعام</span>
         </h1>
         <p className="mt-4 max-w-xl mx-auto text-xs sm:text-base text-alabaster/80 leading-relaxed">
-          اكتشف تشكيلتنا الواسعة من المشويات المصرية الأصيلة المحضرة بأجود أنواع اللحوم الطازجة
-          والبهارات المميزة.
+          كبدة بالردة، مخ بانيه، جمبري، وسمك فيليه بتتبيلة الشرقاوي الأصيلة — طعم مش هتقدر تقاومه.
         </p>
 
         <div className="mx-auto mt-8 flex w-full max-w-md items-center gap-2 rounded-full p-1.5 shadow-elevated bg-white/5 border border-white/10 glass-panel">
