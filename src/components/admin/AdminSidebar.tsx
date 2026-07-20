@@ -13,8 +13,8 @@ export function AdminSidebar({ onClose }: { onClose?: () => void }) {
   ];
 
   return (
-    <aside className="w-64 bg-charcoal text-alabaster min-h-screen flex flex-col shadow-xl">
-      <div className="p-6 relative">
+    <aside className="w-64 bg-charcoal text-alabaster h-full max-h-screen flex flex-col shadow-xl">
+      <div className="p-6 relative shrink-0">
         <button 
           onClick={onClose}
           className="absolute top-4 left-4 lg:hidden text-alabaster/70 hover:text-white"
@@ -27,7 +27,7 @@ export function AdminSidebar({ onClose }: { onClose?: () => void }) {
         <div className="text-center text-xs mt-1 text-alabaster/60">لوحة التحكم</div>
       </div>
 
-      <nav className="flex-1 mt-6">
+      <nav className="flex-1 mt-6 overflow-y-auto">
         <ul className="flex flex-col gap-2 px-4">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -51,13 +51,13 @@ export function AdminSidebar({ onClose }: { onClose?: () => void }) {
         </ul>
       </nav>
 
-      <div className="p-4 mt-auto">
+      <div className="p-4 shrink-0 mt-auto border-t border-white/5">
         <Link
           to="/"
           className="flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-alabaster/70 hover:bg-white/10 hover:text-white"
         >
-          <Home className="h-5 w-5" />
-          <span className="font-medium">الرجوع للموقع</span>
+          <Home className="h-5 w-5 shrink-0" />
+          <span className="font-medium whitespace-nowrap">الرجوع للموقع</span>
         </Link>
       </div>
     </aside>
