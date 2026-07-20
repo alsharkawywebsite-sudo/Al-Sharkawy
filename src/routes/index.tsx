@@ -78,11 +78,11 @@ function Hero() {
 
           <div className="mt-8 flex justify-center">
             <Link
-              to="/menu"
+              to="/offers"
               className="group inline-flex items-center gap-1 border-b border-alabaster/30 pb-1 text-sm font-medium text-alabaster/80 transition-colors hover:border-amber-glow hover:text-amber-glow"
             >
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-              <span>تصفح كل الأطباق</span>
+              <span>لا تفوت عروضنا اليوم</span>
             </Link>
           </div>
         </div>
