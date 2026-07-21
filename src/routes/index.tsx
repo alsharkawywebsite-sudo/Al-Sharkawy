@@ -76,15 +76,15 @@ function Hero() {
             </Link>
           </form>
 
-          <div className="mt-8 flex justify-center">
-            <Link
-              to="/offers"
-              className="group inline-flex items-center gap-1 border-b border-alabaster/30 pb-1 text-sm font-medium text-alabaster/80 transition-colors hover:border-amber-glow hover:text-amber-glow"
-            >
-              <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-              <span>لا تفوت عروضنا اليوم</span>
-            </Link>
-          </div>
+         <div className="mt-8 flex justify-center">
+  <Link
+    to="/offers"
+    className="group inline-flex animate-pulse items-center gap-1 rounded-full border border-white/20 bg-white/5 px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:border-white/40 hover:bg-white/10 hover:scale-105"
+  >
+    <ChevronLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
+    <span>لا تفوت عروضنا اليوم</span>
+  </Link>
+</div>
         </div>
       </div>
     </section>
