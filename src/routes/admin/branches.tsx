@@ -51,10 +51,10 @@ function AdminBranches() {
   const [deletingBranch, setDeletingBranch] = useState<Branch | null>(null);
 
   // Form State
-  const [formData, setFormData] = useState({ name: "", address: "", phone: "", is_active: true });
+  const [formData, setFormData] = useState({ name: "", address: "", is_active: true });
 
   const resetForm = () => {
-    setFormData({ name: "", address: "", phone: "", is_active: true });
+    setFormData({ name: "", address: "", is_active: true });
     setEditingBranch(null);
   };
 
@@ -68,7 +68,6 @@ function AdminBranches() {
     setFormData({
       name: branch.name || "",
       address: branch.address || "",
-      phone: branch.phone || "",
       is_active: branch.is_active ?? true,
     });
     setIsFormOpen(true);
@@ -148,7 +147,6 @@ function AdminBranches() {
               <TableRow>
                 <TableHead className="text-right">الاسم</TableHead>
                 <TableHead className="text-right">العنوان</TableHead>
-                <TableHead className="text-right">الهاتف</TableHead>
                 <TableHead className="text-right">الحالة</TableHead>
                 <TableHead className="text-right">إجراءات</TableHead>
               </TableRow>
@@ -158,7 +156,6 @@ function AdminBranches() {
               <TableRow key={branch.id}>
                 <TableCell className="font-medium">{branch.name}</TableCell>
                 <TableCell>{branch.address}</TableCell>
-                <TableCell dir="ltr" className="text-right">{branch.phone || "—"}</TableCell>
                 <TableCell>
                   {branch.is_active ? (
                     <span className="inline-flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md text-xs font-medium">
