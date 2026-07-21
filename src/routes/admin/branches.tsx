@@ -220,17 +220,6 @@ function AdminBranches() {
                 placeholder="مثال: شارع جامعة الدول..."
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="phone">رقم الهاتف</Label>
-              <Input
-                id="phone"
-                value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="01xxxxxxxxx"
-                dir="ltr"
-                className="text-right"
-              />
-            </div>
             
             <div className="flex items-center gap-2 pt-2">
               <input
