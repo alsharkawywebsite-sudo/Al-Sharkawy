@@ -7,6 +7,7 @@ import type {
   Order,
   Product,
   ProductSize,
+  Branch,
 } from "@/types";
 
 // ---- Categories ---------------------------------------------------------
@@ -315,6 +316,50 @@ export async function updateSiteSetting(key: string, value: string): Promise<voi
   if (error) throw error;
 }
 
+// ---- Branches -------------------------------------------------------------
+
+export async function getBranches(): Promise<Branch[]> {
+  const { data, error } = await supabase
+    .from("branches")
+    .select("*")
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data ?? []) as Branch[];
+}
+
+export async function getActiveBranches(): Promise<Branch[]> {
+  const { data, error } = await supabase
+    .from("branches")
+    .select("*")
+    .eq("is_active", true)
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data ?? []) as Branch[];
+}
+
+export async function createBranch(payload: Partial<Branch>): Promise<Branch> {
+  const { data, error } = await supabase.from("branches").insert(payload).select().single();
+  if (error) throw error;
+  return data as Branch;
+}
+
+export async function updateBranch(id: string, updates: Partial<Branch>): Promise<Branch> {
+  const { data, error } = await supabase
+    .from("branches")
+    .update(updates)
+    .eq("id", id)
+    .select()
+    .single();
+  if (error) throw error;
+  return data as Branch;
+}
+
+export async function deleteBranch(id: string): Promise<true> {
+  const { error } = await supabase.from("branches").delete().eq("id", id);
+  if (error) throw error;
+  return true;
+}
+
 // Convenience aggregate for callers already using the previous `api.*` surface.
 export const api = {
   getCategories,
@@ -339,4 +384,9 @@ export const api = {
   getAdminOrders,
   getSiteSettings,
   updateSiteSetting,
+  getBranches,
+  getActiveBranches,
+  createBranch,
+  updateBranch,
+  deleteBranch,
 };

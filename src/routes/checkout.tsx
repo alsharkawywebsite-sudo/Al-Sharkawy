@@ -2,11 +2,11 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useState } from "react";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
-import { ArrowRight, CheckCircle2, ClipboardList, Loader2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, ClipboardList, Loader2, Store } from "lucide-react";
 import heroGrill from "@/assets/hero-grill.webp";
 import { useCart } from "@/store/cart";
 import { createOrder } from "@/services/api";
-import { useSiteSettings } from "@/hooks/useData";
+import { useSiteSettings, useActiveBranches } from "@/hooks/useData";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,10 +84,12 @@ function CheckoutForm() {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [notes, setNotes] = useState("");
+  const [branchId, setBranchId] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submittedOrderId, setSubmittedOrderId] = useState<string | null>(null);
   
   const { data: settings } = useSiteSettings();
+  const { data: branches = [] } = useActiveBranches();
   const deliveryMessage = settings?.delivery_message;
   const deliveryFeeMin = settings?.delivery_fee_min;
   const deliveryFeeMax = settings?.delivery_fee_max;
@@ -119,6 +121,10 @@ function CheckoutForm() {
     const trimmedPhone = phone.trim();
     const trimmedAddress = address.trim();
 
+    if (!branchId) {
+      toast.error("يرجى اختيار الفرع من القائمة");
+      return;
+    }
     if (!trimmedName || !trimmedPhone || !trimmedAddress) {
       toast.error("يرجى إدخال الاسم والهاتف والعنوان");
       return;
@@ -144,8 +150,13 @@ function CheckoutForm() {
         title: item.title,
         sizeName: item.sizeName,
       }));
+      
+      const selectedBranch = branches.find((b) => b.id === branchId);
+      
       const order = await createOrder({
         customer,
+        branchId: selectedBranch!.id,
+        branchName: selectedBranch!.name,
         items: orderItems,
         subtotal,
         deliveryFee: DELIVERY_FEE,
@@ -180,9 +191,48 @@ function CheckoutForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-        <div className="lg:col-span-7 space-y-6">
-          <div>
-            <h2 className="font-display text-xl font-semibold text-ink mb-1">بيانات التوصيل</h2>
+        <div className="lg:col-span-7 space-y-8">
+          
+          {/* Branch Selection */}
+          <div className="space-y-4">
+            <div>
+              <h2 className="font-display text-xl font-semibold text-ink mb-1">اختر الفرع</h2>
+              <p className="text-sm text-ink/50">يرجى تحديد الفرع الأقرب لتوصيل طلبك.</p>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {branches.map((branch) => (
+                <div
+                  key={branch.id}
+                  onClick={() => setBranchId(branch.id)}
+                  className={`cursor-pointer rounded-2xl p-4 border transition-all ${
+                    branchId === branch.id
+                      ? "border-crimson bg-crimson/5 ring-1 ring-crimson"
+                      : "border-black/5 bg-white hover:border-crimson/30 hover:bg-cream"
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`p-2 rounded-full shrink-0 ${branchId === branch.id ? "bg-crimson/10 text-crimson" : "bg-gray-50 text-gray-400"}`}>
+                      <Store className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h3 className={`font-semibold ${branchId === branch.id ? "text-crimson" : "text-ink"}`}>{branch.name}</h3>
+                      <p className="text-xs text-ink/60 mt-1 line-clamp-2">{branch.address}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {branches.length === 0 && (
+                <div className="col-span-full p-4 text-center text-sm text-ink/60 bg-white rounded-2xl border border-black/5">
+                  لا توجد فروع متاحة حالياً
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <h2 className="font-display text-xl font-semibold text-ink mb-1">بيانات التوصيل</h2>
             <p className="text-sm text-ink/50">أدخل بياناتك عشان نقدر نوصللك الطلب.</p>
           </div>
 
@@ -245,6 +295,7 @@ function CheckoutForm() {
               />
             </div>
           </div>
+        </div>
         </div>
 
         <div className="lg:col-span-5">

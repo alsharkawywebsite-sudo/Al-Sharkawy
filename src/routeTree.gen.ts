@@ -27,6 +27,7 @@ import { Route as AdminOrdersRouteImport } from './routes/admin/orders'
 import { Route as AdminOffersRouteImport } from './routes/admin/offers'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
+import { Route as AdminBranchesRouteImport } from './routes/admin/branches'
 
 const SiteMenuRoute = SiteMenuRouteImport.update({
   id: '/site-menu',
@@ -118,6 +119,11 @@ const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
   path: '/categories',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminBranchesRoute = AdminBranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -129,6 +135,7 @@ export interface FileRoutesByFullPath {
   '/menu': typeof MenuRoute
   '/offers': typeof OffersRoute
   '/site-menu': typeof SiteMenuRoute
+  '/admin/branches': typeof AdminBranchesRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/offers': typeof AdminOffersRoute
@@ -148,6 +155,7 @@ export interface FileRoutesByTo {
   '/menu': typeof MenuRoute
   '/offers': typeof OffersRoute
   '/site-menu': typeof SiteMenuRoute
+  '/admin/branches': typeof AdminBranchesRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/offers': typeof AdminOffersRoute
@@ -169,6 +177,7 @@ export interface FileRoutesById {
   '/menu': typeof MenuRoute
   '/offers': typeof OffersRoute
   '/site-menu': typeof SiteMenuRoute
+  '/admin/branches': typeof AdminBranchesRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/offers': typeof AdminOffersRoute
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/offers'
     | '/site-menu'
+    | '/admin/branches'
     | '/admin/categories'
     | '/admin/login'
     | '/admin/offers'
@@ -210,6 +220,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/offers'
     | '/site-menu'
+    | '/admin/branches'
     | '/admin/categories'
     | '/admin/login'
     | '/admin/offers'
@@ -230,6 +241,7 @@ export interface FileRouteTypes {
     | '/menu'
     | '/offers'
     | '/site-menu'
+    | '/admin/branches'
     | '/admin/categories'
     | '/admin/login'
     | '/admin/offers'
@@ -383,10 +395,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCategoriesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/branches': {
+      id: '/admin/branches'
+      path: '/branches'
+      fullPath: '/admin/branches'
+      preLoaderRoute: typeof AdminBranchesRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminBranchesRoute: typeof AdminBranchesRoute
   AdminCategoriesRoute: typeof AdminCategoriesRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminOffersRoute: typeof AdminOffersRoute
@@ -397,6 +417,7 @@ interface AdminRouteChildren {
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminBranchesRoute: AdminBranchesRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminOffersRoute: AdminOffersRoute,

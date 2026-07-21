@@ -50,6 +50,7 @@ function AdminLayout() {
   else if (location.pathname.includes("/products")) title = "المنتجات";
   else if (location.pathname.includes("/offers")) title = "العروض";
   else if (location.pathname.includes("/orders")) title = "الطلبات";
+  else if (location.pathname.includes("/branches")) title = "الفروع";
   else if (location.pathname.includes("/settings")) title = "الإعدادات";
 
   return (

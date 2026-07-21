@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { LayoutDashboard, Tags, Utensils, Percent, ShoppingBag, Settings, X, Home } from "lucide-react";
+import { LayoutDashboard, Tags, Utensils, Percent, ShoppingBag, Settings, X, Home, Store } from "lucide-react";
 
 export function AdminSidebar({ onClose }: { onClose?: () => void }) {
   const location = useLocation();
@@ -9,6 +9,7 @@ export function AdminSidebar({ onClose }: { onClose?: () => void }) {
     { name: "الفئات", path: "/admin/categories", icon: <Tags className="h-5 w-5" /> },
     { name: "المنتجات", path: "/admin/products", icon: <Utensils className="h-5 w-5" /> },
     { name: "العروض", path: "/admin/offers", icon: <Percent className="h-5 w-5" /> },
+    { name: "الفروع", path: "/admin/branches", icon: <Store className="h-5 w-5" /> },
     { name: "الإعدادات", path: "/admin/settings", icon: <Settings className="h-5 w-5" /> },
   ];
 

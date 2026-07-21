@@ -15,8 +15,9 @@ function asUuidOrNull(value: string | null | undefined): string | null {
 }
 
 function formatOrderNotes(payload: any): string {
-  const { customer } = payload;
+  const { customer, branchName } = payload;
   const lines = [
+    ...(branchName ? [`الفرع: ${branchName}`] : []),
     `الاسم: ${customer.name.trim()}`,
     `الهاتف: ${customer.phone.trim()}`,
     `العنوان: ${customer.address.trim()}`,
@@ -63,9 +64,12 @@ function formatOrderHtml(data: any): string {
     ? `\n📝 <b>ملاحظات:</b> ${escapeHtml(data.customer.notes.trim())}`
     : "";
 
-  return [
+  const branchLine = data.branchName ? `🏪 <b>الفرع:</b> ${escapeHtml(data.branchName)}` : null;
+
+  const lines = [
     `🆕 <b>طلب جديد</b>`,
     ``,
+    branchLine,
     `🆔 <b>رقم الطلب:</b> <code>${escapeHtml(data.orderId.slice(0, 8))}</code>`,
     `👤 <b>الاسم:</b> ${escapeHtml(data.customer.name)}`,
     `📞 <b>الهاتف:</b> <code>${escapeHtml(data.customer.phone)}</code>`,
@@ -78,7 +82,9 @@ function formatOrderHtml(data: any): string {
     `🛵 <b>التوصيل:</b> ${formatMoney(data.deliveryFee)}`,
     `✅ <b>الإجمالي:</b> ${formatMoney(data.finalTotal)}`,
     notes,
-  ].join("\n");
+  ];
+
+  return lines.filter((l) => l !== null).join("\n");
 }
 
 async function sendTelegramMessage(html: string): Promise<void> {
@@ -203,12 +209,14 @@ serve(async (req) => {
     const { data: order, error } = await supabase
       .from("orders")
       .insert({
+        branch_id: asUuidOrNull(payload.branchId),
         status: "pending",
         subtotal: serverSubtotal,
         discount_total: 0,
         final_total: serverFinalTotal,
         notes: formatOrderNotes({
           customer: payload.customer,
+          branchName: payload.branchName,
           deliveryFee: deliveryFee,
           items: validItems
         }),
@@ -244,6 +252,7 @@ serve(async (req) => {
       const telegramPayload = {
         orderId,
         customer: payload.customer,
+        branchName: payload.branchName,
         items: validItems,
         subtotal: serverSubtotal,
         deliveryFee: deliveryFee,

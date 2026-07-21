@@ -7,6 +7,8 @@ import {
   getOffers,
   getOfferById,
   getProductById,
+  getBranches,
+  getActiveBranches,
 } from "@/services/api";
 
 const FIVE_MINUTES = 5 * 60 * 1000;
@@ -73,6 +75,22 @@ export function useSiteSettings() {
   return useQuery({
     queryKey: ["siteSettings"],
     queryFn: () => import("@/services/api").then((m) => m.getSiteSettings()),
+    staleTime: FIVE_MINUTES,
+  });
+}
+
+export function useBranches() {
+  return useQuery({
+    queryKey: ["branches"],
+    queryFn: getBranches,
+    staleTime: FIVE_MINUTES,
+  });
+}
+
+export function useActiveBranches() {
+  return useQuery({
+    queryKey: ["activeBranches"],
+    queryFn: getActiveBranches,
     staleTime: FIVE_MINUTES,
   });
 }

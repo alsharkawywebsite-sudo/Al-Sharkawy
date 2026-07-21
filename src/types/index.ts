@@ -22,6 +22,15 @@ export type ProductSize = {
   is_active: boolean | null;
 };
 
+export type Branch = {
+  id: string;
+  name: string;
+  address: string;
+  phone: string | null;
+  is_active: boolean;
+  created_at: string;
+};
+
 export type Product = {
   id: string;
   category_id: string | null;
@@ -73,6 +82,7 @@ export type OrderStatus = "pending" | "confirmed" | "preparing" | "delivered" | 
 export type Order = {
   id: string;
   user_id: string | null;
+  branch_id: string | null;
   status: OrderStatus | string;
   subtotal: number;
   discount_total: number;
@@ -100,6 +110,8 @@ export type CheckoutCustomer = {
 
 export type CreateOrderPayload = {
   customer: CheckoutCustomer;
+  branchId: string;
+  branchName: string;
   items: Array<{
     productId: string;
     sizeId: string | null;
