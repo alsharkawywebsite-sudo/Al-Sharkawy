@@ -53,7 +53,7 @@ function OrderSuccess({ orderId }: { orderId: string }) {
       </div>
       <h2 className="font-display text-2xl sm:text-3xl font-semibold text-ink mb-3">تم إرسال الطلب</h2>
       <p className="text-sm text-ink/60 max-w-sm mb-2">
-        استلمنا طلبك بنجاح. هنتواصل معاك قريب لتأكيد التوصيل.
+        تم استلام طلبك بنجاح. سيصلك الطلب خلال 20 إلى 40 دقيقة.
       </p>
       <p className="text-xs text-ink/40 mb-8 font-mono dir-ltr">#{orderId.slice(0, 8)}</p>
       <div className="flex flex-wrap items-center justify-center gap-3">
@@ -207,7 +207,12 @@ function CheckoutForm() {
                 type="tel"
                 inputMode="tel"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => {
+                  const normalized = e.target.value.replace(/[٠-٩]/g, (d) =>
+                    arabicDigits.indexOf(d).toString()
+                  );
+                  setPhone(normalized);
+                }}
                 placeholder="01xxxxxxxxx"
                 required
                 autoComplete="tel"
