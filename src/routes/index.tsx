@@ -79,10 +79,12 @@ function Hero() {
          <div className="mt-8 flex justify-center">
   <Link
     to="/offers"
-    className="group inline-flex animate-pulse items-center gap-1 rounded-full border border-white/20 bg-white/5 px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:border-white/40 hover:bg-white/10 hover:scale-105"
+    className="group relative overflow-hidden inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold text-white backdrop-blur-sm shadow-lg shadow-black/20 transition-transform duration-300 hover:scale-105"
   >
+    <div className="absolute inset-0 -z-10 bg-white/10 animate-[pulse_4.5s_ease-in-out_infinite] transition-colors duration-300 group-hover:bg-white/15" />
+    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-crimson animate-[pulse_2.5s_ease-in-out_infinite]" />
+    <span>اكتشف عروض اليوم</span>
     <ChevronLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
-    <span>لا تفوت عروضنا اليوم</span>
   </Link>
 </div>
         </div>
