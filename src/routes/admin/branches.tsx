@@ -82,37 +82,37 @@ function AdminBranches() {
   const createMut = useMutation({
     mutationFn: api.createBranch,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminBranches"] });
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
-      queryClient.invalidateQueries({ queryKey: ["activeBranches"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminBranches"] });
+      void queryClient.invalidateQueries({ queryKey: ["branches"] });
+      void queryClient.invalidateQueries({ queryKey: ["activeBranches"] });
       toast.success("تمت إضافة الفرع بنجاح");
       setIsFormOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const updateMut = useMutation({
     mutationFn: (data: Partial<Branch>) => api.updateBranch(editingBranch!.id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminBranches"] });
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
-      queryClient.invalidateQueries({ queryKey: ["activeBranches"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminBranches"] });
+      void queryClient.invalidateQueries({ queryKey: ["branches"] });
+      void queryClient.invalidateQueries({ queryKey: ["activeBranches"] });
       toast.success("تم تحديث الفرع بنجاح");
       setIsFormOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const deleteMut = useMutation({
     mutationFn: api.deleteBranch,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminBranches"] });
-      queryClient.invalidateQueries({ queryKey: ["branches"] });
-      queryClient.invalidateQueries({ queryKey: ["activeBranches"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminBranches"] });
+      void queryClient.invalidateQueries({ queryKey: ["branches"] });
+      void queryClient.invalidateQueries({ queryKey: ["activeBranches"] });
       toast.success("تم حذف الفرع بنجاح");
       setIsDeleteOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const handleSubmit = (e: React.FormEvent) => {

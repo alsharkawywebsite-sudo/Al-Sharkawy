@@ -37,8 +37,9 @@ function AdminSettings() {
       await api.updateSiteSetting("delivery_fee_max", formData.delivery_fee_max);
       toast.success("تم حفظ الإعدادات بنجاح");
       await refetch();
-    } catch (err: any) {
-      toast.error(err.message || "حدث خطأ أثناء حفظ الإعدادات");
+    } catch (err: unknown) {
+      console.error(err);
+      toast.error(err instanceof Error ? err.message : "حدث خطأ أثناء حفظ الإعدادات");
     } finally {
       setIsSaving(false);
     }

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/services/api";
+import type { Offer, Product } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -106,7 +107,7 @@ function AdminOffers() {
     setIsFormOpen(true);
   };
 
-  const handleOpenEdit = (offer: any) => {
+  const handleOpenEdit = (offer: Offer) => {
     setEditingOffer(offer);
     setFormData({
       title: offer.title || "",
@@ -124,7 +125,7 @@ function AdminOffers() {
     setIsFormOpen(true);
   };
 
-  const handleOpenDelete = (offer: any) => {
+  const handleOpenDelete = (offer: Offer) => {
     setDeletingOffer(offer);
     setIsDeleteOpen(true);
   };
@@ -186,7 +187,7 @@ function AdminOffers() {
       setFormData((prev) => ({ ...prev, product_id: "" }));
       return;
     }
-    const p = products.find((x: any) => x.id === pid);
+    const p = products.find((x: Product) => x.id === pid);
     let baseStr = "";
     if (p) {
       const base = p.product_sizes && p.product_sizes.length > 0 ? p.product_sizes[0].price : p.base_price;
@@ -204,37 +205,37 @@ function AdminOffers() {
   const createMut = useMutation({
     mutationFn: api.createOffer,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminOffers"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminOffers"] });
       toast.success("تمت إضافة العرض بنجاح");
       setIsFormOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const updateMut = useMutation({
-    mutationFn: (data: any) => api.updateOffer(editingOffer.id, data),
+    mutationFn: (data: Partial<Offer>) => api.updateOffer(editingOffer!.id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminOffers"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminOffers"] });
       toast.success("تم تحديث العرض بنجاح");
       setIsFormOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const deleteMut = useMutation({
     mutationFn: api.deleteOffer,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminOffers"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminOffers"] });
       toast.success("تم حذف العرض بنجاح");
       setIsDeleteOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const setFeaturedMut = useMutation({
     mutationFn: async (offerId: string) => {
-      const currentFeatured = offers.filter((o: any) => o.is_featured && o.id !== offerId);
-      const promises = currentFeatured.map((o: any) => api.updateOffer(o.id, { is_featured: false }));
+      const currentFeatured = offers.filter((o: Offer) => o.is_featured && o.id !== offerId);
+      const promises = currentFeatured.map((o: Offer) => api.updateOffer(o.id, { is_featured: false }));
       await Promise.all(promises);
 
       if (offerId !== NO_OFFER) {
@@ -250,7 +251,7 @@ function AdminOffers() {
   });
 
   const handleOpenFeaturedModal = () => {
-    const featuredOffer = offers.find((o: any) => o.is_featured);
+    const featuredOffer = offers.find((o: Offer) => o.is_featured);
     setSelectedFeaturedId(featuredOffer ? featuredOffer.id : NO_OFFER);
     setIsFeaturedModalOpen(true);
   };
@@ -324,8 +325,8 @@ function AdminOffers() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {offers.map((offer: any) => {
-                const linkedProduct = products.find((p: any) => p.id === offer.product_id);
+              {offers.map((offer: Offer) => {
+                const linkedProduct = products.find((p: Product) => p.id === offer.product_id);
                 return (
                   <TableRow key={offer.id}>
                     <TableCell>
@@ -456,7 +457,7 @@ function AdminOffers() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value={NO_PRODUCT}>بدون ربط</SelectItem>
-                  {products.map((p: any) => (
+                  {products.map((p: Product) => (
                     <SelectItem key={p.id} value={p.id}>
                       {p.name}
                     </SelectItem>
@@ -609,7 +610,7 @@ function AdminOffers() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value={NO_OFFER}>بدون عرض مميز</SelectItem>
-                {offers.filter((o: any) => o.is_active).map((o: any) => (
+                {offers.filter((o: Offer) => o.is_active).map((o: Offer) => (
                   <SelectItem key={o.id} value={o.id}>
                     {o.title}
                   </SelectItem>

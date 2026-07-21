@@ -27,7 +27,7 @@ export async function getMenuCategories(): Promise<MenuCategory[]> {
     .select("id, slug, name, sort_order")
     .order("sort_order", { ascending: true });
   if (error) throw error;
-  return (data ?? []).map((c: any) => ({ id: c.id, slug: c.slug, name: c.name }));
+  return (data ?? []).map((c: { id: string; slug: string; name: string }) => ({ id: c.id, slug: c.slug, name: c.name }));
 }
 
 export async function createCategory(payload: Partial<Category>): Promise<Category> {
@@ -303,7 +303,7 @@ export async function getAdminOrders(): Promise<Order[]> {
 export async function getSiteSettings(): Promise<Record<string, string>> {
   const { data, error } = await supabase.from("site_settings").select("*");
   if (error) throw error;
-  return (data ?? []).reduce((acc: Record<string, string>, curr: any) => {
+  return (data ?? []).reduce((acc: Record<string, string>, curr: { key: string; value: string | null }) => {
     if (curr.value !== null) acc[curr.key] = curr.value;
     return acc;
   }, {});

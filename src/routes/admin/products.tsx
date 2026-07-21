@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/services/api";
+import type { Product, Category, ProductSize } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -101,7 +102,7 @@ function AdminProducts() {
     setIsFormOpen(true);
   };
 
-  const handleOpenEdit = (prod: any) => {
+  const handleOpenEdit = (prod: Product) => {
     setEditingProd(prod);
     setFormData({
       name: prod.name || "",
@@ -117,7 +118,7 @@ function AdminProducts() {
     setIsFormOpen(true);
   };
 
-  const handleOpenDelete = (prod: any) => {
+  const handleOpenDelete = (prod: Product) => {
     setDeletingProd(prod);
     setIsDeleteOpen(true);
   };
@@ -127,7 +128,7 @@ function AdminProducts() {
     setSizes([...sizes, { name: "", price: "", is_active: true }]);
   };
 
-  const updateSize = (index: number, field: string, value: any) => {
+  const updateSize = (index: number, field: string, value: string | number | boolean) => {
     const newSizes = [...sizes];
     newSizes[index] = { ...newSizes[index], [field]: value };
     setSizes(newSizes);
@@ -139,34 +140,34 @@ function AdminProducts() {
 
   // Mutations
   const createMut = useMutation({
-    mutationFn: (data: { prod: any; sizes: any[] }) => api.createProduct(data.prod, data.sizes),
+    mutationFn: (data: { prod: Partial<Product>; sizes: Partial<ProductSize>[] }) => api.createProduct(data.prod, data.sizes),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
       toast.success("تمت إضافة المنتج بنجاح");
       setIsFormOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const updateMut = useMutation({
-    mutationFn: (data: { prod: any; sizes: any[] }) =>
-      api.updateProduct(editingProd.id, data.prod, data.sizes),
+    mutationFn: (data: { prod: Partial<Product>; sizes: Partial<ProductSize>[] }) =>
+      api.updateProduct(editingProd!.id, data.prod, data.sizes),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
       toast.success("تم تحديث المنتج بنجاح");
       setIsFormOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const deleteMut = useMutation({
     mutationFn: api.deleteProduct,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
       toast.success("تم حذف المنتج بنجاح");
       setIsDeleteOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const handleOpenFeatured = () => {
@@ -188,12 +189,12 @@ function AdminProducts() {
       await api.updateSiteSetting("featured_products", JSON.stringify(ids));
     },
     onSuccess: () => {
-      toast.success("تم حفظ المنتجات المميزة بنجاح");
+      void queryClient.invalidateQueries({ queryKey: ["featuredProducts"] });
       refetchSettings();
-      queryClient.invalidateQueries({ queryKey: ["featuredProducts"] });
+      toast.success("تم الحفظ بنجاح");
       setIsFeaturedOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const handleToggleFeatured = (id: string) => {
@@ -279,8 +280,8 @@ function AdminProducts() {
               </TableRow>
             </TableHeader>
             <TableBody>
-            {products.map((prod: any) => {
-              const cat = categories.find((c: any) => c.id === prod.category_id);
+            {products.map((prod: Product) => {
+              const cat = categories.find((c: Category) => c.id === prod.category_id);
               const hasSizes = prod.product_sizes && prod.product_sizes.length > 0;
               return (
                 <TableRow key={prod.id}>
@@ -369,7 +370,7 @@ function AdminProducts() {
                     <SelectValue placeholder="اختر الفئة" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((c: any) => (
+                    {categories.map((c: Category) => (
                       <SelectItem key={c.id} value={c.id}>
                         {c.name}
                       </SelectItem>
@@ -568,8 +569,8 @@ function AdminProducts() {
             </p>
             <div className="space-y-2">
               {products
-                .filter((p: any) => p.is_active)
-                .map((prod: any) => (
+                .filter((p: Product) => p.is_active)
+                .map((prod: Product) => (
                   <label
                     key={prod.id}
                     className="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
@@ -591,7 +592,7 @@ function AdminProducts() {
                     )}
                     <span className="font-medium flex-1">{prod.name}</span>
                     <span className="text-sm text-gray-500">
-                      {categories.find((c: any) => c.id === prod.category_id)?.name}
+                      {categories.find((c: Category) => c.id === prod.category_id)?.name}
                     </span>
                   </label>
                 ))}

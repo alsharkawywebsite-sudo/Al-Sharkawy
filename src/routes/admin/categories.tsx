@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/services/api";
+import type { Category } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -62,7 +63,7 @@ function AdminCategories() {
     setIsFormOpen(true);
   };
 
-  const handleOpenEdit = (cat: any) => {
+  const handleOpenEdit = (cat: Category) => {
     setEditingCat(cat);
     setFormData({
       name: cat.name || "",
@@ -73,7 +74,7 @@ function AdminCategories() {
     setIsFormOpen(true);
   };
 
-  const handleOpenDelete = (cat: any) => {
+  const handleOpenDelete = (cat: Category) => {
     setDeletingCat(cat);
     setIsDeleteOpen(true);
   };
@@ -82,31 +83,31 @@ function AdminCategories() {
   const createMut = useMutation({
     mutationFn: api.createCategory,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
       toast.success("تمت إضافة الفئة بنجاح");
       setIsFormOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const updateMut = useMutation({
-    mutationFn: (data: any) => api.updateCategory(editingCat.id, data),
+    mutationFn: (data: Partial<Category>) => api.updateCategory(editingCat!.id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
       toast.success("تم تحديث الفئة بنجاح");
       setIsFormOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const deleteMut = useMutation({
     mutationFn: api.deleteCategory,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
+      void queryClient.invalidateQueries({ queryKey: ["adminCategories"] });
       toast.success("تم حذف الفئة بنجاح");
       setIsDeleteOpen(false);
     },
-    onError: (err: any) => toast.error(err.message || "حدث خطأ"),
+    onError: (err: Error) => toast.error(err.message || "حدث خطأ"),
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -147,7 +148,7 @@ function AdminCategories() {
               </TableRow>
             </TableHeader>
             <TableBody>
-            {categories.map((cat: any) => (
+            {categories.map((cat: Category) => (
               <TableRow key={cat.id}>
                 <TableCell>
                   {cat.image_url ? (

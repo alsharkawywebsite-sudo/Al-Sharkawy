@@ -8,13 +8,60 @@ const corsHeaders = {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+interface CustomerData {
+  name: string;
+  phone: string;
+  address: string;
+  notes?: string;
+}
+
+interface ItemData {
+  productId?: string;
+  sizeId?: string;
+  quantity: number | string;
+  title?: string;
+  sizeName?: string;
+  unitPrice?: number;
+  product_size_id?: string | null;
+  product_id?: string;
+  discount_applied?: number;
+}
+
+interface PayloadData {
+  branchId?: string;
+  branchName?: string;
+  customer: CustomerData;
+  items: ItemData[];
+  deliveryFee?: number;
+  orderId?: string;
+  subtotal?: number;
+  finalTotal?: number;
+}
+
+interface ProductData {
+  id: string;
+  name: string;
+  base_price: number;
+  is_active: boolean;
+  discount_type?: string;
+  discount_value?: number;
+}
+
+interface SizeData {
+  id: string;
+  product_id: string;
+  name: string;
+  price: number;
+  is_active: boolean;
+}
+
 function asUuidOrNull(value: string | null | undefined): string | null {
   if (!value || typeof value !== "string") return null;
   const trimmed = value.trim();
   return UUID_RE.test(trimmed) ? trimmed : null;
 }
 
-function formatOrderNotes(payload: any): string {
+function formatOrderNotes(payload: PayloadData): string {
   const { customer, branchName } = payload;
   const lines = [
     ...(branchName ? [`الفرع: ${branchName}`] : []),
@@ -51,11 +98,11 @@ function formatMoney(n: number): string {
   return `${Math.round(n)} ج.م`;
 }
 
-function formatOrderHtml(data: any): string {
+function formatOrderHtml(data: PayloadData): string {
   const items = data.items
-    .map((item: any) => {
+    .map((item: ItemData) => {
       const size = item.sizeName ? ` (${escapeHtml(item.sizeName)})` : "";
-      const lineTotal = formatMoney(item.unitPrice * item.quantity);
+      const lineTotal = formatMoney((item.unitPrice || 0) * (Number(item.quantity) || 1));
       return `• ${escapeHtml(item.title)}${size} × ${item.quantity} — <b>${lineTotal}</b>`;
     })
     .join("\n");
@@ -130,8 +177,8 @@ serve(async (req) => {
     }
 
     // 1) Validate items & Calculate totals
-    const candidateProductIds = [...new Set(payload.items.map((i: any) => asUuidOrNull(i.productId)).filter(Boolean))];
-    const candidateSizeIds = [...new Set(payload.items.map((i: any) => asUuidOrNull(i.sizeId)).filter(Boolean))];
+    const candidateProductIds = [...new Set(payload.items.map((i: ItemData) => asUuidOrNull(i.productId)).filter(Boolean))];
+    const candidateSizeIds = [...new Set(payload.items.map((i: ItemData) => asUuidOrNull(i.sizeId)).filter(Boolean))];
 
     if (candidateProductIds.length === 0) throw new Error("السلة فارغة أو الأصناف غير صالحة");
 
@@ -139,9 +186,9 @@ serve(async (req) => {
       .from("products")
       .select("id, name, base_price, is_active, discount_type, discount_value")
       .in("id", candidateProductIds);
-    const productMap = new Map(productsData?.map((p: any) => [p.id, p]) || []);
+    const productMap = new Map(productsData?.map((p: ProductData) => [p.id, p]) || []);
 
-    let sizesData: any[] = [];
+    let sizesData: SizeData[] = [];
     if (candidateSizeIds.length > 0) {
       const res = await supabase
         .from("product_sizes")
@@ -149,10 +196,10 @@ serve(async (req) => {
         .in("id", candidateSizeIds);
       sizesData = res.data || [];
     }
-    const sizeMap = new Map(sizesData.map((s: any) => [s.id, s]));
+    const sizeMap = new Map(sizesData.map((s: SizeData) => [s.id, s]));
 
     let serverSubtotal = 0;
-    const validItems: any[] = [];
+    const validItems: ItemData[] = [];
 
     for (const item of payload.items) {
       const productId = asUuidOrNull(item.productId);
@@ -230,7 +277,7 @@ serve(async (req) => {
     const orderId = order.id;
 
     // 3) Insert order_items
-    const rows = validItems.map((item: any) => ({
+    const rows = validItems.map((item: ItemData) => ({
       order_id: orderId,
       product_id: item.product_id,
       product_size_id: item.product_size_id,
@@ -268,8 +315,9 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
-  } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    return new Response(JSON.stringify({ error: message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 400,
     });
