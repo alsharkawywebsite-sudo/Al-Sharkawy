@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Search, ChevronLeft, Star, Heart, ShoppingCart } from "lucide-react";
-import { toast } from "sonner";
+import { publicToast as toast } from "@/store/toast";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import heroGrill from "@/assets/hero-grill.webp";

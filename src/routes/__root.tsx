@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { CustomToaster } from "@/components/ui/CustomToast";
 
 /** Google Fonts stylesheet — `display=swap` avoids invisible text (FOIT) while fonts load. */
 const GOOGLE_FONTS_HREF =
@@ -147,6 +148,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <Outlet />
+      <CustomToaster />
       <Toaster position="bottom-center" swipeDirection="right" duration={3000} richColors closeButton />
     </QueryClientProvider>
   );

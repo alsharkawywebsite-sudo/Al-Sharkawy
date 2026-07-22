@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { Heart, ShoppingCart, Star } from "lucide-react";
-import { toast } from "sonner";
+import { publicToast as toast } from "@/store/toast";
 import { useMenuItems } from "@/hooks/useData";
 import { useFavorites } from "@/store/favorites";
 import { useCart } from "@/store/cart";

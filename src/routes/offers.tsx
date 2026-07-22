@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { ShoppingCart, Heart } from "lucide-react";
-import { toast } from "sonner";
+import { publicToast as toast } from "@/store/toast";
 import { useOffers } from "@/hooks/useData";
 import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";

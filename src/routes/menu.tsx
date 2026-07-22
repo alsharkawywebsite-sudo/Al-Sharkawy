@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { Search, Star, Heart, ShoppingCart } from "lucide-react";
-import { toast } from "sonner";
+import { publicToast as toast } from "@/store/toast";
 import heroGrill from "@/assets/hero-grill.webp";
 import { useMenuCategories, useMenuItems } from "@/hooks/useData";
 import { useCart } from "@/store/cart";

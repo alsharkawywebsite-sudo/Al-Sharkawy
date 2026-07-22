@@ -3,7 +3,7 @@ import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { Heart, ShoppingCart, Star, ArrowRight, Minus, Plus } from "lucide-react";
 import { useMemo, useState } from "react";
-import { toast } from "sonner";
+import { publicToast as toast } from "@/store/toast";
 import { useProduct } from "@/hooks/useData";
 import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
