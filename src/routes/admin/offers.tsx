@@ -381,10 +381,13 @@ function AdminOffers() {
                       <Switch
                         checked={offer.is_active ?? true}
                         onCheckedChange={(v) => {
-                          updateMut.mutate({ is_active: v });
-                          setEditingOffer(offer); // To let mutation know which id to use... wait, updateMut uses editingOffer!.id in mutationFn! 
-                          // Better way: we need to call api.updateOffer directly or use a standalone mutation for inline toggles.
-                          api.updateOffer(offer.id, { is_active: v }).then(() => queryClient.invalidateQueries({ queryKey: ["adminOffers"] }));
+                          const promise = api.updateOffer(offer.id, { is_active: v })
+                            .then(() => queryClient.invalidateQueries({ queryKey: ["adminOffers"] }));
+                          toast.promise(promise, {
+                            loading: "جاري التحديث...",
+                            success: "تم التحديث بنجاح",
+                            error: "حدث خطأ أثناء التحديث"
+                          });
                         }}
                       />
                     </TableCell>
@@ -392,7 +395,13 @@ function AdminOffers() {
                       <Switch
                         checked={offer.is_hidden ?? false}
                         onCheckedChange={(v) => {
-                          api.updateOffer(offer.id, { is_hidden: v }).then(() => queryClient.invalidateQueries({ queryKey: ["adminOffers"] }));
+                          const promise = api.updateOffer(offer.id, { is_hidden: v })
+                            .then(() => queryClient.invalidateQueries({ queryKey: ["adminOffers"] }));
+                          toast.promise(promise, {
+                            loading: "جاري التحديث...",
+                            success: "تم التحديث بنجاح",
+                            error: "حدث خطأ أثناء التحديث"
+                          });
                         }}
                       />
                     </TableCell>
