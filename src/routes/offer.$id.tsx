@@ -150,8 +150,15 @@ function OfferDetailPage() {
                 <img
                   src={offer.image_url}
                   alt={offer.title}
-                  className="w-full h-full object-cover"
+                  className={`w-full h-full object-cover ${!offer.is_active ? "grayscale" : ""}`}
                 />
+              )}
+              {!offer.is_active && (
+                <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                  <div className="rounded-full bg-white/95 px-6 py-3 text-sm sm:text-base font-bold text-ink shadow-lg text-center mx-4">
+                    العرض ده خلص.. استناه لما يرجع! ⏳
+                  </div>
+                </div>
               )}
             </div>
 
@@ -205,27 +212,22 @@ function OfferDetailPage() {
                   </button>
                 </div>
 
-                <button
-                  onClick={handleAdd}
-                  disabled={!offer.is_active}
-                  className={`flex-1 flex items-center justify-center gap-2 h-12 sm:h-14 rounded-full font-semibold text-base sm:text-lg shadow-elevated transition-all ${
-                    offer.is_active
-                      ? "bg-crimson hover:bg-crimson-deep text-white active:scale-[0.98]"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
-                >
-                  {offer.is_active ? (
-                    <>
-                      <ShoppingCart className="h-5 w-5" />
-                      أضف إلى السلة
-                      <span className="font-normal opacity-80 mr-1 hidden sm:inline">
-                        ({unitPrice * quantity} ج.م)
-                      </span>
-                    </>
-                  ) : (
-                    "غير متوفر"
-                  )}
-                </button>
+                {offer.is_active ? (
+                  <button
+                    onClick={handleAdd}
+                    className="flex-1 flex items-center justify-center gap-2 h-12 sm:h-14 rounded-full font-semibold text-base sm:text-lg shadow-elevated transition-all bg-crimson hover:bg-crimson-deep text-white active:scale-[0.98]"
+                  >
+                    <ShoppingCart className="h-5 w-5" />
+                    أضف إلى السلة
+                    <span className="font-normal opacity-80 mr-1 hidden sm:inline">
+                      ({unitPrice * quantity} ج.م)
+                    </span>
+                  </button>
+                ) : (
+                  <div className="flex-1 flex items-center justify-center gap-2 h-12 sm:h-14 rounded-full font-semibold text-base sm:text-lg border-2 border-dashed border-gray-300 text-gray-500 bg-gray-50/50">
+                    العرض متوقف مؤقتاً
+                  </div>
+                )}
               </div>
             </div>
           </div>

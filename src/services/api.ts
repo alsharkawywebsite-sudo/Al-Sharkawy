@@ -181,6 +181,7 @@ export async function getOffers(): Promise<Offer[]> {
   const { data, error } = await supabase
     .from("offers")
     .select("*")
+    .eq("is_hidden", false)
     .order("created_at", { ascending: false });
   if (error) throw error;
   return (data ?? []) as Offer[];

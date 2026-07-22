@@ -147,15 +147,22 @@ function OffersPage() {
               <Link
                 to="/offer/$id"
                 params={{ id: featuredOffer.id }}
-                className="block relative w-full md:w-1/2 lg:w-[40%] aspect-[4/3] md:aspect-square lg:aspect-[4/3] overflow-hidden bg-cream shrink-0"
+                className="block relative w-full md:w-1/2 lg:w-[40%] aspect-[4/3] md:aspect-square lg:aspect-[4/3] overflow-hidden bg-cream shrink-0 group-hover/article:opacity-95"
               >
                 {featuredOffer.image_url && (
                   <img
                     src={featuredOffer.image_url}
                     alt={featuredOffer.title}
                     loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${!featuredOffer.is_active ? "grayscale" : ""}`}
                   />
+                )}
+                {!featuredOffer.is_active && (
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                    <div className="rounded-full bg-white/95 px-4 py-2 text-xs sm:text-sm font-bold text-ink shadow-lg text-center mx-4">
+                      العرض ده خلص.. استناه لما يرجع! ⏳
+                    </div>
+                  </div>
                 )}
               </Link>
 
@@ -205,21 +212,20 @@ function OffersPage() {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => featuredOffer.is_active && addOfferToCart(featuredOffer)}
-                    disabled={!featuredOffer.is_active}
-                    aria-label={featuredOffer.is_active ? "أضف للسلة" : "غير متوفر"}
-                    className={`flex items-center gap-1.5 rounded-full px-4 py-2 sm:px-6 sm:py-3 shadow-md transition-all ${
-                      featuredOffer.is_active
-                        ? "bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
-                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    }`}
-                  >
-                    <span className="text-xs sm:text-sm font-semibold">
-                      {featuredOffer.is_active ? "أضف للسلة" : "غير متوفر"}
-                    </span>
-                    {featuredOffer.is_active && <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />}
-                  </button>
+                  {featuredOffer.is_active ? (
+                    <button
+                      onClick={() => addOfferToCart(featuredOffer)}
+                      aria-label="أضف للسلة"
+                      className="flex items-center gap-1.5 rounded-full px-4 py-2 sm:px-6 sm:py-3 shadow-md transition-all bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
+                    >
+                      <span className="text-xs sm:text-sm font-semibold">أضف للسلة</span>
+                      <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+                    </button>
+                  ) : (
+                    <div className="flex items-center justify-center rounded-full px-4 py-2 sm:px-6 sm:py-3 border border-dashed border-gray-300 text-gray-500 bg-gray-50/50">
+                      <span className="text-xs sm:text-sm font-medium">موقوف مؤقتاً</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </article>
@@ -264,15 +270,22 @@ function OffersPage() {
                     <Link
                       to="/offer/$id"
                       params={{ id: offer.id }}
-                      className="block aspect-square w-full shrink-0 overflow-hidden bg-cream"
+                      className="block relative aspect-square w-full shrink-0 overflow-hidden bg-cream group-hover/item:opacity-95"
                     >
                       {offer.image_url && (
                         <img
                           src={offer.image_url}
                           alt={offer.title}
                           loading="lazy"
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className={`h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 ${!offer.is_active ? "grayscale" : ""}`}
                         />
+                      )}
+                      {!offer.is_active && (
+                        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-[2px]">
+                          <div className="rounded-xl bg-white/95 px-2 py-1.5 text-[10px] sm:text-[11px] font-bold text-ink shadow-lg text-center leading-tight mx-2">
+                            العرض ده خلص..<br />استناه لما يرجع! ⏳
+                          </div>
+                        </div>
                       )}
                     </Link>
 
@@ -322,21 +335,20 @@ function OffersPage() {
                           </div>
                         </div>
 
-                        <button
-                          onClick={() => offer.is_active && addOfferToCart(offer)}
-                          disabled={!offer.is_active}
-                          aria-label={offer.is_active ? "أضف للسلة" : "غير متوفر"}
-                          className={`flex items-center gap-1.5 rounded-full px-2 py-1.5 sm:px-4 sm:py-2 shadow-md transition-all ${
-                            offer.is_active
-                              ? "bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
-                              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                          }`}
-                        >
-                          <span className="text-[10px] sm:text-xs font-semibold hidden sm:inline">
-                            {offer.is_active ? "أضف" : "غير متوفر"}
-                          </span>
-                          {offer.is_active && <ShoppingCart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />}
-                        </button>
+                        {offer.is_active ? (
+                          <button
+                            onClick={() => addOfferToCart(offer)}
+                            aria-label="أضف للسلة"
+                            className="flex items-center gap-1.5 rounded-full px-2 py-1.5 sm:px-4 sm:py-2 shadow-md transition-all bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
+                          >
+                            <span className="text-[10px] sm:text-xs font-semibold hidden sm:inline">أضف</span>
+                            <ShoppingCart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                          </button>
+                        ) : (
+                          <div className="flex items-center justify-center rounded-full px-2 py-1.5 sm:px-4 sm:py-2 border border-dashed border-gray-300 text-gray-500 bg-gray-50/50">
+                            <span className="text-[10px] sm:text-[11px] font-medium">موقوف</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </article>
