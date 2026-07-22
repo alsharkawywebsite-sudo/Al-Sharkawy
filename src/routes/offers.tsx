@@ -88,6 +88,7 @@ function OffersPage() {
     addItem({
       key: `offer:${offer.id}`,
       productId: linkedProductId ?? `offer:${offer.id}`,
+      offerId: offer.id,
       sizeId: null,
       sizeName: null,
       title: offer.title,
@@ -205,12 +206,19 @@ function OffersPage() {
                   </div>
 
                   <button
-                    onClick={() => addOfferToCart(featuredOffer)}
-                    aria-label="أضف للسلة"
-                    className="flex items-center gap-1.5 rounded-full bg-crimson px-4 py-2 sm:px-6 sm:py-3 text-alabaster shadow-md transition-all hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
+                    onClick={() => featuredOffer.is_active && addOfferToCart(featuredOffer)}
+                    disabled={!featuredOffer.is_active}
+                    aria-label={featuredOffer.is_active ? "أضف للسلة" : "غير متوفر"}
+                    className={`flex items-center gap-1.5 rounded-full px-4 py-2 sm:px-6 sm:py-3 shadow-md transition-all ${
+                      featuredOffer.is_active
+                        ? "bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
                   >
-                    <span className="text-xs sm:text-sm font-semibold">أضف للسلة</span>
-                    <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span className="text-xs sm:text-sm font-semibold">
+                      {featuredOffer.is_active ? "أضف للسلة" : "غير متوفر"}
+                    </span>
+                    {featuredOffer.is_active && <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />}
                   </button>
                 </div>
               </div>
@@ -315,14 +323,19 @@ function OffersPage() {
                         </div>
 
                         <button
-                          onClick={() => addOfferToCart(offer)}
-                          aria-label="أضف للسلة"
-                          className="flex items-center gap-1.5 rounded-full bg-crimson px-2 py-1.5 sm:px-4 sm:py-2 text-alabaster shadow-md transition-all hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
+                          onClick={() => offer.is_active && addOfferToCart(offer)}
+                          disabled={!offer.is_active}
+                          aria-label={offer.is_active ? "أضف للسلة" : "غير متوفر"}
+                          className={`flex items-center gap-1.5 rounded-full px-2 py-1.5 sm:px-4 sm:py-2 shadow-md transition-all ${
+                            offer.is_active
+                              ? "bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
+                              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                          }`}
                         >
                           <span className="text-[10px] sm:text-xs font-semibold hidden sm:inline">
-                            أضف
+                            {offer.is_active ? "أضف" : "غير متوفر"}
                           </span>
-                          <ShoppingCart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                          {offer.is_active && <ShoppingCart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />}
                         </button>
                       </div>
                     </div>

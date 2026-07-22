@@ -24,6 +24,7 @@ interface ItemData {
   unitPrice?: number;
   product_size_id?: string | null;
   product_id?: string;
+  offerId?: string;
   discount_applied?: number;
 }
 
@@ -179,14 +180,22 @@ serve(async (req) => {
     // 1) Validate items & Calculate totals
     const candidateProductIds = [...new Set(payload.items.map((i: ItemData) => asUuidOrNull(i.productId)).filter(Boolean))];
     const candidateSizeIds = [...new Set(payload.items.map((i: ItemData) => asUuidOrNull(i.sizeId)).filter(Boolean))];
+    const candidateOfferIds = [...new Set(payload.items.map((i: ItemData) => asUuidOrNull(i.offerId)).filter(Boolean))];
 
-    if (candidateProductIds.length === 0) throw new Error("السلة فارغة أو الأصناف غير صالحة");
+    if (candidateProductIds.length === 0 && candidateOfferIds.length === 0) throw new Error("السلة فارغة أو الأصناف غير صالحة");
 
     const { data: productsData } = await supabase
       .from("products")
       .select("id, name, base_price, is_active, discount_type, discount_value")
       .in("id", candidateProductIds);
     const productMap = new Map(productsData?.map((p: ProductData) => [p.id, p]) || []);
+
+    let offersData: any[] = [];
+    if (candidateOfferIds.length > 0) {
+      const res = await supabase.from("offers").select("id, title, is_active").in("id", candidateOfferIds);
+      offersData = res.data || [];
+    }
+    const offerMap = new Map(offersData.map((o: any) => [o.id, o]));
 
     let sizesData: SizeData[] = [];
     if (candidateSizeIds.length > 0) {
@@ -202,6 +211,14 @@ serve(async (req) => {
     const validItems: ItemData[] = [];
 
     for (const item of payload.items) {
+      const offerId = asUuidOrNull(item.offerId);
+      if (offerId) {
+        const offer = offerMap.get(offerId);
+        if (offer && offer.is_active === false) {
+          throw new Error(`العرض غير متاح: ${offer.title}`);
+        }
+      }
+
       const productId = asUuidOrNull(item.productId);
       if (!productId) throw new Error("معرف المنتج غير صالح");
       

@@ -86,6 +86,7 @@ function OfferDetailPage() {
     addItem({
       key: `offer:${offer.id}`,
       productId: linkedProductId ?? `offer:${offer.id}`,
+      offerId: offer.id,
       sizeId: null,
       sizeName: null,
       title: offer.title,
@@ -206,13 +207,24 @@ function OfferDetailPage() {
 
                 <button
                   onClick={handleAdd}
-                  className="flex-1 flex items-center justify-center gap-2 h-12 sm:h-14 rounded-full bg-crimson hover:bg-crimson-deep text-white font-semibold text-base sm:text-lg shadow-elevated transition-all active:scale-[0.98]"
+                  disabled={!offer.is_active}
+                  className={`flex-1 flex items-center justify-center gap-2 h-12 sm:h-14 rounded-full font-semibold text-base sm:text-lg shadow-elevated transition-all ${
+                    offer.is_active
+                      ? "bg-crimson hover:bg-crimson-deep text-white active:scale-[0.98]"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
                 >
-                  <ShoppingCart className="h-5 w-5" />
-                  أضف إلى السلة
-                  <span className="font-normal opacity-80 mr-1 hidden sm:inline">
-                    ({unitPrice * quantity} ج.م)
-                  </span>
+                  {offer.is_active ? (
+                    <>
+                      <ShoppingCart className="h-5 w-5" />
+                      أضف إلى السلة
+                      <span className="font-normal opacity-80 mr-1 hidden sm:inline">
+                        ({unitPrice * quantity} ج.م)
+                      </span>
+                    </>
+                  ) : (
+                    "غير متوفر"
+                  )}
                 </button>
               </div>
             </div>

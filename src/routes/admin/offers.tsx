@@ -78,6 +78,7 @@ function AdminOffers() {
     discount_type: "fixed",
     discount_value: "",
     is_active: true,
+    is_hidden: false,
     product_id: "",
     old_price: "",
     new_price: "",
@@ -93,6 +94,7 @@ function AdminOffers() {
       discount_type: "none",
       discount_value: "",
       is_active: true,
+      is_hidden: false,
       product_id: "",
       old_price: "",
       new_price: "",
@@ -116,6 +118,7 @@ function AdminOffers() {
       discount_type: offer.discount_type || "none",
       discount_value: offer.discount_value?.toString() || "",
       is_active: offer.is_active ?? true,
+      is_hidden: offer.is_hidden ?? false,
       product_id: offer.product_id || "",
       old_price: offer.old_price?.toString() || "",
       new_price: offer.new_price?.toString() || "",
@@ -274,6 +277,7 @@ function AdminOffers() {
       discount_type: formData.discount_type as "none" | "percentage" | "fixed",
       discount_value: formData.discount_type === "none" ? null : (formData.discount_value ? parseFloat(formData.discount_value) : null),
       is_active: formData.is_active,
+      is_hidden: formData.is_hidden,
       product_id: formData.product_id ? formData.product_id : null,
       old_price: formData.old_price ? parseFloat(formData.old_price) : null,
       new_price: formData.new_price ? parseFloat(formData.new_price) : null,
@@ -320,7 +324,8 @@ function AdminOffers() {
                 <TableHead className="text-right whitespace-nowrap">السعر</TableHead>
                 <TableHead className="text-right whitespace-nowrap">الخصم</TableHead>
                 <TableHead className="text-right whitespace-nowrap">المنتج</TableHead>
-                <TableHead className="text-right whitespace-nowrap">الحالة</TableHead>
+                <TableHead className="text-right whitespace-nowrap">النشاط</TableHead>
+                <TableHead className="text-right whitespace-nowrap">مخفي</TableHead>
                 <TableHead className="text-right whitespace-nowrap">إجراءات</TableHead>
               </TableRow>
             </TableHeader>
@@ -373,11 +378,23 @@ function AdminOffers() {
                       {linkedProduct ? linkedProduct.name : <span className="text-gray-400">غير مرتبط</span>}
                     </TableCell>
                     <TableCell>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs ${offer.is_active ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"}`}
-                      >
-                        {offer.is_active ? "نشط" : "غير نشط"}
-                      </span>
+                      <Switch
+                        checked={offer.is_active ?? true}
+                        onCheckedChange={(v) => {
+                          updateMut.mutate({ is_active: v });
+                          setEditingOffer(offer); // To let mutation know which id to use... wait, updateMut uses editingOffer!.id in mutationFn! 
+                          // Better way: we need to call api.updateOffer directly or use a standalone mutation for inline toggles.
+                          api.updateOffer(offer.id, { is_active: v }).then(() => queryClient.invalidateQueries({ queryKey: ["adminOffers"] }));
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <Switch
+                        checked={offer.is_hidden ?? false}
+                        onCheckedChange={(v) => {
+                          api.updateOffer(offer.id, { is_hidden: v }).then(() => queryClient.invalidateQueries({ queryKey: ["adminOffers"] }));
+                        }}
+                      />
                     </TableCell>
                     <TableCell>
                       <div className="flex gap-2">
@@ -569,15 +586,25 @@ function AdminOffers() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center justify-between rounded-md border p-3">
                 <Label htmlFor="is_active" className="cursor-pointer">
-                  العرض نشط
+                  العرض نشط (متاح للطلب)
                 </Label>
                 <Switch
                   id="is_active"
                   checked={formData.is_active}
                   onCheckedChange={(v) => setFormData({ ...formData, is_active: v })}
+                />
+              </div>
+              <div className="flex items-center justify-between rounded-md border p-3">
+                <Label htmlFor="is_hidden" className="cursor-pointer">
+                  العرض مخفي (غير ظاهر للمستخدمين)
+                </Label>
+                <Switch
+                  id="is_hidden"
+                  checked={formData.is_hidden}
+                  onCheckedChange={(v) => setFormData({ ...formData, is_hidden: v })}
                 />
               </div>
             </div>

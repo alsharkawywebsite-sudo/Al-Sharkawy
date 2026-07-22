@@ -55,6 +55,7 @@ export type Offer = {
   discount_value: number | null;
   is_active: boolean | null;
   is_featured?: boolean | null;
+  is_hidden?: boolean | null;
   product_id?: string | null;
   old_price?: number | null;
   new_price?: number | null;
@@ -70,6 +71,7 @@ export type CartLine = {
   productId: string;
   sizeId: string | null;
   sizeName: string | null;
+  offerId?: string | null;
   title: string;
   description: string | null;
   imageUrl: string | null;
@@ -115,6 +117,7 @@ export type CreateOrderPayload = {
   items: Array<{
     productId: string;
     sizeId: string | null;
+    offerId?: string | null;
     quantity: number;
     unitPrice: number;
     title?: string;
