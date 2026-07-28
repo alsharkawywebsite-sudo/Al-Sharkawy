@@ -33,6 +33,10 @@ interface PayloadData {
   branchName?: string;
   customer: CustomerData;
   items: ItemData[];
+  // NOTE: deliveryFee removed from the form. Field kept optional here (and
+  // in every usage below) so nothing breaks if it's ever sent again from
+  // an old client build. See "DELIVERY FEE (DISABLED)" comments throughout
+  // this file for how to fully re-enable it.
   deliveryFee?: number;
   orderId?: string;
   subtotal?: number;
@@ -70,9 +74,18 @@ function formatOrderNotes(payload: PayloadData): string {
     `الهاتف: ${customer.phone.trim()}`,
     `العنوان: ${customer.address.trim()}`,
   ];
-  if (payload.deliveryFee > 0) {
-    lines.push(`رسوم التوصيل: ${payload.deliveryFee}`);
-  }
+
+  // ---- DELIVERY FEE (DISABLED) ----------------------------------------
+  // The delivery fee field was removed from the customer-facing form.
+  // Left here commented out (not deleted) in case delivery gets
+  // reintroduced later. To re-enable: uncomment this block and the
+  // matching blocks below marked "DELIVERY FEE (DISABLED)".
+  //
+  // if (payload.deliveryFee > 0) {
+  //   lines.push(`رسوم التوصيل: ${payload.deliveryFee}`);
+  // }
+  // ----------------------------------------------------------------------
+
   if (customer.notes?.trim()) {
     lines.push(`ملاحظات: ${customer.notes.trim()}`);
   }
@@ -112,27 +125,33 @@ function formatOrderHtml(data: PayloadData): string {
     ? `\n📝 <b>ملاحظات:</b> ${escapeHtml(data.customer.notes.trim())}`
     : "";
 
-  const branchLine = data.branchName ? `🏪 <b>الفرع:</b> ${escapeHtml(data.branchName)}` : null;
-
   const lines = [
-    `🆕 <b>طلب جديد</b>`,
-    ``,
-    branchLine,
+    `🆕 <b>طلب جديد</b>${data.branchName ? ` — ${escapeHtml(data.branchName)}` : ""}`,
+    `➖➖➖➖➖➖➖➖➖➖`,
     `🆔 <b>رقم الطلب:</b> <code>${escapeHtml(data.orderId.slice(0, 8))}</code>`,
     `👤 <b>الاسم:</b> ${escapeHtml(data.customer.name)}`,
     `📞 <b>الهاتف:</b> <code>${escapeHtml(data.customer.phone)}</code>`,
     `📍 <b>العنوان:</b> ${escapeHtml(data.customer.address)}`,
-    ``,
+    `➖➖➖➖➖➖➖➖➖➖`,
     `🍽 <b>الأصناف:</b>`,
     items || "—",
-    ``,
-    `💰 <b>الفرعي:</b> ${formatMoney(data.subtotal)}`,
-    `🛵 <b>التوصيل:</b> ${formatMoney(data.deliveryFee)}`,
+    `➖➖➖➖➖➖➖➖➖➖`,
+    // ---- DELIVERY FEE (DISABLED) --------------------------------------
+    // Previously the subtotal / delivery / final total were shown as three
+    // separate lines. Since there's no delivery fee anymore, the subtotal
+    // line is redundant with the final total (they're equal), so we just
+    // show one "الإجمالي" line below. To re-enable delivery, restore:
+    //
+    // `💰 <b>الفرعي:</b> ${formatMoney(data.subtotal)}`,
+    // `🛵 <b>التوصيل:</b> ${formatMoney(data.deliveryFee)}`,
+    // and change the total line back to reference data.finalTotal
+    // (already does — no change needed there).
+    // --------------------------------------------------------------------
     `✅ <b>الإجمالي:</b> ${formatMoney(data.finalTotal)}`,
     notes,
   ];
 
-  return lines.filter((l) => l !== null).join("\n");
+  return lines.filter((l) => l !== null && l !== "").join("\n");
 }
 
 async function sendTelegramMessage(html: string): Promise<void> {
@@ -263,11 +282,23 @@ serve(async (req) => {
       });
     }
 
-    const deliveryFee = Number(payload.deliveryFee) || 0;
-    if (!Number.isFinite(deliveryFee) || deliveryFee < 0) {
-      throw new Error("رسوم التوصيل غير صالحة");
-    }
-    const serverFinalTotal = serverSubtotal + deliveryFee;
+    // ---- DELIVERY FEE (DISABLED) -------------------------------------------
+    // The delivery fee input was removed from the customer-facing form, so
+    // there is no longer a trustworthy `payload.deliveryFee` to validate or
+    // charge. Everything below is commented out rather than deleted so the
+    // feature can be restored quickly if delivery comes back.
+    //
+    // To re-enable: uncomment the two lines below, and add `+ deliveryFee`
+    // back into `serverFinalTotal` further down, and restore the
+    // corresponding lines in formatOrderNotes / formatOrderHtml / the
+    // telegramPayload object (see matching comments in those spots).
+    //
+    // const deliveryFee = Number(payload.deliveryFee) || 0;
+    // if (!Number.isFinite(deliveryFee) || deliveryFee < 0) {
+    //   throw new Error("رسوم التوصيل غير صالحة");
+    // }
+    // -------------------------------------------------------------------------
+    const serverFinalTotal = serverSubtotal; // was: serverSubtotal + deliveryFee
 
     // 2) Insert order
     const { data: order, error } = await supabase
@@ -281,7 +312,7 @@ serve(async (req) => {
         notes: formatOrderNotes({
           customer: payload.customer,
           branchName: payload.branchName,
-          deliveryFee: deliveryFee,
+          // deliveryFee, // DELIVERY FEE (DISABLED) — see formatOrderNotes
           items: validItems
         }),
       })
@@ -319,7 +350,7 @@ serve(async (req) => {
         branchName: payload.branchName,
         items: validItems,
         subtotal: serverSubtotal,
-        deliveryFee: deliveryFee,
+        // deliveryFee, // DELIVERY FEE (DISABLED) — see formatOrderHtml
         finalTotal: serverFinalTotal,
       };
       await sendTelegramMessage(formatOrderHtml(telegramPayload));

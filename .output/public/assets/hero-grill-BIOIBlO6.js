@@ -1,1 +1,0 @@
-var e=`/assets/hero-grill-CmswXN6W.webp`;export{e as t};
