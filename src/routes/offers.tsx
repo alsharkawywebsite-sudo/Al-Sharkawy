@@ -84,10 +84,9 @@ function OffersPage() {
 
   const addOfferToCart = (offer: Offer) => {
     // Never fall back to offer.id — order_items.product_id FK targets products only.
-    const linkedProductId = offer.product_id ?? null;
     addItem({
       key: `offer:${offer.id}`,
-      productId: linkedProductId ?? `offer:${offer.id}`,
+      productId: offer.product_id || undefined,
       offerId: offer.id,
       sizeId: null,
       sizeName: null,

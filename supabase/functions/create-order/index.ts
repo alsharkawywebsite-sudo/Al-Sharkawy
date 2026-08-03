@@ -25,6 +25,7 @@ interface ItemData {
   product_size_id?: string | null;
   product_id?: string;
   offerId?: string;
+  offer_id?: string;
   discount_applied?: number;
 }
 
@@ -197,9 +198,20 @@ serve(async (req) => {
     }
 
     // 1) Validate items & Calculate totals
-    const candidateProductIds = [...new Set(payload.items.map((i: ItemData) => asUuidOrNull(i.productId)).filter(Boolean))];
     const candidateSizeIds = [...new Set(payload.items.map((i: ItemData) => asUuidOrNull(i.sizeId)).filter(Boolean))];
     const candidateOfferIds = [...new Set(payload.items.map((i: ItemData) => asUuidOrNull(i.offerId)).filter(Boolean))];
+
+    let offersData: any[] = [];
+    if (candidateOfferIds.length > 0) {
+      const res = await supabase.from("offers").select("id, title, is_active, product_id, new_price, old_price, discount_type, discount_value").in("id", candidateOfferIds);
+      offersData = res.data || [];
+    }
+    const offerMap = new Map(offersData.map((o: any) => [o.id, o]));
+
+    const candidateProductIds = [...new Set([
+      ...payload.items.map((i: ItemData) => asUuidOrNull(i.productId)),
+      ...offersData.map((o: any) => asUuidOrNull(o.product_id))
+    ].filter(Boolean))];
 
     if (candidateProductIds.length === 0 && candidateOfferIds.length === 0) throw new Error("السلة فارغة أو الأصناف غير صالحة");
 
@@ -208,13 +220,6 @@ serve(async (req) => {
       .select("id, name, base_price, is_active, discount_type, discount_value")
       .in("id", candidateProductIds);
     const productMap = new Map(productsData?.map((p: ProductData) => [p.id, p]) || []);
-
-    let offersData: any[] = [];
-    if (candidateOfferIds.length > 0) {
-      const res = await supabase.from("offers").select("id, title, is_active").in("id", candidateOfferIds);
-      offersData = res.data || [];
-    }
-    const offerMap = new Map(offersData.map((o: any) => [o.id, o]));
 
     let sizesData: SizeData[] = [];
     if (candidateSizeIds.length > 0) {
@@ -231,11 +236,38 @@ serve(async (req) => {
 
     for (const item of payload.items) {
       const offerId = asUuidOrNull(item.offerId);
+      const quantity = Math.max(1, parseInt(String(item.quantity)) || 1);
+
       if (offerId) {
         const offer = offerMap.get(offerId);
-        if (offer && offer.is_active === false) {
+        if (!offer) throw new Error("العرض غير موجود");
+        if (offer.is_active === false) {
           throw new Error(`العرض غير متاح: ${offer.title}`);
         }
+
+        if (offer.product_id) {
+          const product = productMap.get(offer.product_id);
+          if (!product) throw new Error("المنتج المرتبط بالعرض غير موجود");
+          if (product.is_active === false) throw new Error(`المنتج المرتبط بالعرض غير متاح: ${product.name}`);
+        }
+
+        const unitPrice = offer.new_price || 0;
+        const originalPrice = offer.old_price || unitPrice;
+        
+        serverSubtotal += unitPrice * quantity;
+        
+        validItems.push({
+          product_id: offer.product_id || undefined,
+          product_size_id: undefined,
+          offer_id: offerId,
+          quantity: quantity,
+          unitPrice: unitPrice,
+          discount_applied: Math.max(0, (originalPrice - unitPrice) * quantity),
+          title: offer.title,
+          sizeName: undefined
+        });
+        
+        continue;
       }
 
       const productId = asUuidOrNull(item.productId);
@@ -266,8 +298,6 @@ serve(async (req) => {
           unitPrice = Math.round(Math.max(0, originalPrice - product.discount_value));
         }
       }
-      
-      const quantity = Math.max(1, parseInt(item.quantity) || 1);
       
       serverSubtotal += unitPrice * quantity;
       
@@ -329,6 +359,7 @@ serve(async (req) => {
       order_id: orderId,
       product_id: item.product_id,
       product_size_id: item.product_size_id,
+      offer_id: item.offer_id,
       quantity: item.quantity,
       unit_price: item.unitPrice,
       discount_applied: item.discount_applied,

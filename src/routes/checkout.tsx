@@ -144,6 +144,7 @@ function CheckoutForm() {
       };
       const orderItems = items.map((item) => ({
         productId: item.productId,
+        offerId: item.offerId,
         sizeId: item.sizeId,
         quantity: item.quantity,
         unitPrice: item.unitPrice,
