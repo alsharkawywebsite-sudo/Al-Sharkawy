@@ -3,7 +3,7 @@ import logoAsset from "@/assets/logo.webp";
 export function Footer() {
   // استبدل هذا الرقم برقمك الفعلي بكود الدولة (بدون أصفار أو علامة +)
   const whatsappNumber = "201028551063";
-  const whatsappMessage = encodeURIComponent("مرحباً عمر، شاهدت عملك في موقع الشرقاوي وأود التواصل معك!");
+  const whatsappMessage = encodeURIComponent("مرحباً KODO، شاهدت موقع الشرقاوي وأود التواصل معكم!");
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
 
   return (
@@ -39,7 +39,7 @@ export function Footer() {
               className="relative inline-block font-bold transition-all duration-300 hover:scale-105 group"
             >
               <span className="bg-gradient-to-r from-crimson to-amber-deep bg-clip-text text-transparent group-hover:from-green-600 group-hover:to-emerald-500 transition-colors duration-300">
-                Omar Sayed
+                KODO
               </span>
               {/* خط سفلي متحرك */}
               <span className="absolute bottom-0 left-0 h-[1.5px] w-0 bg-gradient-to-r from-crimson to-amber-deep transition-all duration-300 group-hover:w-full group-hover:from-green-600 group-hover:to-emerald-500"></span>
