@@ -31,7 +31,7 @@ export function Footer() {
           {/* تم إصلاح الاتجاه هنا */}
           {/* لمسة المطور الجذابة - حل مشكلة الفراغ */}
           <p className="text-xs text-muted-foreground" dir="ltr">
-            Developed by{" "}
+            Built by{" "}
             <a
               href={whatsappUrl}
               target="_blank"
