@@ -10,7 +10,16 @@ import type { Offer } from "@/types";
 import { ProductCardSkeletonGrid } from "@/components/ProductCardSkeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import { getOffers } from "@/services/api";
+
 export const Route = createFileRoute("/offers")({
+  loader: ({ context: { queryClient } }) => {
+    queryClient.ensureQueryData({
+      queryKey: ["offers"],
+      queryFn: getOffers,
+      staleTime: 5 * 60 * 1000,
+    });
+  },
   component: OffersPage,
 });
 
@@ -86,7 +95,7 @@ function OffersPage() {
     // Never fall back to offer.id — order_items.product_id FK targets products only.
     addItem({
       key: `offer:${offer.id}`,
-      productId: offer.product_id || undefined,
+      productId: offer.product_id || `offer:${offer.id}`,
       offerId: offer.id,
       sizeId: null,
       sizeName: null,

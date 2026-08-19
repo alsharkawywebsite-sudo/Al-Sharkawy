@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
 import { Search, Star, Heart, ShoppingCart } from "lucide-react";
 import { publicToast as toast } from "@/store/toast";
 import heroGrill from "@/assets/hero-grill.webp";
 import { useMenuCategories, useMenuItems } from "@/hooks/useData";
+import { getCategories, getMenuItems } from "@/services/api";
 import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
 import type { Product } from "@/types";
@@ -22,6 +23,18 @@ export const Route = createFileRoute("/menu")({
     return {
       category: search.category as string | undefined,
     };
+  },
+  loader: ({ context: { queryClient } }) => {
+    queryClient.ensureQueryData({
+      queryKey: ["categories"],
+      queryFn: getCategories,
+      staleTime: 5 * 60 * 1000,
+    });
+    queryClient.ensureQueryData({
+      queryKey: ["menuItems"],
+      queryFn: getMenuItems,
+      staleTime: 5 * 60 * 1000,
+    });
   },
   component: MenuPage,
 });
@@ -67,18 +80,19 @@ function MenuPage() {
   const { addItem } = useCart();
   const { isFavorite, toggle } = useFavorites();
   const [query, setQuery] = useState("");
+  const deferredQuery = useDeferredValue(query);
 
   const categories = menuCategories ?? [];
   const items = menuItems ?? [];
 
   const filteredItems = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const q = deferredQuery.trim().toLowerCase();
     if (!q) return items;
     return items.filter((it) => {
       const hay = `${it.name ?? ""} ${it.description ?? ""}`.toLowerCase();
       return hay.includes(q);
     });
-  }, [items, query]);
+  }, [items, deferredQuery]);
 
   const handleAdd = (p: Product) => {
     const size = p.product_sizes?.[0];

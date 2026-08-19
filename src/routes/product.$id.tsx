@@ -10,7 +10,18 @@ import { useFavorites } from "@/store/favorites";
 import type { ProductSize } from "@/types";
 import { getProductDisplayPrice } from "@/lib/utils";
 import { ProductDetailSkeleton } from "@/components/ProductCardSkeleton";
+import { getProductById } from "@/services/api";
+
 export const Route = createFileRoute("/product/$id")({
+  loader: ({ context: { queryClient }, params: { id } }) => {
+    if (id) {
+      queryClient.ensureQueryData({
+        queryKey: ["product", id],
+        queryFn: () => getProductById(id),
+        staleTime: 5 * 60 * 1000,
+      });
+    }
+  },
   component: ProductPage,
 });
 

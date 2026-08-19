@@ -15,7 +15,21 @@ import {
   ProductCardSkeletonGrid,
 } from "@/components/ProductCardSkeleton";
 
+import { getCategories, getFeaturedProducts } from "@/services/api";
+
 export const Route = createFileRoute("/")({
+  loader: ({ context: { queryClient } }) => {
+    queryClient.ensureQueryData({
+      queryKey: ["categories"],
+      queryFn: getCategories,
+      staleTime: 5 * 60 * 1000,
+    });
+    queryClient.ensureQueryData({
+      queryKey: ["featuredProducts"],
+      queryFn: getFeaturedProducts,
+      staleTime: 5 * 60 * 1000,
+    });
+  },
   component: Index,
 });
 

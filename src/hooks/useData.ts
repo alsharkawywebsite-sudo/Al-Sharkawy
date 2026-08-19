@@ -23,8 +23,14 @@ export function useCategories() {
 
 export function useMenuCategories() {
   return useQuery({
-    queryKey: ["menuCategories"],
-    queryFn: getMenuCategories,
+    queryKey: ["categories"],
+    queryFn: getCategories,
+    select: (data) =>
+      data.map((c) => ({
+        id: c.id,
+        slug: c.slug,
+        name: c.name,
+      })),
     staleTime: FIVE_MINUTES,
   });
 }

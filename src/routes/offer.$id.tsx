@@ -8,8 +8,18 @@ import { useOffer } from "@/hooks/useData";
 import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
 import { ProductDetailSkeleton } from "@/components/ProductCardSkeleton";
+import { getOfferById } from "@/services/api";
 
 export const Route = createFileRoute("/offer/$id")({
+  loader: ({ context: { queryClient }, params: { id } }) => {
+    if (id) {
+      queryClient.ensureQueryData({
+        queryKey: ["offer", id],
+        queryFn: () => getOfferById(id),
+        staleTime: 5 * 60 * 1000,
+      });
+    }
+  },
   component: OfferDetailPage,
 });
 

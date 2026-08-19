@@ -17,8 +17,11 @@ function readFromStorage(): CartLine[] {
   }
 }
 
+let countCache = cache.reduce((acc, it) => acc + it.quantity, 0);
+
 function writeToStorage(next: CartLine[]) {
   cache = next;
+  countCache = next.reduce((acc, it) => acc + it.quantity, 0);
   if (typeof window !== "undefined") {
     try {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
@@ -40,10 +43,18 @@ function getSnapshot(): CartLine[] {
   return cache;
 }
 
+function getCountSnapshot(): number {
+  return countCache;
+}
+
 const EMPTY_CART: CartLine[] = [];
 
 function getServerSnapshot(): CartLine[] {
   return EMPTY_CART;
+}
+
+function getServerCountSnapshot(): number {
+  return 0;
 }
 
 // Cross-tab sync.
@@ -51,8 +62,13 @@ if (typeof window !== "undefined") {
   window.addEventListener("storage", (event) => {
     if (event.key !== STORAGE_KEY) return;
     cache = readFromStorage();
+    countCache = cache.reduce((acc, it) => acc + it.quantity, 0);
     listeners.forEach((l) => l());
   });
+}
+
+export function useCartCount(): number {
+  return useSyncExternalStore(subscribe, getCountSnapshot, getServerCountSnapshot);
 }
 
 export function useCart() {
@@ -83,7 +99,7 @@ export function useCart() {
 
   const clear = useCallback(() => writeToStorage([]), []);
 
-  const count = items.reduce((acc, it) => acc + it.quantity, 0);
+  const count = countCache;
   const subtotal = items.reduce((acc, it) => acc + it.unitPrice * it.quantity, 0);
 
   return { items, count, subtotal, addItem, updateQuantity, removeItem, clear };

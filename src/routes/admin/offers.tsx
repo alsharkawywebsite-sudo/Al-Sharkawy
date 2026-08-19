@@ -274,7 +274,7 @@ function AdminOffers() {
       title: formData.title,
       description: formData.description || null,
       image_url: formData.image_url || null,
-      discount_type: formData.discount_type as "none" | "percentage" | "fixed",
+      discount_type: formData.discount_type === "none" ? null : (formData.discount_type as "percentage" | "fixed"),
       discount_value: formData.discount_type === "none" ? null : (formData.discount_value ? parseFloat(formData.discount_value) : null),
       is_active: formData.is_active,
       is_hidden: formData.is_hidden,

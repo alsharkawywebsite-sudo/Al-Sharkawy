@@ -229,8 +229,9 @@ function AdminProducts() {
       }
     }
 
-    const submitData = {
+    const submitData: Partial<Product> = {
       ...formData,
+      discount_type: formData.discount_type as "none" | "percentage" | "fixed",
       base_price: sizes.length > 0 ? null : parseFloat(formData.base_price) || null,
       discount_value: formData.discount_value ? parseFloat(formData.discount_value) : null,
     };

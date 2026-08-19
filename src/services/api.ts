@@ -76,18 +76,31 @@ export async function getAdminProducts(): Promise<Product[]> {
   return (data ?? []) as Product[];
 }
 
-export async function getFeaturedProducts(): Promise<Product[]> {
-  const { data: setting } = await supabase
-    .from("site_settings")
-    .select("value")
-    .eq("key", "featured_products")
-    .maybeSingle();
+let cachedFeaturedIds: { ids: string[]; timestamp: number } | null = null;
+const FEATURED_IDS_CACHE_TTL = 5 * 60 * 1000;
 
+export async function getFeaturedProducts(): Promise<Product[]> {
   let ids: string[] = [];
-  if (setting?.value) {
-    try {
-      ids = JSON.parse(setting.value);
-    } catch {}
+  const now = Date.now();
+
+  if (cachedFeaturedIds && now - cachedFeaturedIds.timestamp < FEATURED_IDS_CACHE_TTL) {
+    ids = cachedFeaturedIds.ids;
+  } else {
+    const { data: setting } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "featured_products")
+      .maybeSingle();
+
+    if (setting?.value) {
+      try {
+        const parsed = JSON.parse(setting.value);
+        if (Array.isArray(parsed)) {
+          ids = parsed;
+          cachedFeaturedIds = { ids, timestamp: now };
+        }
+      } catch {}
+    }
   }
 
   if (ids.length > 0) {
@@ -314,6 +327,9 @@ export async function updateSiteSetting(key: string, value: string): Promise<voi
     .from("site_settings")
     .upsert({ key, value, updated_at: new Date().toISOString() });
   if (error) throw error;
+  if (key === "featured_products") {
+    cachedFeaturedIds = null;
+  }
 }
 
 // ---- Branches -------------------------------------------------------------

@@ -6,7 +6,16 @@ import { Footer } from "@/components/layout/Footer";
 import { useCategories } from "@/hooks/useData";
 import { CategoryCardSkeleton } from "@/components/ProductCardSkeleton";
 
+import { getCategories } from "@/services/api";
+
 export const Route = createFileRoute("/categories")({
+  loader: ({ context: { queryClient } }) => {
+    queryClient.ensureQueryData({
+      queryKey: ["categories"],
+      queryFn: getCategories,
+      staleTime: 5 * 60 * 1000,
+    });
+  },
   component: CategoriesPage,
 });
 
