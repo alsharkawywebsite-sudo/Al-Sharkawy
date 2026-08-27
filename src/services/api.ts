@@ -12,10 +12,18 @@ import type {
 
 // ---- Categories ---------------------------------------------------------
 
+// ---- Column whitelists (public reads) ------------------------------------
+// Trim payloads: skip internal timestamps/audit columns the UI never renders.
+const CATEGORY_COLUMNS = "id, name, slug, image_url, sort_order";
+const PUBLIC_PRODUCT_SELECT =
+  "id, category_id, name, description, image_url, base_price, discount_type, discount_value, is_active, tag, spicy, product_sizes(id, product_id, name, price, is_active)";
+const PUBLIC_OFFER_SELECT =
+  "id, title, description, image_url, discount_type, discount_value, is_active, is_featured, is_hidden, product_id, old_price, new_price, expires_in, savings";
+
 export async function getCategories(): Promise<Category[]> {
   const { data, error } = await supabase
     .from("categories")
-    .select("*")
+    .select(CATEGORY_COLUMNS)
     .order("sort_order", { ascending: true });
   if (error) throw error;
   return (data ?? []) as Category[];
@@ -60,7 +68,7 @@ const PRODUCT_SELECT = "*, product_sizes(*)";
 export async function getMenuItems(): Promise<Product[]> {
   const { data, error } = await supabase
     .from("products")
-    .select(PRODUCT_SELECT)
+    .select(PUBLIC_PRODUCT_SELECT)
     .eq("is_active", true)
     .order("created_at", { ascending: false });
   if (error) throw error;
@@ -106,7 +114,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
   if (ids.length > 0) {
     const { data, error } = await supabase
       .from("products")
-      .select(PRODUCT_SELECT)
+      .select(PUBLIC_PRODUCT_SELECT)
       .in("id", ids)
       .eq("is_active", true);
     if (error) throw error;
@@ -119,7 +127,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
   // Fallback
   const { data, error } = await supabase
     .from("products")
-    .select(PRODUCT_SELECT)
+    .select(PUBLIC_PRODUCT_SELECT)
     .eq("is_active", true)
     .order("created_at", { ascending: false })
     .limit(4);
@@ -130,7 +138,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
 export async function getProductById(id: string): Promise<Product | null> {
   const { data, error } = await supabase
     .from("products")
-    .select(PRODUCT_SELECT)
+    .select(PUBLIC_PRODUCT_SELECT)
     .eq("id", id)
     .maybeSingle();
   if (error) throw error;
@@ -193,7 +201,7 @@ export async function deleteProduct(id: string): Promise<true> {
 export async function getOffers(): Promise<Offer[]> {
   const { data, error } = await supabase
     .from("offers")
-    .select("*")
+    .select(PUBLIC_OFFER_SELECT)
     .eq("is_hidden", false)
     .order("created_at", { ascending: false });
   if (error) throw error;

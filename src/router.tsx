@@ -7,7 +7,8 @@ export const getRouter = () => {
     defaultOptions: {
       queries: {
         staleTime: 60_000,
-        gcTime: 5 * 60_000,
+        // Keep cached data alive across in-app navigation (session-long).
+        gcTime: 30 * 60_000,
         refetchOnWindowFocus: false,
         retry: 1,
       },

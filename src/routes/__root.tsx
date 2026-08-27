@@ -16,7 +16,10 @@ import { CustomToaster } from "@/components/ui/CustomToast";
 
 /** Google Fonts stylesheet — `display=swap` avoids invisible text (FOIT) while fonts load. */
 const GOOGLE_FONTS_HREF =
-  "https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&display=swap";
+  "https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&display=swap";
+
+// Warm up connections to data + image origins while the JS bundles download.
+const PRECONNECT_ORIGINS = ["https://wgkecyczhfunxjbqvgji.supabase.co", "https://i.ibb.co"];
 
 function NotFoundComponent() {
   return (
@@ -117,6 +120,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      ...PRECONNECT_ORIGINS.map((href) => ({ rel: "preconnect", href })),
       // Preload font CSS early; apply non-blocking with display=swap in RootShell.
       { rel: "preload", as: "style", href: GOOGLE_FONTS_HREF },
     ],
