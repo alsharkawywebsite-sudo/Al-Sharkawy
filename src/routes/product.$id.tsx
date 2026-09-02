@@ -1,7 +1,7 @@
 import { createFileRoute, useRouter, Link } from "@tanstack/react-router";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
-import { Heart, ShoppingCart, Star, ArrowRight, Minus, Plus } from "lucide-react";
+import { Heart, ShoppingCart, Star, ArrowRight, Minus, Plus, Check } from "lucide-react";
 import { useMemo, useState } from "react";
 import { publicToast as toast } from "@/store/toast";
 import { useProduct } from "@/hooks/useData";
@@ -39,6 +39,7 @@ function ProductPage() {
 
   const [selectedSizeId, setSelectedSizeId] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
 
   const sizes = useMemo(() => product?.product_sizes ?? [], [product]);
   const activeSize = useMemo(
@@ -111,6 +112,10 @@ function ProductPage() {
       quantity,
     });
     toast.success("تمت الإضافة إلى السلة");
+    setIsAdded(true);
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 1500);
   };
 
   return (
@@ -236,13 +241,26 @@ function ProductPage() {
 
                 <button
                   onClick={handleAdd}
-                  className="flex-1 flex items-center justify-center gap-2 h-12 sm:h-14 rounded-full bg-crimson hover:bg-crimson-deep text-white font-semibold text-base sm:text-lg shadow-elevated transition-all active:scale-[0.98]"
+                  className={`flex-1 flex items-center justify-center gap-2 h-12 sm:h-14 rounded-full font-semibold text-base sm:text-lg shadow-elevated transition-all duration-300 active:scale-[0.98] ${
+                    isAdded
+                      ? "bg-emerald-600 hover:bg-emerald-700 text-white"
+                      : "bg-crimson hover:bg-crimson-deep text-white"
+                  }`}
                 >
-                  <ShoppingCart className="h-5 w-5" />
-                  أضف إلى السلة
-                  <span className="font-normal opacity-80 mr-1 hidden sm:inline">
-                    ({unitPrice * quantity} ج.م)
-                  </span>
+                  {isAdded ? (
+                    <>
+                      <Check className="h-5 w-5 animate-in zoom-in" />
+                      <span>تمت الإضافة للسلة!</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="h-5 w-5" />
+                      <span>أضف إلى السلة</span>
+                      <span className="font-normal opacity-80 mr-1 hidden sm:inline">
+                        ({unitPrice * quantity} ج.م)
+                      </span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>

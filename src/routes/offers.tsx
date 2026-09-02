@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, Check } from "lucide-react";
 import { publicToast as toast } from "@/store/toast";
 import { useOffers } from "@/hooks/useData";
 import { useCart } from "@/store/cart";
@@ -31,6 +32,7 @@ function OffersPage() {
   const { data: offers, isLoading, isError } = useOffers();
   const { addItem } = useCart();
   const { isFavorite, toggle } = useFavorites();
+  const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
 
   if (isLoading) {
     return (
@@ -106,6 +108,14 @@ function OffersPage() {
       quantity: 1,
     });
     toast.success("تمت الإضافة إلى السلة");
+    setAddedIds((prev) => ({ ...prev, [offer.id]: true }));
+    setTimeout(() => {
+      setAddedIds((prev) => {
+        const next = { ...prev };
+        delete next[offer.id];
+        return next;
+      });
+    }, 1500);
   };
 
   const discountLabel = (offer: Offer) => {
@@ -224,10 +234,23 @@ function OffersPage() {
                     <button
                       onClick={() => addOfferToCart(featuredOffer)}
                       aria-label="أضف للسلة"
-                      className="flex items-center gap-1.5 rounded-full px-4 py-2 sm:px-6 sm:py-3 shadow-md transition-all bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
+                      className={`flex items-center gap-1.5 rounded-full px-4 py-2 sm:px-6 sm:py-3 shadow-md transition-all duration-300 active:scale-95 ${
+                        addedIds[featuredOffer.id]
+                          ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-elevated"
+                          : "bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated"
+                      }`}
                     >
-                      <span className="text-xs sm:text-sm font-semibold">أضف للسلة</span>
-                      <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+                      {addedIds[featuredOffer.id] ? (
+                        <>
+                          <span className="text-xs sm:text-sm font-semibold">تمت الإضافة</span>
+                          <Check className="h-4 w-4 sm:h-5 sm:w-5 animate-in zoom-in" />
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-xs sm:text-sm font-semibold">أضف للسلة</span>
+                          <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+                        </>
+                      )}
                     </button>
                   ) : (
                     <div className="flex items-center justify-center rounded-full px-4 py-2 sm:px-6 sm:py-3 border border-dashed border-gray-300 text-gray-500 bg-gray-50/50">
@@ -347,10 +370,23 @@ function OffersPage() {
                           <button
                             onClick={() => addOfferToCart(offer)}
                             aria-label="أضف للسلة"
-                            className="flex items-center gap-1.5 rounded-full px-2 py-1.5 sm:px-4 sm:py-2 shadow-md transition-all bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
+                            className={`flex items-center gap-1.5 rounded-full px-2 py-1.5 sm:px-4 sm:py-2 shadow-md transition-all duration-300 active:scale-95 ${
+                              addedIds[offer.id]
+                                ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-elevated"
+                                : "bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated"
+                            }`}
                           >
-                            <span className="text-[10px] sm:text-xs font-semibold hidden sm:inline">أضف</span>
-                            <ShoppingCart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                            {addedIds[offer.id] ? (
+                              <>
+                                <span className="text-[10px] sm:text-xs font-semibold hidden sm:inline">تمت الإضافة</span>
+                                <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5 animate-in zoom-in" />
+                              </>
+                            ) : (
+                              <>
+                                <span className="text-[10px] sm:text-xs font-semibold hidden sm:inline">أضف</span>
+                                <ShoppingCart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                              </>
+                            )}
                           </button>
                         ) : (
                           <div className="flex items-center justify-center rounded-full px-2 py-1.5 sm:px-4 sm:py-2 border border-dashed border-gray-300 text-gray-500 bg-gray-50/50">

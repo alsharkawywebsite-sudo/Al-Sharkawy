@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Nav } from "@/components/layout/Nav";
 import { Footer } from "@/components/layout/Footer";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { Heart, ShoppingCart, Star, Check } from "lucide-react";
 import { publicToast as toast } from "@/store/toast";
 import { useMenuItems } from "@/hooks/useData";
 import { useFavorites } from "@/store/favorites";
@@ -18,6 +18,7 @@ function FavoritesPage() {
   const { data: menuItems, isLoading, isError } = useMenuItems();
   const { ids, toggle } = useFavorites();
   const { addItem } = useCart();
+  const [addedIds, setAddedIds] = useState<Record<string, boolean>>({});
 
   const favorites = useMemo<Product[]>(() => {
     const set = new Set(ids);
@@ -38,6 +39,14 @@ function FavoritesPage() {
       quantity: 1,
     });
     toast.success("تمت الإضافة إلى السلة");
+    setAddedIds((prev) => ({ ...prev, [p.id]: true }));
+    setTimeout(() => {
+      setAddedIds((prev) => {
+        const next = { ...prev };
+        delete next[p.id];
+        return next;
+      });
+    }, 1500);
   };
 
   return (
@@ -139,12 +148,27 @@ function FavoritesPage() {
                           type="button"
                           aria-label="أضف للسلة"
                           onClick={() => handleAdd(p)}
-                          className="flex items-center gap-1.5 rounded-full bg-crimson px-2 py-1 sm:px-4 sm:py-2 text-alabaster shadow-md transition-all hover:bg-crimson-deep hover:shadow-elevated active:scale-95"
+                          className={`flex items-center gap-1.5 rounded-full px-2 py-1 sm:px-4 sm:py-2 shadow-md transition-all duration-300 active:scale-95 ${
+                            addedIds[p.id]
+                              ? "bg-emerald-600 hover:bg-emerald-700 text-white shadow-elevated"
+                              : "bg-crimson text-alabaster hover:bg-crimson-deep hover:shadow-elevated"
+                          }`}
                         >
-                          <span className="text-[10px] sm:text-xs font-semibold hidden sm:inline">
-                            أضف
-                          </span>
-                          <ShoppingCart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                          {addedIds[p.id] ? (
+                            <>
+                              <span className="text-[10px] sm:text-xs font-semibold hidden sm:inline">
+                                تمت الإضافة
+                              </span>
+                              <Check className="h-3 w-3 sm:h-3.5 sm:w-3.5 animate-in zoom-in" />
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-[10px] sm:text-xs font-semibold hidden sm:inline">
+                                أضف
+                              </span>
+                              <ShoppingCart className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                            </>
+                          )}
                         </button>
                       </div>
                     </div>
