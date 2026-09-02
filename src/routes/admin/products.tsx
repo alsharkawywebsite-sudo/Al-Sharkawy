@@ -366,9 +366,6 @@ function AdminProducts() {
                   <div className="flex items-center gap-2.5">
                     <span className="w-2.5 h-2.5 rounded-full bg-crimson" />
                     <h3 className="font-display font-bold text-base text-ink">{cat.name}</h3>
-                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-black/5 text-ink/70 font-medium">
-                      {catProds.length} {catProds.length === 1 ? "منتج" : "منتجات"}
-                    </span>
                   </div>
                   <Button
                     size="sm"
@@ -503,9 +500,6 @@ function AdminProducts() {
                   <h3 className="font-display font-bold text-base text-amber-900">
                     منتجات بدون فئة محددة
                   </h3>
-                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-800 font-medium">
-                    {groupedProducts.unassigned.length}
-                  </span>
                 </div>
               </div>
               <div className="overflow-x-auto">
