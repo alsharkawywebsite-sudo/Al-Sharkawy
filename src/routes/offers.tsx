@@ -90,14 +90,17 @@ function OffersPage() {
     );
   }
 
-  const featuredOffer = safeOffers.find((offer) => offer.is_featured) ?? safeOffers[0];
+  const featuredOffer =
+    safeOffers.find((offer) => offer.is_featured && offer.is_active) ??
+    safeOffers.find((offer) => offer.is_active) ??
+    safeOffers[0];
   const regularOffers = safeOffers.filter((offer) => offer.id !== featuredOffer.id);
 
   const addOfferToCart = (offer: Offer) => {
     // Never fall back to offer.id — order_items.product_id FK targets products only.
     addItem({
       key: `offer:${offer.id}`,
-      productId: offer.product_id || `offer:${offer.id}`,
+      productId: offer.product_id || offer.id,
       offerId: offer.id,
       sizeId: null,
       sizeName: null,

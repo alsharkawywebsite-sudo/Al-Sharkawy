@@ -93,10 +93,10 @@ function OfferDetailPage() {
   const handleAdd = () => {
     // order_items.product_id must reference products — never use offer.id.
     // offer_sizes are not product_sizes; omit size FK to avoid 409 conflicts.
-    const linkedProductId = offer.product_id ?? null;
+    const linkedProductId = offer.product_id ? offer.product_id : null;
     addItem({
       key: `offer:${offer.id}`,
-      productId: linkedProductId ?? `offer:${offer.id}`,
+      productId: linkedProductId ?? offer.id,
       offerId: offer.id,
       sizeId: null,
       sizeName: null,

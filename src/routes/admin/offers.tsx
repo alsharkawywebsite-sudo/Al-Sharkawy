@@ -192,15 +192,18 @@ function AdminOffers() {
     }
     const p = products.find((x: Product) => x.id === pid);
     let baseStr = "";
+    let productImageUrl = "";
     if (p) {
       const base = p.product_sizes && p.product_sizes.length > 0 ? p.product_sizes[0].price : p.base_price;
       if (base) baseStr = base.toString();
+      if (p.image_url) productImageUrl = p.image_url;
     }
     setFormData((prev) => {
       const newOld = prev.old_price || baseStr;
-      // schedule sync via effect or call directly if we know state
+      // auto-fill image from product only if admin hasn't set one manually
+      const newImageUrl = prev.image_url || productImageUrl;
       setTimeout(() => syncDiscount(newOld, prev.discount_type, prev.discount_value, prev.new_price, "old"), 0);
-      return { ...prev, product_id: pid, old_price: newOld };
+      return { ...prev, product_id: pid, old_price: newOld, image_url: newImageUrl };
     });
   };
 
