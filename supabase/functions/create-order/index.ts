@@ -434,6 +434,9 @@ serve(async (req) => {
     }
 
     // 4) Send Telegram
+    // NOTE: Telegram errors are intentionally non-fatal. The order has already
+    // been persisted in DB at this point; failing to send a notification must
+    // not make the customer think their order was rejected.
     try {
       const telegramPayload = {
         orderId,
@@ -450,8 +453,8 @@ serve(async (req) => {
         await sendTelegramMessage(html, chatId);
       }
     } catch (telegramErr) {
-      console.error("[telegram] internal error:", telegramErr);
-      throw new Error("تعذر تأكيد الطلب في الوقت الحالي. يُرجى المحاولة مرة أخرى بعد قليل، أو التواصل مع المطعم مباشرة إذا كان الطلب عاجلًا.");
+      // Log and continue — do NOT re-throw. The order is already saved in DB.
+      console.error("[telegram] notification failed (order still saved):", telegramErr);
     }
 
     return new Response(JSON.stringify(order), {
