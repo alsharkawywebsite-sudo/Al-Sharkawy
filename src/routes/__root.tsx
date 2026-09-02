@@ -100,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:url", content: "https://al-sharkawy.vercel.app" },
       { property: "og:site_name", content: "الشرقاوي" },
       { property: "og:locale", content: "ar_EG" },
-      { property: "og:image", content: "https://al-sharkawy.vercel.app/og-image.png" },
+      { property: "og:image", content: "https://al-sharkawy.vercel.app/og-image.webp" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: "شعار مطعم الشرقاوي - كبدة ومخ ومأكولات بحرية" },
@@ -111,7 +111,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "twitter:description",
         content: "مطعم الشرقاوي - أشهى أطباق الكبدة بالردة، المخ بانيه، والمأكولات البحرية بالتتبيلة الأصيلة.",
       },
-      { name: "twitter:image", content: "https://al-sharkawy.vercel.app/og-image.png" },
+      { name: "twitter:image", content: "https://al-sharkawy.vercel.app/og-image.webp" },
       { name: "twitter:image:alt", content: "شعار مطعم الشرقاوي - كبدة ومخ ومأكولات بحرية" },
     ],
     links: [
@@ -121,8 +121,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       ...PRECONNECT_ORIGINS.map((href) => ({ rel: "preconnect", href })),
-      // Preload font CSS early; apply non-blocking with display=swap in RootShell.
-      { rel: "preload", as: "style", href: GOOGLE_FONTS_HREF },
+      { rel: "stylesheet", href: GOOGLE_FONTS_HREF },
     ],
   }),
   shellComponent: RootShell,
@@ -133,21 +132,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="ar" dir="rtl">
-      <head>
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
+      <head suppressHydrationWarning>
         <HeadContent />
-        {/* media=print = non-blocking; script flips to all when ready. URL includes display=swap. */}
-        <link rel="stylesheet" href={GOOGLE_FONTS_HREF} media="print" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){var h=${JSON.stringify(GOOGLE_FONTS_HREF)};document.querySelectorAll('link[rel="stylesheet"][href="'+h+'"]').forEach(function(l){function a(){l.media="all"}l.addEventListener("load",a);if(l.sheet)a()});})();`,
-          }}
-        />
-        <noscript>
-          <link rel="stylesheet" href={GOOGLE_FONTS_HREF} />
-        </noscript>
       </head>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Scripts />
       </body>
