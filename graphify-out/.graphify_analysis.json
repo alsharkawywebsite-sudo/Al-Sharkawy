@@ -1,6 +1,162 @@
 {
   "communities": {
     "0": [
+      "src_components_layout_footer",
+      "src_components_layout_footer_footer",
+      "src_components_layout_nav",
+      "src_components_layout_nav_iconlink",
+      "src_components_layout_nav_nav",
+      "src_components_productcardskeleton",
+      "src_components_productcardskeleton_categorycardskeleton",
+      "src_components_productcardskeleton_categorycardskeletongrid",
+      "src_components_productcardskeleton_productcardskeleton",
+      "src_components_productcardskeleton_productcardskeletongrid",
+      "src_components_productcardskeleton_productdetailskeleton",
+      "src_hooks_usedata",
+      "src_hooks_usedata_usebranches",
+      "src_hooks_usedata_usecategories",
+      "src_hooks_usedata_usefeaturedproducts",
+      "src_hooks_usedata_usemenucategories",
+      "src_hooks_usedata_usemenuitems",
+      "src_hooks_usedata_useoffer",
+      "src_hooks_usedata_useoffers",
+      "src_hooks_usedata_useproduct",
+      "src_lib_utils_calculatediscountedprice",
+      "src_lib_utils_getproductdisplayprice",
+      "src_routes_categories",
+      "src_routes_categories_categoriespage",
+      "src_routes_categories_route",
+      "src_routes_favorites",
+      "src_routes_favorites_favoritespage",
+      "src_routes_favorites_route",
+      "src_routes_index",
+      "src_routes_index_categoriessection",
+      "src_routes_index_featuredsection",
+      "src_routes_index_hero",
+      "src_routes_index_index",
+      "src_routes_index_route",
+      "src_routes_menu",
+      "src_routes_menu_menuhero",
+      "src_routes_menu_menupage",
+      "src_routes_menu_menusearch",
+      "src_routes_menu_productsortoption",
+      "src_routes_menu_route",
+      "src_routes_menu_sortproducts",
+      "src_routes_offer_id",
+      "src_routes_offer_id_offerdetailpage",
+      "src_routes_offer_id_route",
+      "src_routes_offers",
+      "src_routes_offers_offerprice",
+      "src_routes_offers_offerspage",
+      "src_routes_offers_route",
+      "src_routes_product_id",
+      "src_routes_product_id_priceforproduct",
+      "src_routes_product_id_productpage",
+      "src_routes_product_id_route",
+      "src_routes_site_menu",
+      "src_routes_site_menu_route",
+      "src_routes_site_menu_sitemenupage",
+      "src_services_api_getbranches",
+      "src_services_api_getcategories",
+      "src_services_api_getfeaturedproducts",
+      "src_services_api_getmenucategories",
+      "src_services_api_getmenuitems",
+      "src_services_api_getofferbyid",
+      "src_services_api_getoffers",
+      "src_services_api_getproductbyid",
+      "src_store_cart",
+      "src_store_cart_cache",
+      "src_store_cart_countcache",
+      "src_store_cart_empty_cart",
+      "src_store_cart_getcountsnapshot",
+      "src_store_cart_getservercountsnapshot",
+      "src_store_cart_getserversnapshot",
+      "src_store_cart_getsnapshot",
+      "src_store_cart_listeners",
+      "src_store_cart_readfromstorage",
+      "src_store_cart_subscribe",
+      "src_store_cart_usecart",
+      "src_store_cart_usecartcount",
+      "src_store_cart_writetostorage",
+      "src_store_favorites",
+      "src_store_favorites_cache",
+      "src_store_favorites_empty_favorites",
+      "src_store_favorites_getserversnapshot",
+      "src_store_favorites_getsnapshot",
+      "src_store_favorites_listeners",
+      "src_store_favorites_readfromstorage",
+      "src_store_favorites_subscribe",
+      "src_store_favorites_usefavorites",
+      "src_store_favorites_writetostorage",
+      "src_store_toast",
+      "src_store_toast_publictoast",
+      "src_store_toast_toastdata",
+      "src_store_toast_toaststore",
+      "src_types_index_cartline",
+      "test_db",
+      "test_db_main"
+    ],
+    "1": [
+      "src_components_ui_accordion",
+      "src_components_ui_accordion_accordioncontent",
+      "src_components_ui_accordion_accordionitem",
+      "src_components_ui_accordion_accordiontrigger",
+      "src_components_ui_alert_dialog_alertdialogoverlay",
+      "src_components_ui_avatar",
+      "src_components_ui_avatar_avatar",
+      "src_components_ui_avatar_avatarfallback",
+      "src_components_ui_avatar_avatarimage",
+      "src_components_ui_checkbox",
+      "src_components_ui_checkbox_checkbox",
+      "src_components_ui_command",
+      "src_components_ui_command_command",
+      "src_components_ui_command_commanddialog",
+      "src_components_ui_command_commandempty",
+      "src_components_ui_command_commandgroup",
+      "src_components_ui_command_commandinput",
+      "src_components_ui_command_commanditem",
+      "src_components_ui_command_commandlist",
+      "src_components_ui_command_commandseparator",
+      "src_components_ui_command_commandshortcut",
+      "src_components_ui_dialog_dialogdescription",
+      "src_components_ui_dialog_dialogoverlay",
+      "src_components_ui_dropdown_menu",
+      "src_components_ui_dropdown_menu_dropdownmenucheckboxitem",
+      "src_components_ui_dropdown_menu_dropdownmenucontent",
+      "src_components_ui_dropdown_menu_dropdownmenuitem",
+      "src_components_ui_dropdown_menu_dropdownmenulabel",
+      "src_components_ui_dropdown_menu_dropdownmenuradioitem",
+      "src_components_ui_dropdown_menu_dropdownmenuseparator",
+      "src_components_ui_dropdown_menu_dropdownmenushortcut",
+      "src_components_ui_dropdown_menu_dropdownmenusubcontent",
+      "src_components_ui_dropdown_menu_dropdownmenusubtrigger",
+      "src_components_ui_hover_card",
+      "src_components_ui_hover_card_hovercardcontent",
+      "src_components_ui_popover",
+      "src_components_ui_popover_popovercontent",
+      "src_components_ui_progress",
+      "src_components_ui_progress_progress",
+      "src_components_ui_radio_group",
+      "src_components_ui_radio_group_radiogroup",
+      "src_components_ui_radio_group_radiogroupitem",
+      "src_components_ui_resizable",
+      "src_components_ui_resizable_resizablehandle",
+      "src_components_ui_resizable_resizablepanelgroup",
+      "src_components_ui_select_selectlabel",
+      "src_components_ui_select_selectscrolldownbutton",
+      "src_components_ui_select_selectscrollupbutton",
+      "src_components_ui_select_selectseparator",
+      "src_components_ui_slider",
+      "src_components_ui_slider_slider",
+      "src_components_ui_table_tablecaption",
+      "src_components_ui_table_tablefooter",
+      "src_components_ui_tabs",
+      "src_components_ui_tabs_tabscontent",
+      "src_components_ui_tabs_tabslist",
+      "src_components_ui_tabs_tabstrigger",
+      "src_lib_utils_cn"
+    ],
+    "2": [
       "src_components_ui_alert_dialog",
       "src_components_ui_alert_dialog_alertdialogaction",
       "src_components_ui_alert_dialog_alertdialogcancel",
@@ -28,10 +184,6 @@
       "src_components_ui_select",
       "src_components_ui_select_selectcontent",
       "src_components_ui_select_selectitem",
-      "src_components_ui_select_selectlabel",
-      "src_components_ui_select_selectscrolldownbutton",
-      "src_components_ui_select_selectscrollupbutton",
-      "src_components_ui_select_selectseparator",
       "src_components_ui_select_selecttrigger",
       "src_components_ui_switch",
       "src_components_ui_switch_switch",
@@ -42,6 +194,7 @@
       "src_components_ui_table_tablehead",
       "src_components_ui_table_tableheader",
       "src_components_ui_table_tablerow",
+      "src_lib_utils",
       "src_routes_admin_branches",
       "src_routes_admin_branches_adminbranches",
       "src_routes_admin_categories",
@@ -50,9 +203,11 @@
       "src_routes_admin_offers_adminoffers",
       "src_routes_admin_products",
       "src_services_api_api",
-      "src_types_index_category"
+      "src_types_index_category",
+      "src_types_index_product",
+      "src_types_index_productsize"
     ],
-    "1": [
+    "3": [
       "eslint",
       "eslint_config_prettier",
       "eslint_js",
@@ -101,51 +256,55 @@
       "vite",
       "vitejs_plugin_react"
     ],
-    "2": [
-      "src_components_ui_accordion",
-      "src_components_ui_accordion_accordioncontent",
-      "src_components_ui_accordion_accordionitem",
-      "src_components_ui_accordion_accordiontrigger",
-      "src_components_ui_alert_dialog_alertdialogoverlay",
-      "src_components_ui_avatar",
-      "src_components_ui_avatar_avatar",
-      "src_components_ui_avatar_avatarfallback",
-      "src_components_ui_avatar_avatarimage",
-      "src_components_ui_dialog_dialogdescription",
-      "src_components_ui_dialog_dialogoverlay",
-      "src_components_ui_drawer",
-      "src_components_ui_drawer_drawer",
-      "src_components_ui_drawer_drawercontent",
-      "src_components_ui_drawer_drawerdescription",
-      "src_components_ui_drawer_drawerfooter",
-      "src_components_ui_drawer_drawerheader",
-      "src_components_ui_drawer_draweroverlay",
-      "src_components_ui_drawer_drawertitle",
-      "src_components_ui_dropdown_menu",
-      "src_components_ui_dropdown_menu_dropdownmenucheckboxitem",
-      "src_components_ui_dropdown_menu_dropdownmenucontent",
-      "src_components_ui_dropdown_menu_dropdownmenuitem",
-      "src_components_ui_dropdown_menu_dropdownmenulabel",
-      "src_components_ui_dropdown_menu_dropdownmenuradioitem",
-      "src_components_ui_dropdown_menu_dropdownmenuseparator",
-      "src_components_ui_dropdown_menu_dropdownmenushortcut",
-      "src_components_ui_dropdown_menu_dropdownmenusubcontent",
-      "src_components_ui_dropdown_menu_dropdownmenusubtrigger",
-      "src_components_ui_radio_group",
-      "src_components_ui_radio_group_radiogroup",
-      "src_components_ui_radio_group_radiogroupitem",
-      "src_components_ui_scroll_area",
-      "src_components_ui_scroll_area_scrollarea",
-      "src_components_ui_scroll_area_scrollbar",
-      "src_components_ui_table_tablecaption",
-      "src_components_ui_table_tablefooter",
-      "src_components_ui_tabs",
-      "src_components_ui_tabs_tabscontent",
-      "src_components_ui_tabs_tabslist",
-      "src_components_ui_tabs_tabstrigger",
-      "src_lib_utils_cn"
+    "4": [
+      "src_components_ui_textarea",
+      "src_components_ui_textarea_textarea",
+      "src_hooks_usedata_useactivebranches",
+      "src_routes_checkout",
+      "src_routes_checkout_checkoutform",
+      "src_routes_checkout_checkoutform_handlesubmit",
+      "src_routes_checkout_checkouthero",
+      "src_routes_checkout_checkoutpage",
+      "src_routes_checkout_ordersuccess",
+      "src_routes_checkout_route",
+      "src_routes_checkout_toarabicdigits",
+      "src_services_api",
+      "src_services_api_asuuidornull",
+      "src_services_api_createbranch",
+      "src_services_api_createcategory",
+      "src_services_api_createoffer",
+      "src_services_api_createorder",
+      "src_services_api_createproduct",
+      "src_services_api_deletebranch",
+      "src_services_api_deletecategory",
+      "src_services_api_deleteoffer",
+      "src_services_api_deleteproduct",
+      "src_services_api_formatordernotes",
+      "src_services_api_getactivebranches",
+      "src_services_api_getadminoffers",
+      "src_services_api_getadminorders",
+      "src_services_api_getadminproducts",
+      "src_services_api_getsitesettings",
+      "src_services_api_toerror",
+      "src_services_api_updatebranch",
+      "src_services_api_updatecategory",
+      "src_services_api_updateoffer",
+      "src_services_api_updateproduct",
+      "src_services_api_updatesitesetting",
+      "src_types_database_types",
+      "src_types_database_types_database",
+      "src_types_index",
+      "src_types_index_branch",
+      "src_types_index_checkoutcustomer",
+      "src_types_index_createorderpayload",
+      "src_types_index_menucategory",
+      "src_types_index_offer",
+      "src_types_index_order",
+      "src_types_index_orderitem",
+      "src_types_index_orderstatus",
+      "src_types_index_sitesetting"
     ],
-    "3": [
+    "5": [
       "src_components_ui_separator",
       "src_components_ui_separator_separator",
       "src_components_ui_sidebar",
@@ -176,12 +335,14 @@
       "src_components_ui_sidebar_sidebarseparator",
       "src_components_ui_sidebar_sidebartrigger",
       "src_components_ui_sidebar_usesidebar",
+      "src_components_ui_skeleton",
+      "src_components_ui_skeleton_skeleton",
       "src_components_ui_tooltip",
       "src_components_ui_tooltip_tooltipcontent",
       "src_hooks_use_mobile",
       "src_hooks_use_mobile_useismobile"
     ],
-    "4": [
+    "6": [
       "src_router",
       "src_router_getrouter",
       "src_routetree_gen",
@@ -216,41 +377,7 @@
       "src_routetree_gen_tanstack_react_start",
       "src_start_startinstance"
     ],
-    "5": [
-      "src_services_api",
-      "src_services_api_asuuidornull",
-      "src_services_api_createbranch",
-      "src_services_api_createcategory",
-      "src_services_api_createoffer",
-      "src_services_api_createproduct",
-      "src_services_api_deletebranch",
-      "src_services_api_deletecategory",
-      "src_services_api_deleteoffer",
-      "src_services_api_deleteproduct",
-      "src_services_api_formatordernotes",
-      "src_services_api_getadminoffers",
-      "src_services_api_getadminorders",
-      "src_services_api_getadminproducts",
-      "src_services_api_getsitesettings",
-      "src_services_api_updatebranch",
-      "src_services_api_updatecategory",
-      "src_services_api_updateoffer",
-      "src_services_api_updateproduct",
-      "src_services_api_updatesitesetting",
-      "src_types_database_types",
-      "src_types_database_types_database",
-      "src_types_index",
-      "src_types_index_branch",
-      "src_types_index_checkoutcustomer",
-      "src_types_index_createorderpayload",
-      "src_types_index_menucategory",
-      "src_types_index_offer",
-      "src_types_index_order",
-      "src_types_index_orderitem",
-      "src_types_index_orderstatus",
-      "src_types_index_sitesetting"
-    ],
-    "6": [
+    "7": [
       "ref_dom",
       "ref_dom_iterable",
       "ref_es2022",
@@ -279,87 +406,7 @@
       "tsconfig_compileroptions_verbatimmodulesyntax",
       "tsconfig_include"
     ],
-    "7": [
-      "src_components_layout_nav",
-      "src_components_layout_nav_iconlink",
-      "src_components_layout_nav_nav",
-      "src_hooks_usedata_usemenuitems",
-      "src_routes_favorites",
-      "src_routes_favorites_favoritespage",
-      "src_routes_menu",
-      "src_routes_menu_menuhero",
-      "src_routes_menu_menupage",
-      "src_routes_menu_menusearch",
-      "src_store_cart",
-      "src_store_cart_cache",
-      "src_store_cart_countcache",
-      "src_store_cart_empty_cart",
-      "src_store_cart_getcountsnapshot",
-      "src_store_cart_getservercountsnapshot",
-      "src_store_cart_getserversnapshot",
-      "src_store_cart_getsnapshot",
-      "src_store_cart_listeners",
-      "src_store_cart_readfromstorage",
-      "src_store_cart_subscribe",
-      "src_store_cart_usecart",
-      "src_store_cart_usecartcount",
-      "src_store_cart_writetostorage",
-      "src_types_index_cartline",
-      "src_types_index_product"
-    ],
     "8": [
-      "src_components_ui_badge",
-      "src_components_ui_badge_badge",
-      "src_components_ui_badge_badgeprops",
-      "src_components_ui_badge_badgevariants",
-      "src_components_ui_checkbox",
-      "src_components_ui_checkbox_checkbox",
-      "src_components_ui_hover_card",
-      "src_components_ui_hover_card_hovercardcontent",
-      "src_components_ui_input_otp",
-      "src_components_ui_input_otp_inputotp",
-      "src_components_ui_input_otp_inputotpgroup",
-      "src_components_ui_input_otp_inputotpseparator",
-      "src_components_ui_input_otp_inputotpslot",
-      "src_components_ui_popover",
-      "src_components_ui_popover_popovercontent",
-      "src_components_ui_progress",
-      "src_components_ui_progress_progress",
-      "src_components_ui_resizable",
-      "src_components_ui_resizable_resizablehandle",
-      "src_components_ui_resizable_resizablepanelgroup",
-      "src_components_ui_slider",
-      "src_components_ui_slider_slider",
-      "src_lib_utils",
-      "src_lib_utils_calculatediscountedprice",
-      "src_lib_utils_getproductdisplayprice"
-    ],
-    "9": [
-      "src_components_productcardskeleton",
-      "src_components_productcardskeleton_categorycardskeleton",
-      "src_components_productcardskeleton_categorycardskeletongrid",
-      "src_components_productcardskeleton_productcardskeleton",
-      "src_components_productcardskeleton_productcardskeletongrid",
-      "src_hooks_usedata",
-      "src_hooks_usedata_usebranches",
-      "src_hooks_usedata_usecategories",
-      "src_hooks_usedata_usefeaturedproducts",
-      "src_hooks_usedata_usemenucategories",
-      "src_routes_categories",
-      "src_routes_categories_categoriespage",
-      "src_routes_categories_route",
-      "src_routes_index",
-      "src_routes_index_categoriessection",
-      "src_routes_index_featuredsection",
-      "src_routes_index_hero",
-      "src_routes_index_index",
-      "src_routes_index_route",
-      "src_services_api_getbranches",
-      "src_services_api_getcategories",
-      "src_services_api_getfeaturedproducts",
-      "src_services_api_getmenucategories"
-    ],
-    "10": [
       "components",
       "components_aliases",
       "components_aliases_components",
@@ -380,7 +427,7 @@
       "components_tailwind_prefix",
       "components_tsx"
     ],
-    "11": [
+    "9": [
       "src_components_ui_customtoast",
       "src_components_ui_customtoast_customtoaster",
       "src_components_ui_customtoast_toastitem",
@@ -400,26 +447,7 @@
       "src_routes_root_rootshell",
       "src_store_toast_usepublictoast"
     ],
-    "12": [
-      "src_components_admin_adminheader",
-      "src_components_admin_adminheader_adminheader",
-      "src_components_admin_adminheader_adminheaderprops",
-      "src_components_admin_adminsidebar",
-      "src_components_admin_adminsidebar_adminsidebar",
-      "src_lib_supabase",
-      "src_lib_supabase_getclient",
-      "src_lib_supabase_issupabaseconfigured",
-      "src_lib_supabase_supabase",
-      "src_lib_supabase_supabaseanonkey",
-      "src_lib_supabase_supabaseurl",
-      "src_routes_admin",
-      "src_routes_admin_adminlayout",
-      "src_routes_admin_login",
-      "src_routes_admin_login_adminlogin",
-      "src_routes_admin_login_route",
-      "src_routes_admin_route"
-    ],
-    "13": [
+    "10": [
       "src_components_ui_menubar",
       "src_components_ui_menubar_menubar",
       "src_components_ui_menubar_menubarcheckboxitem",
@@ -438,7 +466,25 @@
       "src_components_ui_menubar_menubarsubtrigger",
       "src_components_ui_menubar_menubartrigger"
     ],
-    "14": [
+    "11": [
+      "src_components_admin_adminheader",
+      "src_components_admin_adminheader_adminheader",
+      "src_components_admin_adminheader_adminheaderprops",
+      "src_components_admin_adminsidebar",
+      "src_components_admin_adminsidebar_adminsidebar",
+      "src_lib_supabase",
+      "src_lib_supabase_getclient",
+      "src_lib_supabase_issupabaseconfigured",
+      "src_lib_supabase_supabase",
+      "src_lib_supabase_supabaseanonkey",
+      "src_lib_supabase_supabaseurl",
+      "src_routes_admin",
+      "src_routes_admin_adminlayout",
+      "src_routes_admin_login",
+      "src_routes_admin_login_adminlogin",
+      "src_routes_admin_login_route"
+    ],
+    "12": [
       "src_components_ui_carousel",
       "src_components_ui_carousel_carousel",
       "src_components_ui_carousel_carouselapi",
@@ -454,23 +500,7 @@
       "src_components_ui_carousel_usecarousel",
       "src_components_ui_carousel_usecarouselparameters"
     ],
-    "15": [
-      "src_components_ui_textarea",
-      "src_components_ui_textarea_textarea",
-      "src_hooks_usedata_useactivebranches",
-      "src_routes_checkout",
-      "src_routes_checkout_checkoutform",
-      "src_routes_checkout_checkoutform_handlesubmit",
-      "src_routes_checkout_checkouthero",
-      "src_routes_checkout_checkoutpage",
-      "src_routes_checkout_ordersuccess",
-      "src_routes_checkout_route",
-      "src_routes_checkout_toarabicdigits",
-      "src_services_api_createorder",
-      "src_services_api_getactivebranches",
-      "src_services_api_toerror"
-    ],
-    "16": [
+    "13": [
       "supabase_functions_create_order_index",
       "supabase_functions_create_order_index_asuuidornull",
       "supabase_functions_create_order_index_corsheaders",
@@ -486,37 +516,22 @@
       "supabase_functions_create_order_index_sendtelegrammessage",
       "supabase_functions_create_order_index_sizedata"
     ],
-    "17": [
+    "14": [
+      "input_otp",
       "package_dependencies",
+      "package_dependencies_input_otp",
       "package_dependencies_radix_ui_react_context_menu",
-      "package_dependencies_radix_ui_react_progress",
       "package_dependencies_radix_ui_react_scroll_area",
       "package_dependencies_radix_ui_react_tabs",
       "package_dependencies_radix_ui_react_toggle",
       "package_dependencies_tw_animate_css",
       "radix_ui_react_context_menu",
-      "radix_ui_react_progress",
       "radix_ui_react_scroll_area",
       "radix_ui_react_tabs",
       "radix_ui_react_toggle",
       "tw_animate_css"
     ],
-    "18": [
-      "src_components_layout_footer",
-      "src_components_layout_footer_footer",
-      "src_components_productcardskeleton_productdetailskeleton",
-      "src_hooks_usedata_useproduct",
-      "src_routes_product_id",
-      "src_routes_product_id_priceforproduct",
-      "src_routes_product_id_productpage",
-      "src_routes_product_id_route",
-      "src_routes_site_menu",
-      "src_routes_site_menu_route",
-      "src_routes_site_menu_sitemenupage",
-      "src_services_api_getproductbyid",
-      "src_types_index_productsize"
-    ],
-    "19": [
+    "15": [
       "src_lib_error_capture",
       "src_lib_error_capture_consumelastcapturederror",
       "src_lib_error_capture_record",
@@ -531,7 +546,7 @@
       "src_start",
       "src_start_errormiddleware"
     ],
-    "20": [
+    "16": [
       "src_components_ui_chart",
       "src_components_ui_chart_chartconfig",
       "src_components_ui_chart_chartcontainer",
@@ -544,7 +559,7 @@
       "src_components_ui_chart_themes",
       "src_components_ui_chart_usechart"
     ],
-    "21": [
+    "17": [
       "src_hooks_usedata_usesitesettings",
       "src_routes_admin_products_adminproducts",
       "src_routes_admin_settings",
@@ -557,7 +572,7 @@
       "src_routes_cart_route",
       "src_routes_cart_toarabicdigits"
     ],
-    "22": [
+    "18": [
       "src_routes_admin_branches_route",
       "src_routes_admin_categories_route",
       "src_routes_admin_index",
@@ -565,12 +580,12 @@
       "src_routes_admin_index_route",
       "src_routes_admin_offers_route",
       "src_routes_admin_products_route",
-      "src_routes_favorites_route",
+      "src_routes_admin_route",
       "src_routes_root_route",
       "src_routetree_gen_fileroutesbyid",
       "src_routetree_gen_fileroutesbypath"
     ],
-    "23": [
+    "19": [
       "src_components_ui_button_buttonprops",
       "src_components_ui_pagination",
       "src_components_ui_pagination_pagination",
@@ -582,19 +597,7 @@
       "src_components_ui_pagination_paginationnext",
       "src_components_ui_pagination_paginationprevious"
     ],
-    "24": [
-      "src_components_ui_command",
-      "src_components_ui_command_command",
-      "src_components_ui_command_commanddialog",
-      "src_components_ui_command_commandempty",
-      "src_components_ui_command_commandgroup",
-      "src_components_ui_command_commandinput",
-      "src_components_ui_command_commanditem",
-      "src_components_ui_command_commandlist",
-      "src_components_ui_command_commandseparator",
-      "src_components_ui_command_commandshortcut"
-    ],
-    "25": [
+    "20": [
       "src_components_ui_context_menu",
       "src_components_ui_context_menu_contextmenucheckboxitem",
       "src_components_ui_context_menu_contextmenucontent",
@@ -606,19 +609,7 @@
       "src_components_ui_context_menu_contextmenusubcontent",
       "src_components_ui_context_menu_contextmenusubtrigger"
     ],
-    "26": [
-      "src_store_favorites",
-      "src_store_favorites_cache",
-      "src_store_favorites_empty_favorites",
-      "src_store_favorites_getserversnapshot",
-      "src_store_favorites_getsnapshot",
-      "src_store_favorites_listeners",
-      "src_store_favorites_readfromstorage",
-      "src_store_favorites_subscribe",
-      "src_store_favorites_usefavorites",
-      "src_store_favorites_writetostorage"
-    ],
-    "27": [
+    "21": [
       "src_components_ui_sheet",
       "src_components_ui_sheet_sheetcontent",
       "src_components_ui_sheet_sheetcontentprops",
@@ -629,18 +620,7 @@
       "src_components_ui_sheet_sheettitle",
       "src_components_ui_sheet_sheetvariants"
     ],
-    "28": [
-      "src_hooks_usedata_useoffer",
-      "src_routes_offer_id",
-      "src_routes_offer_id_offerdetailpage",
-      "src_routes_offer_id_route",
-      "src_services_api_getofferbyid",
-      "src_store_toast",
-      "src_store_toast_publictoast",
-      "src_store_toast_toastdata",
-      "src_store_toast_toaststore"
-    ],
-    "29": [
+    "22": [
       "src_components_ui_breadcrumb",
       "src_components_ui_breadcrumb_breadcrumb",
       "src_components_ui_breadcrumb_breadcrumbellipsis",
@@ -650,7 +630,17 @@
       "src_components_ui_breadcrumb_breadcrumbpage",
       "src_components_ui_breadcrumb_breadcrumbseparator"
     ],
-    "30": [
+    "23": [
+      "src_components_ui_drawer",
+      "src_components_ui_drawer_drawer",
+      "src_components_ui_drawer_drawercontent",
+      "src_components_ui_drawer_drawerdescription",
+      "src_components_ui_drawer_drawerfooter",
+      "src_components_ui_drawer_drawerheader",
+      "src_components_ui_drawer_draweroverlay",
+      "src_components_ui_drawer_drawertitle"
+    ],
+    "24": [
       "src_components_ui_navigation_menu",
       "src_components_ui_navigation_menu_navigationmenu",
       "src_components_ui_navigation_menu_navigationmenucontent",
@@ -660,17 +650,7 @@
       "src_components_ui_navigation_menu_navigationmenutriggerstyle",
       "src_components_ui_navigation_menu_navigationmenuviewport"
     ],
-    "31": [
-      "src_components_ui_skeleton",
-      "src_components_ui_skeleton_skeleton",
-      "src_hooks_usedata_useoffers",
-      "src_routes_offers",
-      "src_routes_offers_offerprice",
-      "src_routes_offers_offerspage",
-      "src_routes_offers_route",
-      "src_services_api_getoffers"
-    ],
-    "32": [
+    "25": [
       "src_components_ui_card",
       "src_components_ui_card_card",
       "src_components_ui_card_cardcontent",
@@ -679,7 +659,7 @@
       "src_components_ui_card_cardheader",
       "src_components_ui_card_cardtitle"
     ],
-    "33": [
+    "26": [
       "src_components_ui_toggle",
       "src_components_ui_toggle_group",
       "src_components_ui_toggle_group_togglegroup",
@@ -688,311 +668,329 @@
       "src_components_ui_toggle_toggle",
       "src_components_ui_toggle_togglevariants"
     ],
-    "34": [
+    "27": [
       "src_components_ui_alert",
       "src_components_ui_alert_alert",
       "src_components_ui_alert_alertdescription",
       "src_components_ui_alert_alerttitle",
       "src_components_ui_alert_alertvariants"
     ],
-    "35": [
+    "28": [
+      "src_components_ui_input_otp",
+      "src_components_ui_input_otp_inputotp",
+      "src_components_ui_input_otp_inputotpgroup",
+      "src_components_ui_input_otp_inputotpseparator",
+      "src_components_ui_input_otp_inputotpslot"
+    ],
+    "29": [
       "prd_md",
       "public_og_image_png",
       "src_assets_hero_grill_webp",
       "src_assets_logo_webp"
     ],
-    "36": [
-      "src_routes_menu_route",
-      "src_services_api_getmenuitems",
-      "test_db",
-      "test_db_main"
+    "30": [
+      "src_components_ui_badge",
+      "src_components_ui_badge_badge",
+      "src_components_ui_badge_badgeprops",
+      "src_components_ui_badge_badgevariants"
     ],
-    "37": [
+    "31": [
+      "src_components_ui_scroll_area",
+      "src_components_ui_scroll_area_scrollarea",
+      "src_components_ui_scroll_area_scrollbar"
+    ],
+    "32": [
       "src_routes_admin_orders",
       "src_routes_admin_orders_adminorders",
       "src_routes_admin_orders_route"
     ],
-    "38": [
+    "33": [
       "class_variance_authority",
       "package_dependencies_class_variance_authority"
     ],
-    "39": [
+    "34": [
       "clsx",
       "package_dependencies_clsx"
     ],
-    "40": [
+    "35": [
       "cmdk",
       "package_dependencies_cmdk"
     ],
-    "41": [
+    "36": [
       "embla_carousel_react",
       "package_dependencies_embla_carousel_react"
     ],
-    "42": [
-      "input_otp",
-      "package_dependencies_input_otp"
-    ],
-    "43": [
+    "37": [
       "lucide_react",
       "package_dependencies_lucide_react"
     ],
-    "44": [
+    "38": [
       "package_dependencies_radix_ui_react_accordion",
       "radix_ui_react_accordion"
     ],
-    "45": [
+    "39": [
       "package_dependencies_radix_ui_react_alert_dialog",
       "radix_ui_react_alert_dialog"
     ],
-    "46": [
+    "40": [
       "package_dependencies_radix_ui_react_aspect_ratio",
       "radix_ui_react_aspect_ratio"
     ],
-    "47": [
+    "41": [
       "package_dependencies_radix_ui_react_avatar",
       "radix_ui_react_avatar"
     ],
-    "48": [
+    "42": [
       "package_dependencies_radix_ui_react_checkbox",
       "radix_ui_react_checkbox"
     ],
-    "49": [
+    "43": [
       "package_dependencies_radix_ui_react_collapsible",
       "radix_ui_react_collapsible"
     ],
-    "50": [
+    "44": [
       "package_dependencies_radix_ui_react_dialog",
       "radix_ui_react_dialog"
     ],
-    "51": [
+    "45": [
       "package_dependencies_radix_ui_react_dropdown_menu",
       "radix_ui_react_dropdown_menu"
     ],
-    "52": [
+    "46": [
       "package_dependencies_radix_ui_react_hover_card",
       "radix_ui_react_hover_card"
     ],
-    "53": [
+    "47": [
       "package_dependencies_radix_ui_react_label",
       "radix_ui_react_label"
     ],
-    "54": [
+    "48": [
       "package_dependencies_radix_ui_react_menubar",
       "radix_ui_react_menubar"
     ],
-    "55": [
+    "49": [
       "package_dependencies_radix_ui_react_navigation_menu",
       "radix_ui_react_navigation_menu"
     ],
-    "56": [
+    "50": [
       "package_dependencies_radix_ui_react_popover",
       "radix_ui_react_popover"
     ],
-    "57": [
+    "51": [
+      "package_dependencies_radix_ui_react_progress",
+      "radix_ui_react_progress"
+    ],
+    "52": [
       "package_dependencies_radix_ui_react_radio_group",
       "radix_ui_react_radio_group"
     ],
-    "58": [
+    "53": [
       "package_dependencies_radix_ui_react_select",
       "radix_ui_react_select"
     ],
-    "59": [
+    "54": [
       "package_dependencies_radix_ui_react_separator",
       "radix_ui_react_separator"
     ],
-    "60": [
+    "55": [
       "package_dependencies_radix_ui_react_slider",
       "radix_ui_react_slider"
     ],
-    "61": [
+    "56": [
       "package_dependencies_radix_ui_react_slot",
       "radix_ui_react_slot"
     ],
-    "62": [
+    "57": [
       "package_dependencies_radix_ui_react_switch",
       "radix_ui_react_switch"
     ],
-    "63": [
+    "58": [
       "package_dependencies_radix_ui_react_toggle_group",
       "radix_ui_react_toggle_group"
     ],
-    "64": [
+    "59": [
       "package_dependencies_radix_ui_react_tooltip",
       "radix_ui_react_tooltip"
     ],
-    "65": [
+    "60": [
       "package_dependencies_react",
       "react"
     ],
-    "66": [
+    "61": [
       "package_dependencies_react_day_picker",
       "react_day_picker"
     ],
-    "67": [
+    "62": [
       "package_dependencies_react_dom",
       "react_dom"
     ],
-    "68": [
+    "63": [
       "package_dependencies_react_resizable_panels",
       "react_resizable_panels"
     ],
-    "69": [
+    "64": [
       "package_dependencies_recharts",
       "recharts"
     ],
-    "70": [
+    "65": [
       "package_dependencies_sonner",
       "sonner"
     ],
-    "71": [
+    "66": [
       "package_dependencies_supabase_supabase_js",
       "supabase_supabase_js"
     ],
-    "72": [
+    "67": [
       "package_dependencies_tailwind_merge",
       "tailwind_merge"
     ],
-    "73": [
+    "68": [
       "package_dependencies_tailwindcss",
       "tailwindcss"
     ],
-    "74": [
+    "69": [
       "package_dependencies_tailwindcss_vite",
       "tailwindcss_vite"
     ],
-    "75": [
+    "70": [
       "package_dependencies_tanstack_react_query",
       "tanstack_react_query"
     ],
-    "76": [
+    "71": [
       "package_dependencies_tanstack_react_router",
       "tanstack_react_router"
     ],
-    "77": [
+    "72": [
       "package_dependencies_tanstack_react_start",
       "tanstack_react_start"
     ],
-    "78": [
+    "73": [
       "package_dependencies_tanstack_router_plugin",
       "tanstack_router_plugin"
     ],
-    "79": [
+    "74": [
       "package_dependencies_vaul",
       "vaul"
     ],
-    "80": [
+    "75": [
       "package_dependencies_vite_tsconfig_paths",
       "vite_tsconfig_paths"
     ],
-    "81": [
+    "76": [
       "package_dependencies_zustand",
       "zustand"
     ],
-    "82": [
+    "77": [
       "supabase_migrations_20260719000000_site_settings",
       "supabase_migrations_20260719000000_site_settings_site_settings"
     ],
-    "83": [
+    "78": [
       "supabase_migrations_20260721000000_branches",
       "supabase_migrations_20260721000000_branches_public_branches"
     ],
-    "84": [
+    "79": [
       "agents_md"
     ],
-    "85": [
+    "80": [
       "categories"
     ],
-    "86": [
+    "81": [
       "eslint_config"
     ],
-    "87": [
+    "82": [
       "offers"
     ],
-    "88": [
+    "83": [
       "orders"
     ],
-    "89": [
+    "84": [
       "product_sizes"
     ],
-    "90": [
+    "85": [
       "products"
     ],
-    "91": [
+    "86": [
       "public_orders"
     ],
-    "92": [
+    "87": [
+      "public_products"
+    ],
+    "88": [
       "readme_md"
     ],
-    "93": [
+    "89": [
       "src_components_ui_aspect_ratio"
     ],
-    "94": [
+    "90": [
       "src_components_ui_collapsible"
     ],
-    "95": [
+    "91": [
       "src_routes_readme_md"
     ],
-    "96": [
+    "92": [
       "supabase_migrations_20240101000000_rls_policies"
     ],
-    "97": [
+    "93": [
       "supabase_migrations_20240101000000_rls_policies_sql_order_items"
     ],
-    "98": [
+    "94": [
       "supabase_migrations_20260721000001_orders_branch_id"
     ],
-    "99": [
+    "95": [
       "supabase_migrations_20260803000000_order_items_offers"
     ],
-    "100": [
+    "96": [
       "supabase_migrations_20260803000000_order_items_offers_sql_order_items"
     ],
-    "101": [
+    "97": [
       "supabase_migrations_20260827000000_performance_indexes"
     ],
-    "102": [
+    "98": [
+      "supabase_migrations_20260902000000_products_sort_order"
+    ],
+    "99": [
       "vite_config"
     ]
   },
   "cohesion": {
-    "0": 0.13714285714285715,
-    "1": 0.0425531914893617,
-    "2": 0.08013937282229965,
-    "3": 0.0748663101604278,
-    "4": 0.06818181818181818,
-    "5": 0.07258064516129033,
-    "6": 0.07407407407407407,
-    "7": 0.14153846153846153,
-    "8": 0.08666666666666667,
-    "9": 0.16600790513833993,
-    "10": 0.10526315789473684,
-    "11": 0.1437908496732026,
-    "12": 0.16176470588235295,
-    "13": 0.11764705882352941,
-    "14": 0.18681318681318682,
-    "15": 0.1978021978021978,
-    "16": 0.16483516483516483,
-    "17": 0.15384615384615385,
-    "18": 0.21794871794871795,
-    "19": 0.28205128205128205,
-    "20": 0.2545454545454545,
-    "21": 0.23636363636363636,
-    "22": 0.18181818181818182,
-    "23": 0.2,
-    "24": 0.2,
-    "25": 0.2,
-    "26": 0.28888888888888886,
-    "27": 0.25,
-    "28": 0.3333333333333333,
-    "29": 0.25,
-    "30": 0.2857142857142857,
-    "31": 0.42857142857142855,
-    "32": 0.2857142857142857,
-    "33": 0.42857142857142855,
-    "34": 0.5,
-    "35": 0.5,
-    "36": 0.6666666666666666,
-    "37": 0.6666666666666666,
+    "0": 0.055822466254861584,
+    "1": 0.055051421657592255,
+    "2": 0.15136054421768708,
+    "3": 0.0425531914893617,
+    "4": 0.05603864734299517,
+    "5": 0.07142857142857142,
+    "6": 0.06818181818181818,
+    "7": 0.07407407407407407,
+    "8": 0.10526315789473684,
+    "9": 0.1437908496732026,
+    "10": 0.11764705882352941,
+    "11": 0.175,
+    "12": 0.18681318681318682,
+    "13": 0.16483516483516483,
+    "14": 0.15384615384615385,
+    "15": 0.28205128205128205,
+    "16": 0.2545454545454545,
+    "17": 0.23636363636363636,
+    "18": 0.18181818181818182,
+    "19": 0.2,
+    "20": 0.2,
+    "21": 0.25,
+    "22": 0.25,
+    "23": 0.25,
+    "24": 0.2857142857142857,
+    "25": 0.2857142857142857,
+    "26": 0.42857142857142855,
+    "27": 0.5,
+    "28": 0.4,
+    "29": 0.5,
+    "30": 0.6666666666666666,
+    "31": 0.6666666666666666,
+    "32": 0.6666666666666666,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0,
+    "37": 1.0,
     "38": 1.0,
     "39": 1.0,
     "40": 1.0,
@@ -1054,10 +1052,7 @@
     "96": 1.0,
     "97": 1.0,
     "98": 1.0,
-    "99": 1.0,
-    "100": 1.0,
-    "101": 1.0,
-    "102": 1.0
+    "99": 1.0
   },
   "gods": [
     {

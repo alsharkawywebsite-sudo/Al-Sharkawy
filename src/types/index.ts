@@ -43,6 +43,8 @@ export type Product = {
   is_active: boolean | null;
   tag?: string | null;
   spicy?: boolean | null;
+  sort_order?: number | null;
+  created_at?: string;
   product_sizes?: ProductSize[];
 };
 

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/services/api";
 import type { Product, Category, ProductSize } from "@/types";
@@ -97,10 +97,34 @@ function AdminProducts() {
     setEditingProd(null);
   };
 
-  const handleOpenCreate = () => {
+  const handleOpenCreate = (categoryId?: string) => {
     resetForm();
+    if (typeof categoryId === "string") {
+      setFormData((prev) => ({ ...prev, category_id: categoryId }));
+    }
     setIsFormOpen(true);
   };
+
+  const groupedProducts = useMemo(() => {
+    const prods = Array.isArray(products) ? products : [];
+    const cats = Array.isArray(categories) ? categories : [];
+
+    const map = new Map<string, Product[]>();
+    cats.forEach((cat) => {
+      map.set(cat.id, []);
+    });
+    const unassigned: Product[] = [];
+
+    prods.forEach((prod) => {
+      if (prod.category_id && map.has(prod.category_id)) {
+        map.get(prod.category_id)!.push(prod);
+      } else {
+        unassigned.push(prod);
+      }
+    });
+
+    return { map, unassigned };
+  }, [categories, products]);
 
   const handleOpenEdit = (prod: Product) => {
     setEditingProd(prod);
@@ -252,13 +276,18 @@ function AdminProducts() {
   return (
     <div className="bg-white rounded-3xl p-4 lg:p-8 shadow-sm ring-1 ring-black/5 min-h-[400px]">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h2 className="text-xl lg:text-2xl font-semibold text-ink">إدارة المنتجات</h2>
+        <div>
+          <h2 className="text-xl lg:text-2xl font-semibold text-ink">إدارة المنتجات</h2>
+          <p className="text-xs sm:text-sm text-ink/60 mt-1">
+            المنتجات مقسمة ومفصولة حسب الأقسام.
+          </p>
+        </div>
         <div className="flex gap-2 w-full sm:w-auto">
           <Button onClick={handleOpenFeatured} variant="outline" className="gap-2 w-full sm:w-auto">
             <Star className="w-4 h-4 text-yellow-500" />
             الأطباق المميزة
           </Button>
-          <Button onClick={handleOpenCreate} className="gap-2 w-full sm:w-auto">
+          <Button onClick={() => handleOpenCreate()} className="gap-2 w-full sm:w-auto">
             <Plus className="w-4 h-4" />
             إضافة منتج
           </Button>
@@ -266,81 +295,217 @@ function AdminProducts() {
       </div>
 
       {isLoadingProducts ? (
-        <div className="text-center py-10">جاري التحميل...</div>
+        <div className="text-center py-10 text-ink/60">جاري التحميل...</div>
       ) : (
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-right whitespace-nowrap">الصورة</TableHead>
-                <TableHead className="text-right whitespace-nowrap">الاسم</TableHead>
-                <TableHead className="text-right whitespace-nowrap">الفئة</TableHead>
-                <TableHead className="text-right whitespace-nowrap">السعر</TableHead>
-                <TableHead className="text-right whitespace-nowrap">الحالة</TableHead>
-                <TableHead className="text-right whitespace-nowrap">إجراءات</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-            {products.map((prod: Product) => {
-              const cat = categories.find((c: Category) => c.id === prod.category_id);
-              const hasSizes = prod.product_sizes && prod.product_sizes.length > 0;
-              return (
-                <TableRow key={prod.id}>
-                  <TableCell>
-                    {prod.image_url ? (
-                      <img
-                        src={prod.image_url}
-                        alt={prod.name}
-                        className="w-12 h-12 object-cover rounded"
-                      />
-                    ) : (
-                      <div className="w-12 h-12 bg-gray-100 rounded flex items-center justify-center text-xs">
-                        بدون صورة
-                      </div>
-                    )}
-                  </TableCell>
-                  <TableCell className="font-medium">{prod.name}</TableCell>
-                  <TableCell>{cat?.name || "غير محدد"}</TableCell>
-                  <TableCell>
-                    {hasSizes ? (
-                      <span className="text-sm text-gray-500">متعدد الأحجام</span>
-                    ) : (
-                      <span className="font-semibold">{prod.base_price} ج.م</span>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs ${prod.is_active ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-700"}`}
-                    >
-                      {prod.is_active ? "نشط" : "غير نشط"}
+        <div className="space-y-8">
+          {categories.map((cat: Category) => {
+            const catProds = groupedProducts.map.get(cat.id) || [];
+            return (
+              <div
+                key={cat.id}
+                className="rounded-2xl border border-black/10 bg-white overflow-hidden shadow-xs"
+              >
+                {/* فاصل وعنوان القسم */}
+                <div className="flex items-center justify-between bg-cream/40 px-4 py-3 border-b border-black/10">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-crimson" />
+                    <h3 className="font-display font-bold text-base text-ink">{cat.name}</h3>
+                    <span className="text-xs px-2.5 py-0.5 rounded-full bg-black/5 text-ink/70 font-medium">
+                      {catProds.length} {catProds.length === 1 ? "منتج" : "منتجات"}
                     </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="icon" onClick={() => handleOpenEdit(prod)}>
-                        <Edit2 className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        onClick={() => handleOpenDelete(prod)}
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-            {products.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={6} className="text-center text-gray-500 py-4">
-                  لا توجد منتجات بعد.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => handleOpenCreate(cat.id)}
+                    className="text-xs gap-1 text-crimson hover:bg-crimson/10 font-medium"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    إضافة منتج لهذا القسم
+                  </Button>
+                </div>
+
+                {/* جدول منتجات هذا القسم */}
+                {catProds.length === 0 ? (
+                  <div className="text-center py-6 text-xs text-ink/40">
+                    لا توجد منتجات في هذا القسم حتى الآن.
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow className="bg-alabaster/30">
+                          <TableHead className="text-right whitespace-nowrap w-16">الصورة</TableHead>
+                          <TableHead className="text-right whitespace-nowrap">الاسم</TableHead>
+                          <TableHead className="text-right whitespace-nowrap">السعر</TableHead>
+                          <TableHead className="text-right whitespace-nowrap">الحالة</TableHead>
+                          <TableHead className="text-right whitespace-nowrap w-24">إجراءات</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {catProds.map((prod: Product) => {
+                          const hasSizes = prod.product_sizes && prod.product_sizes.length > 0;
+                          return (
+                            <TableRow key={prod.id}>
+                              <TableCell>
+                                {prod.image_url ? (
+                                  <img
+                                    src={prod.image_url}
+                                    alt={prod.name}
+                                    className="w-10 h-10 object-cover rounded-lg"
+                                  />
+                                ) : (
+                                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-[10px] text-gray-400">
+                                    بدون صورة
+                                  </div>
+                                )}
+                              </TableCell>
+                              <TableCell className="font-medium text-sm text-ink">{prod.name}</TableCell>
+                              <TableCell>
+                                {hasSizes ? (
+                                  <span className="text-xs text-gray-500">متعدد الأحجام</span>
+                                ) : (
+                                  <span className="font-semibold text-sm">{prod.base_price} ج.م</span>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                <span
+                                  className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                    prod.is_active
+                                      ? "bg-green-100 text-green-700"
+                                      : "bg-gray-100 text-gray-700"
+                                  }`}
+                                >
+                                  {prod.is_active ? "نشط" : "غير نشط"}
+                                </span>
+                              </TableCell>
+                              <TableCell>
+                                <div className="flex gap-1.5">
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => handleOpenEdit(prod)}
+                                  >
+                                    <Edit2 className="w-3.5 h-3.5" />
+                                  </Button>
+                                  <Button
+                                    variant="destructive"
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => handleOpenDelete(prod)}
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5" />
+                                  </Button>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {/* منتجات بدون قسم */}
+          {groupedProducts.unassigned.length > 0 && (
+            <div className="rounded-2xl border border-dashed border-amber-300 bg-amber-50/20 overflow-hidden shadow-xs">
+              <div className="flex items-center justify-between bg-amber-100/50 px-4 py-3 border-b border-amber-200">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                  <h3 className="font-display font-bold text-base text-amber-900">
+                    منتجات بدون فئة محددة
+                  </h3>
+                  <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-200 text-amber-800 font-medium">
+                    {groupedProducts.unassigned.length}
+                  </span>
+                </div>
+              </div>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-amber-50/50">
+                      <TableHead className="text-right whitespace-nowrap w-16">الصورة</TableHead>
+                      <TableHead className="text-right whitespace-nowrap">الاسم</TableHead>
+                      <TableHead className="text-right whitespace-nowrap">السعر</TableHead>
+                      <TableHead className="text-right whitespace-nowrap">الحالة</TableHead>
+                      <TableHead className="text-right whitespace-nowrap w-24">إجراءات</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {groupedProducts.unassigned.map((prod: Product) => {
+                      const hasSizes = prod.product_sizes && prod.product_sizes.length > 0;
+                      return (
+                        <TableRow key={prod.id}>
+                          <TableCell>
+                            {prod.image_url ? (
+                              <img
+                                src={prod.image_url}
+                                alt={prod.name}
+                                className="w-10 h-10 object-cover rounded-lg"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center text-[10px] text-gray-400">
+                                بدون صورة
+                              </div>
+                            )}
+                          </TableCell>
+                          <TableCell className="font-medium text-sm text-ink">{prod.name}</TableCell>
+                          <TableCell>
+                            {hasSizes ? (
+                              <span className="text-xs text-gray-500">متعدد الأحجام</span>
+                            ) : (
+                              <span className="font-semibold text-sm">{prod.base_price} ج.م</span>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                prod.is_active
+                                  ? "bg-green-100 text-green-700"
+                                  : "bg-gray-100 text-gray-700"
+                              }`}
+                            >
+                              {prod.is_active ? "نشط" : "غير نشط"}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-1.5">
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => handleOpenEdit(prod)}
+                              >
+                                <Edit2 className="w-3.5 h-3.5" />
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                size="icon"
+                                className="h-8 w-8"
+                                onClick={() => handleOpenDelete(prod)}
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          )}
+
+          {categories.length === 0 && products.length === 0 && (
+            <div className="text-center text-gray-500 py-12">
+              لا توجد أقسام أو منتجات بعد.
+            </div>
+          )}
         </div>
       )}
 

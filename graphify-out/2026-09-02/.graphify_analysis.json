@@ -23,17 +23,12 @@
       "src_hooks_usedata_useproduct",
       "src_lib_utils_calculatediscountedprice",
       "src_lib_utils_getproductdisplayprice",
-      "src_routes_cart",
-      "src_routes_cart_cartcontent",
-      "src_routes_cart_carthero",
-      "src_routes_cart_cartpage",
-      "src_routes_cart_route",
-      "src_routes_cart_toarabicdigits",
       "src_routes_categories",
       "src_routes_categories_categoriespage",
       "src_routes_categories_route",
       "src_routes_favorites",
       "src_routes_favorites_favoritespage",
+      "src_routes_favorites_route",
       "src_routes_index",
       "src_routes_index_categoriessection",
       "src_routes_index_featuredsection",
@@ -44,7 +39,9 @@
       "src_routes_menu_menuhero",
       "src_routes_menu_menupage",
       "src_routes_menu_menusearch",
+      "src_routes_menu_productsortoption",
       "src_routes_menu_route",
+      "src_routes_menu_sortproducts",
       "src_routes_offer_id",
       "src_routes_offer_id_offerdetailpage",
       "src_routes_offer_id_route",
@@ -95,6 +92,7 @@
       "src_store_toast_publictoast",
       "src_store_toast_toastdata",
       "src_store_toast_toaststore",
+      "src_types_index_cartline",
       "test_db",
       "test_db_main"
     ],
@@ -108,35 +106,32 @@
       "src_components_ui_avatar_avatar",
       "src_components_ui_avatar_avatarfallback",
       "src_components_ui_avatar_avatarimage",
-      "src_components_ui_breadcrumb",
-      "src_components_ui_breadcrumb_breadcrumb",
-      "src_components_ui_breadcrumb_breadcrumbellipsis",
-      "src_components_ui_breadcrumb_breadcrumbitem",
-      "src_components_ui_breadcrumb_breadcrumblink",
-      "src_components_ui_breadcrumb_breadcrumblist",
-      "src_components_ui_breadcrumb_breadcrumbpage",
-      "src_components_ui_breadcrumb_breadcrumbseparator",
       "src_components_ui_checkbox",
       "src_components_ui_checkbox_checkbox",
-      "src_components_ui_context_menu",
-      "src_components_ui_context_menu_contextmenucheckboxitem",
-      "src_components_ui_context_menu_contextmenucontent",
-      "src_components_ui_context_menu_contextmenuitem",
-      "src_components_ui_context_menu_contextmenulabel",
-      "src_components_ui_context_menu_contextmenuradioitem",
-      "src_components_ui_context_menu_contextmenuseparator",
-      "src_components_ui_context_menu_contextmenushortcut",
-      "src_components_ui_context_menu_contextmenusubcontent",
-      "src_components_ui_context_menu_contextmenusubtrigger",
+      "src_components_ui_command",
+      "src_components_ui_command_command",
+      "src_components_ui_command_commanddialog",
+      "src_components_ui_command_commandempty",
+      "src_components_ui_command_commandgroup",
+      "src_components_ui_command_commandinput",
+      "src_components_ui_command_commanditem",
+      "src_components_ui_command_commandlist",
+      "src_components_ui_command_commandseparator",
+      "src_components_ui_command_commandshortcut",
       "src_components_ui_dialog_dialogdescription",
       "src_components_ui_dialog_dialogoverlay",
+      "src_components_ui_dropdown_menu",
+      "src_components_ui_dropdown_menu_dropdownmenucheckboxitem",
+      "src_components_ui_dropdown_menu_dropdownmenucontent",
+      "src_components_ui_dropdown_menu_dropdownmenuitem",
+      "src_components_ui_dropdown_menu_dropdownmenulabel",
+      "src_components_ui_dropdown_menu_dropdownmenuradioitem",
+      "src_components_ui_dropdown_menu_dropdownmenuseparator",
+      "src_components_ui_dropdown_menu_dropdownmenushortcut",
+      "src_components_ui_dropdown_menu_dropdownmenusubcontent",
+      "src_components_ui_dropdown_menu_dropdownmenusubtrigger",
       "src_components_ui_hover_card",
       "src_components_ui_hover_card_hovercardcontent",
-      "src_components_ui_input_otp",
-      "src_components_ui_input_otp_inputotp",
-      "src_components_ui_input_otp_inputotpgroup",
-      "src_components_ui_input_otp_inputotpseparator",
-      "src_components_ui_input_otp_inputotpslot",
       "src_components_ui_popover",
       "src_components_ui_popover_popovercontent",
       "src_components_ui_progress",
@@ -147,9 +142,6 @@
       "src_components_ui_resizable",
       "src_components_ui_resizable_resizablehandle",
       "src_components_ui_resizable_resizablepanelgroup",
-      "src_components_ui_scroll_area",
-      "src_components_ui_scroll_area_scrollarea",
-      "src_components_ui_scroll_area_scrollbar",
       "src_components_ui_select_selectlabel",
       "src_components_ui_select_selectscrolldownbutton",
       "src_components_ui_select_selectscrollupbutton",
@@ -158,6 +150,10 @@
       "src_components_ui_slider_slider",
       "src_components_ui_table_tablecaption",
       "src_components_ui_table_tablefooter",
+      "src_components_ui_tabs",
+      "src_components_ui_tabs_tabscontent",
+      "src_components_ui_tabs_tabslist",
+      "src_components_ui_tabs_tabstrigger",
       "src_lib_utils_cn"
     ],
     "2": [
@@ -299,7 +295,6 @@
       "src_types_database_types_database",
       "src_types_index",
       "src_types_index_branch",
-      "src_types_index_cartline",
       "src_types_index_checkoutcustomer",
       "src_types_index_createorderpayload",
       "src_types_index_menucategory",
@@ -348,6 +343,8 @@
       "src_hooks_use_mobile_useismobile"
     ],
     "6": [
+      "src_router",
+      "src_router_getrouter",
       "src_routetree_gen",
       "src_routetree_gen_adminbranchesroute",
       "src_routetree_gen_admincategoriesroute",
@@ -372,10 +369,13 @@
       "src_routetree_gen_offeridroute",
       "src_routetree_gen_offersroute",
       "src_routetree_gen_productidroute",
+      "src_routetree_gen_register",
       "src_routetree_gen_rootroutechildren",
+      "src_routetree_gen_routetree",
       "src_routetree_gen_sitemenuroute",
       "src_routetree_gen_tanstack_react_router",
-      "src_routetree_gen_tanstack_react_start"
+      "src_routetree_gen_tanstack_react_start",
+      "src_start_startinstance"
     ],
     "7": [
       "ref_dom",
@@ -448,25 +448,6 @@
       "src_store_toast_usepublictoast"
     ],
     "10": [
-      "src_components_admin_adminheader",
-      "src_components_admin_adminheader_adminheader",
-      "src_components_admin_adminheader_adminheaderprops",
-      "src_components_admin_adminsidebar",
-      "src_components_admin_adminsidebar_adminsidebar",
-      "src_lib_supabase",
-      "src_lib_supabase_getclient",
-      "src_lib_supabase_issupabaseconfigured",
-      "src_lib_supabase_supabase",
-      "src_lib_supabase_supabaseanonkey",
-      "src_lib_supabase_supabaseurl",
-      "src_routes_admin",
-      "src_routes_admin_adminlayout",
-      "src_routes_admin_login",
-      "src_routes_admin_login_adminlogin",
-      "src_routes_admin_login_route",
-      "src_routes_admin_route"
-    ],
-    "11": [
       "src_components_ui_menubar",
       "src_components_ui_menubar_menubar",
       "src_components_ui_menubar_menubarcheckboxitem",
@@ -485,23 +466,25 @@
       "src_components_ui_menubar_menubarsubtrigger",
       "src_components_ui_menubar_menubartrigger"
     ],
-    "12": [
-      "server_entry",
-      "src_lib_error_capture",
-      "src_lib_error_capture_consumelastcapturederror",
-      "src_lib_error_capture_record",
-      "src_lib_error_page",
-      "src_lib_error_page_rendererrorpage",
-      "src_server",
-      "src_server_fetch",
-      "src_server_getserverentry",
-      "src_server_ish3swallowederrorbody",
-      "src_server_normalizecatastrophicssrresponse",
-      "src_server_serverentry",
-      "src_start",
-      "src_start_errormiddleware"
+    "11": [
+      "src_components_admin_adminheader",
+      "src_components_admin_adminheader_adminheader",
+      "src_components_admin_adminheader_adminheaderprops",
+      "src_components_admin_adminsidebar",
+      "src_components_admin_adminsidebar_adminsidebar",
+      "src_lib_supabase",
+      "src_lib_supabase_getclient",
+      "src_lib_supabase_issupabaseconfigured",
+      "src_lib_supabase_supabase",
+      "src_lib_supabase_supabaseanonkey",
+      "src_lib_supabase_supabaseurl",
+      "src_routes_admin",
+      "src_routes_admin_adminlayout",
+      "src_routes_admin_login",
+      "src_routes_admin_login_adminlogin",
+      "src_routes_admin_login_route"
     ],
-    "13": [
+    "12": [
       "src_components_ui_carousel",
       "src_components_ui_carousel_carousel",
       "src_components_ui_carousel_carouselapi",
@@ -517,7 +500,7 @@
       "src_components_ui_carousel_usecarousel",
       "src_components_ui_carousel_usecarouselparameters"
     ],
-    "14": [
+    "13": [
       "supabase_functions_create_order_index",
       "supabase_functions_create_order_index_asuuidornull",
       "supabase_functions_create_order_index_corsheaders",
@@ -533,10 +516,10 @@
       "supabase_functions_create_order_index_sendtelegrammessage",
       "supabase_functions_create_order_index_sizedata"
     ],
-    "15": [
-      "clsx",
+    "14": [
+      "input_otp",
       "package_dependencies",
-      "package_dependencies_clsx",
+      "package_dependencies_input_otp",
       "package_dependencies_radix_ui_react_context_menu",
       "package_dependencies_radix_ui_react_scroll_area",
       "package_dependencies_radix_ui_react_tabs",
@@ -547,6 +530,21 @@
       "radix_ui_react_tabs",
       "radix_ui_react_toggle",
       "tw_animate_css"
+    ],
+    "15": [
+      "src_lib_error_capture",
+      "src_lib_error_capture_consumelastcapturederror",
+      "src_lib_error_capture_record",
+      "src_lib_error_page",
+      "src_lib_error_page_rendererrorpage",
+      "src_server",
+      "src_server_fetch",
+      "src_server_getserverentry",
+      "src_server_ish3swallowederrorbody",
+      "src_server_normalizecatastrophicssrresponse",
+      "src_server_serverentry",
+      "src_start",
+      "src_start_errormiddleware"
     ],
     "16": [
       "src_components_ui_chart",
@@ -562,6 +560,19 @@
       "src_components_ui_chart_usechart"
     ],
     "17": [
+      "src_hooks_usedata_usesitesettings",
+      "src_routes_admin_products_adminproducts",
+      "src_routes_admin_settings",
+      "src_routes_admin_settings_adminsettings",
+      "src_routes_admin_settings_route",
+      "src_routes_cart",
+      "src_routes_cart_cartcontent",
+      "src_routes_cart_carthero",
+      "src_routes_cart_cartpage",
+      "src_routes_cart_route",
+      "src_routes_cart_toarabicdigits"
+    ],
+    "18": [
       "src_routes_admin_branches_route",
       "src_routes_admin_categories_route",
       "src_routes_admin_index",
@@ -569,12 +580,12 @@
       "src_routes_admin_index_route",
       "src_routes_admin_offers_route",
       "src_routes_admin_products_route",
-      "src_routes_favorites_route",
+      "src_routes_admin_route",
       "src_routes_root_route",
       "src_routetree_gen_fileroutesbyid",
       "src_routetree_gen_fileroutesbypath"
     ],
-    "18": [
+    "19": [
       "src_components_ui_button_buttonprops",
       "src_components_ui_pagination",
       "src_components_ui_pagination_pagination",
@@ -586,29 +597,17 @@
       "src_components_ui_pagination_paginationnext",
       "src_components_ui_pagination_paginationprevious"
     ],
-    "19": [
-      "src_components_ui_command",
-      "src_components_ui_command_command",
-      "src_components_ui_command_commanddialog",
-      "src_components_ui_command_commandempty",
-      "src_components_ui_command_commandgroup",
-      "src_components_ui_command_commandinput",
-      "src_components_ui_command_commanditem",
-      "src_components_ui_command_commandlist",
-      "src_components_ui_command_commandseparator",
-      "src_components_ui_command_commandshortcut"
-    ],
     "20": [
-      "src_components_ui_dropdown_menu",
-      "src_components_ui_dropdown_menu_dropdownmenucheckboxitem",
-      "src_components_ui_dropdown_menu_dropdownmenucontent",
-      "src_components_ui_dropdown_menu_dropdownmenuitem",
-      "src_components_ui_dropdown_menu_dropdownmenulabel",
-      "src_components_ui_dropdown_menu_dropdownmenuradioitem",
-      "src_components_ui_dropdown_menu_dropdownmenuseparator",
-      "src_components_ui_dropdown_menu_dropdownmenushortcut",
-      "src_components_ui_dropdown_menu_dropdownmenusubcontent",
-      "src_components_ui_dropdown_menu_dropdownmenusubtrigger"
+      "src_components_ui_context_menu",
+      "src_components_ui_context_menu_contextmenucheckboxitem",
+      "src_components_ui_context_menu_contextmenucontent",
+      "src_components_ui_context_menu_contextmenuitem",
+      "src_components_ui_context_menu_contextmenulabel",
+      "src_components_ui_context_menu_contextmenuradioitem",
+      "src_components_ui_context_menu_contextmenuseparator",
+      "src_components_ui_context_menu_contextmenushortcut",
+      "src_components_ui_context_menu_contextmenusubcontent",
+      "src_components_ui_context_menu_contextmenusubtrigger"
     ],
     "21": [
       "src_components_ui_sheet",
@@ -622,6 +621,16 @@
       "src_components_ui_sheet_sheetvariants"
     ],
     "22": [
+      "src_components_ui_breadcrumb",
+      "src_components_ui_breadcrumb_breadcrumb",
+      "src_components_ui_breadcrumb_breadcrumbellipsis",
+      "src_components_ui_breadcrumb_breadcrumbitem",
+      "src_components_ui_breadcrumb_breadcrumblink",
+      "src_components_ui_breadcrumb_breadcrumblist",
+      "src_components_ui_breadcrumb_breadcrumbpage",
+      "src_components_ui_breadcrumb_breadcrumbseparator"
+    ],
+    "23": [
       "src_components_ui_drawer",
       "src_components_ui_drawer_drawer",
       "src_components_ui_drawer_drawercontent",
@@ -631,7 +640,7 @@
       "src_components_ui_drawer_draweroverlay",
       "src_components_ui_drawer_drawertitle"
     ],
-    "23": [
+    "24": [
       "src_components_ui_navigation_menu",
       "src_components_ui_navigation_menu_navigationmenu",
       "src_components_ui_navigation_menu_navigationmenucontent",
@@ -641,7 +650,7 @@
       "src_components_ui_navigation_menu_navigationmenutriggerstyle",
       "src_components_ui_navigation_menu_navigationmenuviewport"
     ],
-    "24": [
+    "25": [
       "src_components_ui_card",
       "src_components_ui_card_card",
       "src_components_ui_card_cardcontent",
@@ -650,7 +659,7 @@
       "src_components_ui_card_cardheader",
       "src_components_ui_card_cardtitle"
     ],
-    "25": [
+    "26": [
       "src_components_ui_toggle",
       "src_components_ui_toggle_group",
       "src_components_ui_toggle_group_togglegroup",
@@ -658,13 +667,6 @@
       "src_components_ui_toggle_group_togglegroupitem",
       "src_components_ui_toggle_toggle",
       "src_components_ui_toggle_togglevariants"
-    ],
-    "26": [
-      "db_site_settings",
-      "prd_md",
-      "public_og_image_png",
-      "src_assets_hero_grill_webp",
-      "src_assets_logo_webp"
     ],
     "27": [
       "src_components_ui_alert",
@@ -674,18 +676,17 @@
       "src_components_ui_alert_alertvariants"
     ],
     "28": [
-      "src_hooks_usedata_usesitesettings",
-      "src_routes_admin_products_adminproducts",
-      "src_routes_admin_settings",
-      "src_routes_admin_settings_adminsettings",
-      "src_routes_admin_settings_route"
+      "src_components_ui_input_otp",
+      "src_components_ui_input_otp_inputotp",
+      "src_components_ui_input_otp_inputotpgroup",
+      "src_components_ui_input_otp_inputotpseparator",
+      "src_components_ui_input_otp_inputotpslot"
     ],
     "29": [
-      "src_router",
-      "src_router_getrouter",
-      "src_routetree_gen_register",
-      "src_routetree_gen_routetree",
-      "src_start_startinstance"
+      "prd_md",
+      "public_og_image_png",
+      "src_assets_hero_grill_webp",
+      "src_assets_logo_webp"
     ],
     "30": [
       "src_components_ui_badge",
@@ -694,10 +695,9 @@
       "src_components_ui_badge_badgevariants"
     ],
     "31": [
-      "src_components_ui_tabs",
-      "src_components_ui_tabs_tabscontent",
-      "src_components_ui_tabs_tabslist",
-      "src_components_ui_tabs_tabstrigger"
+      "src_components_ui_scroll_area",
+      "src_components_ui_scroll_area_scrollarea",
+      "src_components_ui_scroll_area_scrollbar"
     ],
     "32": [
       "src_routes_admin_orders",
@@ -709,16 +709,16 @@
       "package_dependencies_class_variance_authority"
     ],
     "34": [
+      "clsx",
+      "package_dependencies_clsx"
+    ],
+    "35": [
       "cmdk",
       "package_dependencies_cmdk"
     ],
-    "35": [
+    "36": [
       "embla_carousel_react",
       "package_dependencies_embla_carousel_react"
-    ],
-    "36": [
-      "input_otp",
-      "package_dependencies_input_otp"
     ],
     "37": [
       "lucide_react",
@@ -895,99 +895,96 @@
       "categories"
     ],
     "81": [
-      "db_categories"
-    ],
-    "82": [
-      "db_orders"
-    ],
-    "83": [
-      "db_products"
-    ],
-    "84": [
       "eslint_config"
     ],
-    "85": [
+    "82": [
       "offers"
     ],
-    "86": [
+    "83": [
       "orders"
     ],
-    "87": [
+    "84": [
       "product_sizes"
     ],
-    "88": [
+    "85": [
       "products"
     ],
-    "89": [
+    "86": [
       "public_orders"
     ],
-    "90": [
+    "87": [
+      "public_products"
+    ],
+    "88": [
       "readme_md"
     ],
-    "91": [
+    "89": [
       "src_components_ui_aspect_ratio"
     ],
-    "92": [
+    "90": [
       "src_components_ui_collapsible"
     ],
-    "93": [
+    "91": [
       "src_routes_readme_md"
     ],
-    "94": [
+    "92": [
       "supabase_migrations_20240101000000_rls_policies"
     ],
-    "95": [
+    "93": [
       "supabase_migrations_20240101000000_rls_policies_sql_order_items"
     ],
-    "96": [
+    "94": [
       "supabase_migrations_20260721000001_orders_branch_id"
     ],
-    "97": [
+    "95": [
       "supabase_migrations_20260803000000_order_items_offers"
     ],
-    "98": [
+    "96": [
       "supabase_migrations_20260803000000_order_items_offers_sql_order_items"
     ],
-    "99": [
+    "97": [
       "supabase_migrations_20260827000000_performance_indexes"
     ],
-    "100": [
+    "98": [
+      "supabase_migrations_20260902000000_products_sort_order"
+    ],
+    "99": [
       "vite_config"
     ]
   },
   "cohesion": {
-    "0": 0.05526315789473684,
-    "1": 0.05310734463276836,
+    "0": 0.055822466254861584,
+    "1": 0.055051421657592255,
     "2": 0.15136054421768708,
     "3": 0.0425531914893617,
-    "4": 0.0545790934320074,
+    "4": 0.05603864734299517,
     "5": 0.07142857142857142,
-    "6": 0.07142857142857142,
+    "6": 0.06818181818181818,
     "7": 0.07407407407407407,
     "8": 0.10526315789473684,
     "9": 0.1437908496732026,
-    "10": 0.16176470588235295,
-    "11": 0.11764705882352941,
-    "12": 0.25274725274725274,
-    "13": 0.18681318681318682,
-    "14": 0.16483516483516483,
-    "15": 0.15384615384615385,
+    "10": 0.11764705882352941,
+    "11": 0.175,
+    "12": 0.18681318681318682,
+    "13": 0.16483516483516483,
+    "14": 0.15384615384615385,
+    "15": 0.28205128205128205,
     "16": 0.2545454545454545,
-    "17": 0.18181818181818182,
-    "18": 0.2,
+    "17": 0.23636363636363636,
+    "18": 0.18181818181818182,
     "19": 0.2,
     "20": 0.2,
     "21": 0.25,
     "22": 0.25,
-    "23": 0.2857142857142857,
+    "23": 0.25,
     "24": 0.2857142857142857,
-    "25": 0.42857142857142855,
-    "26": 0.4,
+    "25": 0.2857142857142857,
+    "26": 0.42857142857142855,
     "27": 0.5,
-    "28": 0.5,
-    "29": 0.4,
+    "28": 0.4,
+    "29": 0.5,
     "30": 0.6666666666666666,
-    "31": 0.5,
+    "31": 0.6666666666666666,
     "32": 0.6666666666666666,
     "33": 1.0,
     "34": 1.0,
@@ -1055,8 +1052,7 @@
     "96": 1.0,
     "97": 1.0,
     "98": 1.0,
-    "99": 1.0,
-    "100": 1.0
+    "99": 1.0
   },
   "gods": [
     {
@@ -1095,13 +1091,13 @@
       "degree": 11
     },
     {
-      "id": "src_components_ui_button_button",
-      "label": "Button",
+      "id": "src_hooks_usedata_usesitesettings",
+      "label": "useSiteSettings()",
       "degree": 10
     },
     {
-      "id": "src_hooks_usedata_usesitesettings",
-      "label": "useSiteSettings()",
+      "id": "src_components_ui_button_button",
+      "label": "Button",
       "degree": 10
     },
     {
@@ -1134,17 +1130,6 @@
       "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 image); connects across different repos/directories"
     },
     {
-      "source": "PRD \u2014 \u0646\u0638\u0627\u0645 \u0637\u0644\u0628\u0627\u062a \u0645\u0637\u0639\u0645 \u0627\u0644\u0634\u0631\u0642\u0627\u0648\u064a (Al-Sharkawy)",
-      "target": "Site Settings Table",
-      "source_files": [
-        "PRD.md",
-        "supabase/migrations/schema.sql"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "references",
-      "why": "crosses file types (doc \u2194 code); connects across different repos/directories"
-    },
-    {
       "source": "main()",
       "target": "getMenuItems()",
       "source_files": [
@@ -1165,10 +1150,21 @@
       "confidence": "EXTRACTED",
       "relation": "semantically_similar_to",
       "why": "connects across different repos/directories; semantically similar concepts with no structural link"
+    },
+    {
+      "source": "MenubarShortcut()",
+      "target": "cn()",
+      "source_files": [
+        "src/components/ui/menubar.tsx",
+        "src/lib/utils.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities; peripheral node `MenubarShortcut()` unexpectedly reaches hub `cn()`"
     }
   ],
   "tokens": {
-    "input": 12220,
-    "output": 1571
+    "input": 0,
+    "output": 0
   }
 }
