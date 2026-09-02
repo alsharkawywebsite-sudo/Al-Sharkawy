@@ -44,9 +44,18 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+import { handleProductImageUpload } from "./server/upload-handler";
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const url = new URL(request.url);
+      const imageMatch = url.pathname.match(/^\/?(?:api\/)?admin\/products\/([^/]+)\/image\/?$/);
+      if (imageMatch && (request.method === "POST" || request.method === "OPTIONS")) {
+        const productId = decodeURIComponent(imageMatch[1]);
+        return await handleProductImageUpload(request, productId, env);
+      }
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);

@@ -35,7 +35,11 @@ export async function getMenuCategories(): Promise<MenuCategory[]> {
     .select("id, slug, name, sort_order")
     .order("sort_order", { ascending: true });
   if (error) throw error;
-  return (data ?? []).map((c: { id: string; slug: string; name: string }) => ({ id: c.id, slug: c.slug, name: c.name }));
+  return (data ?? []).map((c: { id: string; slug: string; name: string }) => ({
+    id: c.id,
+    slug: c.slug,
+    name: c.name,
+  }));
 }
 
 export async function createCategory(payload: Partial<Category>): Promise<Category> {
@@ -119,9 +123,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
       .eq("is_active", true);
     if (error) throw error;
     // Keep order
-    return ids
-      .map((id) => data.find((p) => p.id === id))
-      .filter(Boolean) as Product[];
+    return ids.map((id) => data.find((p) => p.id === id)).filter(Boolean) as Product[];
   }
 
   // Fallback
@@ -218,11 +220,7 @@ export async function getAdminOffers(): Promise<Offer[]> {
 }
 
 export async function getOfferById(id: string): Promise<Offer | null> {
-  const { data, error } = await supabase
-    .from("offers")
-    .select("*")
-    .eq("id", id)
-    .maybeSingle();
+  const { data, error } = await supabase.from("offers").select("*").eq("id", id).maybeSingle();
   if (error) throw error;
   return (data as Offer | null) ?? null;
 }
@@ -252,8 +250,7 @@ export async function deleteOffer(id: string): Promise<true> {
 
 // ---- Orders -------------------------------------------------------------
 
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 function asUuidOrNull(value: string | null | undefined): string | null {
   if (!value || typeof value !== "string") return null;
@@ -287,7 +284,12 @@ function formatOrderNotes(payload: CreateOrderPayload): string {
 
 function toError(err: unknown, fallback: string): Error {
   if (err instanceof Error) return err;
-  if (err && typeof err === "object" && "message" in err && typeof (err as any).message === "string") {
+  if (
+    err &&
+    typeof err === "object" &&
+    "message" in err &&
+    typeof (err as any).message === "string"
+  ) {
     const e = err as { message: string; details?: string; code?: string };
     const details = e.details ? ` (${e.details})` : "";
     return new Error(`${e.message}${details}`);
@@ -324,10 +326,13 @@ export async function getAdminOrders(): Promise<Order[]> {
 export async function getSiteSettings(): Promise<Record<string, string>> {
   const { data, error } = await supabase.from("site_settings").select("*");
   if (error) throw error;
-  return (data ?? []).reduce((acc: Record<string, string>, curr: { key: string; value: string | null }) => {
-    if (curr.value !== null) acc[curr.key] = curr.value;
-    return acc;
-  }, {});
+  return (data ?? []).reduce(
+    (acc: Record<string, string>, curr: { key: string; value: string | null }) => {
+      if (curr.value !== null) acc[curr.key] = curr.value;
+      return acc;
+    },
+    {},
+  );
 }
 
 export async function updateSiteSetting(key: string, value: string): Promise<void> {
@@ -347,10 +352,13 @@ export async function updateSiteSetting(key: string, value: string): Promise<voi
 export async function getTelegramSettings(): Promise<Record<string, string>> {
   const { data, error } = await supabase.from("telegram_settings").select("key, value");
   if (error) throw error;
-  return (data ?? []).reduce((acc: Record<string, string>, curr: { key: string; value: string | null }) => {
-    if (curr.value !== null) acc[curr.key] = curr.value;
-    return acc;
-  }, {});
+  return (data ?? []).reduce(
+    (acc: Record<string, string>, curr: { key: string; value: string | null }) => {
+      if (curr.value !== null) acc[curr.key] = curr.value;
+      return acc;
+    },
+    {},
+  );
 }
 
 export async function updateTelegramSetting(key: string, value: string): Promise<void> {
@@ -363,9 +371,11 @@ export async function updateTelegramSetting(key: string, value: string): Promise
 export async function sendTelegramTest(
   target: "owner" | "branch",
   branchId?: string,
-  branchName?: string
+  branchName?: string,
 ): Promise<void> {
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   const headers: Record<string, string> = {};
   if (session?.access_token) {
     headers.Authorization = `Bearer ${session.access_token}`;
@@ -423,6 +433,53 @@ export async function deleteBranch(id: string): Promise<true> {
   return true;
 }
 
+// ---- Image Upload ---------------------------------------------------------
+
+export async function uploadProductImage(
+  productId: string,
+  file: File,
+  options?: { quality?: number; target_size?: number; max_width?: number },
+): Promise<{ success: boolean; image_url: string }> {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const token = session?.access_token;
+  if (!token) {
+    throw new Error("يجب تسجيل الدخول كمسؤول أولاً لرفع الصور");
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+  if (options?.quality) formData.append("quality", String(options.quality));
+  if (options?.target_size) formData.append("target_size", String(options.target_size));
+  if (options?.max_width) formData.append("max_width", String(options.max_width));
+
+  const targetId = productId?.trim() || "new";
+  const response = await fetch(`/admin/products/${encodeURIComponent(targetId)}/image`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  let data: { success?: boolean; image_url?: string; error?: string } | undefined;
+  try {
+    data = (await response.json()) as { success?: boolean; image_url?: string; error?: string };
+  } catch {
+    if (!response.ok) {
+      throw new Error(`فشل الاتصال بالخادم (${response.status})`);
+    }
+    throw new Error("استجابة غير متوقعة من الخادم");
+  }
+
+  if (!response.ok || !data?.success || !data?.image_url) {
+    throw new Error(data?.error || "فشل رفع الصورة");
+  }
+
+  return data as { success: true; image_url: string };
+}
+
 // Convenience aggregate for callers already using the previous `api.*` surface.
 export const api = {
   getCategories,
@@ -455,4 +512,5 @@ export const api = {
   getTelegramSettings,
   updateTelegramSetting,
   sendTelegramTest,
+  uploadProductImage,
 };
