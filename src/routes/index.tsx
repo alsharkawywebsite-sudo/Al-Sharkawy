@@ -93,10 +93,9 @@ function Hero() {
          <div className="mt-8 flex justify-center">
   <Link
     to="/offers"
-    className="group relative overflow-hidden inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold text-white backdrop-blur-sm shadow-2xl shadow-black/10 ring-1 ring-inset ring-white/5 transition-transform duration-300 hover:scale-105"
+    className="group inline-flex items-center gap-2 rounded-full bg-amber-glow/30 px-6 py-2.5 text-sm font-semibold text-amber-100 shadow-lg ring-1 ring-amber-glow/60 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:bg-amber-glow/40 active:scale-95"
   >
-    <div className="absolute inset-0 -z-10 bg-white/5 animate-[pulse_4.5s_ease-in-out_infinite] transition-colors duration-300 group-hover:bg-white/10" />
-    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-crimson animate-[pulse_2.5s_ease-in-out_infinite]" />
+    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-glow animate-[pulse_2.5s_ease-in-out_infinite]" />
     <span>اكتشف عروض اليوم</span>
     <ChevronLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
   </Link>
