@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/table";
 import { Edit2, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 export const Route = createFileRoute("/admin/categories")({
   component: AdminCategories,
@@ -206,17 +207,12 @@ function AdminCategories() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="image_url">رابط الصورة (Image URL)</Label>
-              <Input
-                id="image_url"
-                value={formData.image_url}
-                onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                placeholder="https://..."
-                dir="ltr"
-                className="text-left"
-              />
-            </div>
+            <ImageUploadField
+              label="صورة القسم / الفئة"
+              value={formData.image_url}
+              onChange={(url) => setFormData((prev) => ({ ...prev, image_url: url }))}
+              onUpload={(file) => api.uploadCategoryImage(editingCat?.id || "new", file)}
+            />
             <div className="space-y-2">
               <Label htmlFor="sort_order">الترتيب</Label>
               <Input
@@ -250,7 +246,11 @@ function AdminCategories() {
             <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-600 hover:bg-red-700"
-              onClick={() => deleteMut.mutate(deletingCat?.id)}
+              onClick={() => {
+                if (deletingCat?.id) {
+                  deleteMut.mutate(deletingCat.id);
+                }
+              }}
             >
               {deleteMut.isPending ? "جاري الحذف..." : "حذف"}
             </AlertDialogAction>

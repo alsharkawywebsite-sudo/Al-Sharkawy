@@ -43,19 +43,14 @@ import {
   Edit2,
   Trash2,
   Plus,
-  X,
   Star,
   ArrowUp,
   ArrowDown,
-  UploadCloud,
-  Loader2,
-  RefreshCw,
-  CheckCircle2,
-  AlertCircle,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useSiteSettings } from "@/hooks/useData";
-import { useRef } from "react";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 export const Route = createFileRoute("/admin/products")({
   component: AdminProducts,
@@ -63,9 +58,6 @@ export const Route = createFileRoute("/admin/products")({
 
 function AdminProducts() {
   const queryClient = useQueryClient();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const { data: products = [], isLoading: isLoadingProducts } = useQuery({
     queryKey: ["adminProducts"],
@@ -136,56 +128,6 @@ function AdminProducts() {
     });
     setSizes([]);
     setEditingProd(null);
-    setUploadError(null);
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const handleImageFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate size (25MB max)
-    const maxBytes = 25 * 1024 * 1024;
-    if (file.size > maxBytes) {
-      toast.error("حجم الصورة يتجاوز الحد الأقصى المسموح به (25 ميجابايت)");
-      if (fileInputRef.current) fileInputRef.current.value = "";
-      return;
-    }
-
-    // Validate format
-    const validTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp", "image/gif"];
-    const ext = file.name.split(".").pop()?.toLowerCase();
-    const isExtensionValid = ext && ["png", "jpg", "jpeg", "webp", "gif"].includes(ext);
-    if (!validTypes.includes(file.type.toLowerCase()) && !isExtensionValid) {
-      toast.error("صيغة الملف غير مدعومة. الصيغ المقبولة: PNG, JPEG, WEBP, GIF");
-      if (fileInputRef.current) fileInputRef.current.value = "";
-      return;
-    }
-
-    setIsUploadingImage(true);
-    setUploadError(null);
-
-    try {
-      const targetId = editingProd?.id || "new";
-      const res = await api.uploadProductImage(targetId, file);
-      if (res.success && res.image_url) {
-        setFormData((prev) => ({ ...prev, image_url: res.image_url }));
-        if (editingProd) {
-          setEditingProd((prev) => (prev ? { ...prev, image_url: res.image_url } : null));
-          void queryClient.invalidateQueries({ queryKey: ["adminProducts"] });
-        }
-        toast.success("تم رفع صورة المنتج بنجاح");
-      } else {
-        throw new Error("فشل رفع الصورة");
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "فشل رفع الصورة";
-      setUploadError(msg);
-      toast.error(msg);
-    } finally {
-      setIsUploadingImage(false);
-      if (fileInputRef.current) fileInputRef.current.value = "";
-    }
   };
 
   const handleOpenCreate = (categoryId?: string) => {
@@ -264,7 +206,13 @@ function AdminProducts() {
       discount_value: prod.discount_value?.toString() || "",
       is_active: prod.is_active ?? true,
     });
-    setSizes(prod.product_sizes || []);
+    setSizes(
+      (prod.product_sizes || []).map((s) => ({
+        name: s.name,
+        price: s.price.toString(),
+        is_active: s.is_active ?? true,
+      })),
+    );
     setIsFormOpen(true);
   };
 
@@ -713,138 +661,12 @@ function AdminProducts() {
               />
             </div>
 
-            <div className="space-y-3">
-              <Label>صورة المنتج</Label>
-
-              {/* Hidden File Input */}
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/png,image/jpeg,image/webp,image/gif"
-                className="hidden"
-                onChange={handleImageFileChange}
-                disabled={isUploadingImage}
-              />
-
-              {/* Image Preview & Upload Container */}
-              {formData.image_url ? (
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-4 border border-black/10 rounded-2xl bg-cream/30">
-                  <div className="relative w-24 h-24 rounded-xl overflow-hidden border border-black/10 bg-white shadow-xs shrink-0">
-                    <img
-                      src={formData.image_url}
-                      alt="معاينة المنتج"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1 space-y-2">
-                    <div className="flex items-center gap-1.5 text-xs text-green-700 font-medium">
-                      <CheckCircle2 className="w-4 h-4 text-green-600 shrink-0" />
-                      <span>تم تعيين صورة للمنتج بنجاح</span>
-                    </div>
-                    <p className="text-xs text-ink/50 break-all font-mono line-clamp-1" dir="ltr">
-                      {formData.image_url}
-                    </p>
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        disabled={isUploadingImage}
-                        onClick={() => fileInputRef.current?.click()}
-                        className="text-xs gap-1.5 h-8"
-                      >
-                        {isUploadingImage ? (
-                          <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            جاري الرفع...
-                          </>
-                        ) : (
-                          <>
-                            <RefreshCw className="w-3.5 h-3.5" />
-                            تغيير الصورة
-                          </>
-                        )}
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        disabled={isUploadingImage}
-                        onClick={() => {
-                          setFormData((prev) => ({ ...prev, image_url: "" }));
-                          if (fileInputRef.current) fileInputRef.current.value = "";
-                        }}
-                        className="text-xs text-red-600 hover:text-red-700 hover:bg-red-50 h-8 gap-1"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                        إزالة الصورة
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div
-                  onClick={() => {
-                    if (!isUploadingImage) fileInputRef.current?.click();
-                  }}
-                  className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-colors ${
-                    isUploadingImage
-                      ? "border-crimson/40 bg-crimson/5 cursor-wait"
-                      : "border-black/15 hover:border-crimson/50 hover:bg-cream/40 bg-white"
-                  }`}
-                >
-                  {isUploadingImage ? (
-                    <div className="flex flex-col items-center justify-center gap-3 py-2">
-                      <Loader2 className="w-8 h-8 text-crimson animate-spin" />
-                      <div className="space-y-1">
-                        <p className="text-sm font-semibold text-ink">جاري الرفع...</p>
-                        <p className="text-xs text-ink/60 max-w-sm">
-                          قد يستغرق هذا وقتًا أطول من المعتاد (حتى دقيقة) عند الاستخدام لأول مرة.
-                        </p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <div className="w-12 h-12 rounded-full bg-cream flex items-center justify-center text-crimson">
-                        <UploadCloud className="w-6 h-6" />
-                      </div>
-                      <div className="space-y-0.5">
-                        <p className="text-sm font-semibold text-ink">انقر لرفع صورة المنتج</p>
-                        <p className="text-xs text-ink/50">
-                          الصيغ المدعومة: PNG, JPEG, WEBP, GIF (بحد أقصى 25 ميجابايت)
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {uploadError && (
-                <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 p-2.5 rounded-xl border border-red-200">
-                  <AlertCircle className="w-4 h-4 shrink-0" />
-                  <span>{uploadError}</span>
-                </div>
-              )}
-
-              {/* Manual URL Input fallback */}
-              <div className="pt-1">
-                <details className="text-xs text-ink/60 cursor-pointer">
-                  <summary className="hover:text-ink font-medium">
-                    أو إدخال رابط الصورة يدوياً
-                  </summary>
-                  <div className="mt-2 space-y-1">
-                    <Input
-                      id="image_url"
-                      value={formData.image_url}
-                      onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                      placeholder="https://..."
-                      dir="ltr"
-                      className="text-left text-xs h-9"
-                    />
-                  </div>
-                </details>
-              </div>
-            </div>
+            <ImageUploadField
+              label="صورة المنتج"
+              value={formData.image_url}
+              onChange={(url) => setFormData((prev) => ({ ...prev, image_url: url }))}
+              onUpload={(file) => api.uploadProductImage(editingProd?.id || "new", file)}
+            />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -1006,7 +828,11 @@ function AdminProducts() {
             <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-600 hover:bg-red-700"
-              onClick={() => deleteMut.mutate(deletingProd?.id)}
+              onClick={() => {
+                if (deletingProd?.id) {
+                  deleteMut.mutate(deletingProd.id);
+                }
+              }}
             >
               {deleteMut.isPending ? "جاري الحذف..." : "حذف"}
             </AlertDialogAction>

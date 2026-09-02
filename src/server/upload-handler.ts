@@ -164,11 +164,21 @@ async function uploadToExternalService(
   };
 }
 
-export async function handleProductImageUpload(
+export type EntityType = "products" | "offers" | "categories" | "generic";
+
+/**
+ * Generalized image upload handler for products, offers, categories, and generic uploads.
+ */
+export async function handleEntityImageUpload(
   request: Request,
-  productId: string,
-  env?: unknown,
+  options: {
+    entityType: EntityType;
+    entityId?: string;
+    env?: unknown;
+  },
 ): Promise<Response> {
+  const { entityType, entityId, env } = options;
+
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "authorization, content-type",
@@ -310,25 +320,32 @@ export async function handleProductImageUpload(
 
     const imageUrl = uploadResult.url;
 
-    // 5. If productId is an existing product (not "new"), update DB
-    if (productId && productId !== "new" && productId !== "temp") {
-      const { error: dbError } = await supabase
-        .from("products")
-        .update({ image_url: imageUrl })
-        .eq("id", productId);
+    // 5. If entityId is an existing ID (not "new" or "temp"), update DB table
+    if (entityId && entityId !== "new" && entityId !== "temp") {
+      let tableName: string | null = null;
+      if (entityType === "products") tableName = "products";
+      else if (entityType === "offers") tableName = "offers";
+      else if (entityType === "categories") tableName = "categories";
 
-      if (dbError) {
-        console.error("Failed to update product image_url in database:", dbError);
+      if (tableName) {
+        const { error: dbError } = await supabase
+          .from(tableName)
+          .update({ image_url: imageUrl })
+          .eq("id", entityId);
+
+        if (dbError) {
+          console.error(`Failed to update ${tableName} image_url in database:`, dbError);
+        }
       }
     }
 
-    // 6. Return success with image_url only
+    // 6. Return success with image_url only (never leak API key or external service headers)
     return new Response(JSON.stringify({ success: true, image_url: imageUrl }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (err: unknown) {
-    console.error("Error in handleProductImageUpload:", err);
+    console.error("Error in handleEntityImageUpload:", err);
     return new Response(
       JSON.stringify({
         success: false,
@@ -340,4 +357,47 @@ export async function handleProductImageUpload(
       },
     );
   }
+}
+
+export async function handleProductImageUpload(
+  request: Request,
+  productId: string,
+  env?: unknown,
+): Promise<Response> {
+  return handleEntityImageUpload(request, {
+    entityType: "products",
+    entityId: productId,
+    env,
+  });
+}
+
+export async function handleOfferImageUpload(
+  request: Request,
+  offerId: string,
+  env?: unknown,
+): Promise<Response> {
+  return handleEntityImageUpload(request, {
+    entityType: "offers",
+    entityId: offerId,
+    env,
+  });
+}
+
+export async function handleCategoryImageUpload(
+  request: Request,
+  categoryId: string,
+  env?: unknown,
+): Promise<Response> {
+  return handleEntityImageUpload(request, {
+    entityType: "categories",
+    entityId: categoryId,
+    env,
+  });
+}
+
+export async function handleGenericImageUpload(request: Request, env?: unknown): Promise<Response> {
+  return handleEntityImageUpload(request, {
+    entityType: "generic",
+    env,
+  });
 }

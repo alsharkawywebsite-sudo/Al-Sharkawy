@@ -435,8 +435,8 @@ export async function deleteBranch(id: string): Promise<true> {
 
 // ---- Image Upload ---------------------------------------------------------
 
-export async function uploadProductImage(
-  productId: string,
+export async function uploadImage(
+  endpointPath: string,
   file: File,
   options?: { quality?: number; target_size?: number; max_width?: number },
 ): Promise<{ success: boolean; image_url: string }> {
@@ -454,8 +454,7 @@ export async function uploadProductImage(
   if (options?.target_size) formData.append("target_size", String(options.target_size));
   if (options?.max_width) formData.append("max_width", String(options.max_width));
 
-  const targetId = productId?.trim() || "new";
-  const response = await fetch(`/admin/products/${encodeURIComponent(targetId)}/image`, {
+  const response = await fetch(endpointPath, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -478,6 +477,33 @@ export async function uploadProductImage(
   }
 
   return data as { success: true; image_url: string };
+}
+
+export async function uploadProductImage(
+  productId: string,
+  file: File,
+  options?: { quality?: number; target_size?: number; max_width?: number },
+): Promise<{ success: boolean; image_url: string }> {
+  const targetId = productId?.trim() || "new";
+  return uploadImage(`/admin/products/${encodeURIComponent(targetId)}/image`, file, options);
+}
+
+export async function uploadOfferImage(
+  offerId: string,
+  file: File,
+  options?: { quality?: number; target_size?: number; max_width?: number },
+): Promise<{ success: boolean; image_url: string }> {
+  const targetId = offerId?.trim() || "new";
+  return uploadImage(`/admin/offers/${encodeURIComponent(targetId)}/image`, file, options);
+}
+
+export async function uploadCategoryImage(
+  categoryId: string,
+  file: File,
+  options?: { quality?: number; target_size?: number; max_width?: number },
+): Promise<{ success: boolean; image_url: string }> {
+  const targetId = categoryId?.trim() || "new";
+  return uploadImage(`/admin/categories/${encodeURIComponent(targetId)}/image`, file, options);
 }
 
 // Convenience aggregate for callers already using the previous `api.*` surface.
@@ -512,5 +538,8 @@ export const api = {
   getTelegramSettings,
   updateTelegramSetting,
   sendTelegramTest,
+  uploadImage,
   uploadProductImage,
+  uploadOfferImage,
+  uploadCategoryImage,
 };

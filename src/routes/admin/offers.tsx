@@ -41,6 +41,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Edit2, Trash2, Plus, Star } from "lucide-react";
 import { toast } from "sonner";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 export const Route = createFileRoute("/admin/offers")({
   component: AdminOffers,
@@ -463,16 +464,13 @@ function AdminOffers() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="image_url">رابط الصورة (Image URL)</Label>
-              <Input
-                id="image_url"
-                value={formData.image_url}
-                onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-                dir="ltr"
-                className="text-left"
-              />
-            </div>
+            <ImageUploadField
+              label="صورة العرض"
+              value={formData.image_url}
+              onChange={(url) => setFormData((prev) => ({ ...prev, image_url: url }))}
+              onUpload={(file) => api.uploadOfferImage(editingOffer?.id || "new", file)}
+              aspectRatio="wide"
+            />
 
             {/* ربط بمنتج — ليعمل زر الدخول من صفحة العروض */}
             <div className="space-y-2">
@@ -681,7 +679,11 @@ function AdminOffers() {
             <AlertDialogCancel>إلغاء</AlertDialogCancel>
             <AlertDialogAction
               className="bg-red-600 hover:bg-red-700"
-              onClick={() => deleteMut.mutate(deletingOffer?.id)}
+              onClick={() => {
+                if (deletingOffer?.id) {
+                  deleteMut.mutate(deletingOffer.id);
+                }
+              }}
             >
               {deleteMut.isPending ? "جاري الحذف..." : "حذف"}
             </AlertDialogAction>

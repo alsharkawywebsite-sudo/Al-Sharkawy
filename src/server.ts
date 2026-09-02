@@ -44,16 +44,45 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
-import { handleProductImageUpload } from "./server/upload-handler";
+import {
+  handleProductImageUpload,
+  handleOfferImageUpload,
+  handleCategoryImageUpload,
+  handleGenericImageUpload,
+} from "./server/upload-handler";
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
       const url = new URL(request.url);
-      const imageMatch = url.pathname.match(/^\/?(?:api\/)?admin\/products\/([^/]+)\/image\/?$/);
-      if (imageMatch && (request.method === "POST" || request.method === "OPTIONS")) {
-        const productId = decodeURIComponent(imageMatch[1]);
-        return await handleProductImageUpload(request, productId, env);
+
+      if (request.method === "POST" || request.method === "OPTIONS") {
+        // 1. Products image upload: /admin/products/{id}/image
+        const productMatch = url.pathname.match(/^\/?(?:api\/)?admin\/products\/([^/]+)\/image\/?$/);
+        if (productMatch) {
+          const productId = decodeURIComponent(productMatch[1]);
+          return await handleProductImageUpload(request, productId, env);
+        }
+
+        // 2. Offers image upload: /admin/offers/{id}/image
+        const offerMatch = url.pathname.match(/^\/?(?:api\/)?admin\/offers\/([^/]+)\/image\/?$/);
+        if (offerMatch) {
+          const offerId = decodeURIComponent(offerMatch[1]);
+          return await handleOfferImageUpload(request, offerId, env);
+        }
+
+        // 3. Categories image upload: /admin/categories/{id}/image
+        const categoryMatch = url.pathname.match(/^\/?(?:api\/)?admin\/categories\/([^/]+)\/image\/?$/);
+        if (categoryMatch) {
+          const categoryId = decodeURIComponent(categoryMatch[1]);
+          return await handleCategoryImageUpload(request, categoryId, env);
+        }
+
+        // 4. Generic image upload: /admin/upload/image or /api/admin/upload/image
+        const genericMatch = url.pathname.match(/^\/?(?:api\/)?admin\/upload\/image\/?$/);
+        if (genericMatch) {
+          return await handleGenericImageUpload(request, env);
+        }
       }
 
       const handler = await getServerEntry();
