@@ -155,12 +155,12 @@ function formatOrderHtml(data: PayloadData): string {
   return lines.filter((l) => l !== null && l !== "").join("\n");
 }
 
-async function sendTelegramMessage(html: string): Promise<void> {
+async function sendTelegramMessage(html: string, chatId: string): Promise<void> {
+  // Token: prefer DB setting (telegram_bot_token), fall back to env var.
   const token = Deno.env.get("TELEGRAM_BOT_TOKEN");
-  const chatId = Deno.env.get("TELEGRAM_CHAT_ID");
 
-  if (!token || !chatId) {
-    console.warn("[telegram] Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID");
+  if (!token) {
+    console.warn("[telegram] Missing TELEGRAM_BOT_TOKEN");
     return;
   }
 
@@ -179,6 +179,66 @@ async function sendTelegramMessage(html: string): Promise<void> {
     const body = await response.text().catch(() => "");
     throw new Error(`Telegram API ${response.status}: ${body.slice(0, 200)}`);
   }
+}
+
+/**
+ * Resolves the list of Telegram chat IDs that should receive an order
+ * notification, based on the order's branchId.
+ *
+ * Logic:
+ *   1. Always include the Owner chat ID.
+ *   2. Include the branch-specific chat ID if configured.
+ *
+ * Settings are read from the `telegram_settings` table (service role).
+ * The key for a branch chat ID follows the pattern:
+ *   telegram_branch_<branchId>_chat_id
+ */
+async function resolveTargetChatIds(
+  branchId: string | null | undefined,
+  supabase: ReturnType<typeof import("https://esm.sh/@supabase/supabase-js@2.39.0").createClient>
+): Promise<string[]> {
+  const { data: rows, error } = await supabase
+    .from("telegram_settings")
+    .select("key, value");
+
+  if (error) {
+    console.warn("[telegram] Could not read telegram_settings:", error.message);
+    // Fall back to legacy env var so existing setup keeps working.
+    const legacyChat = Deno.env.get("TELEGRAM_CHAT_ID");
+    return legacyChat ? [legacyChat] : [];
+  }
+
+  const settings: Record<string, string> = {};
+  for (const row of rows ?? []) {
+    if (row.value !== null && row.value !== "") settings[row.key] = row.value;
+  }
+
+  const ids: string[] = [];
+
+  // 1. Owner always receives every order.
+  const ownerChatId = settings["telegram_owner_chat_id"];
+  if (ownerChatId) {
+    ids.push(ownerChatId);
+  } else {
+    // Legacy fallback: TELEGRAM_CHAT_ID env var treated as owner.
+    const legacyChat = Deno.env.get("TELEGRAM_CHAT_ID");
+    if (legacyChat) ids.push(legacyChat);
+  }
+
+  // 2. Branch-specific group.
+  if (branchId) {
+    const branchChatId = settings[`telegram_branch_${branchId}_chat_id`];
+    if (branchChatId) {
+      // Avoid duplicates in case owner and branch share the same chat.
+      if (!ids.includes(branchChatId)) {
+        ids.push(branchChatId);
+      }
+    } else {
+      console.warn(`[telegram] No chat ID configured for branch ${branchId}`);
+    }
+  }
+
+  return ids;
 }
 
 serve(async (req) => {
@@ -384,7 +444,11 @@ serve(async (req) => {
         // deliveryFee, // DELIVERY FEE (DISABLED) — see formatOrderHtml
         finalTotal: serverFinalTotal,
       };
-      await sendTelegramMessage(formatOrderHtml(telegramPayload));
+      const html = formatOrderHtml(telegramPayload);
+      const chatIds = await resolveTargetChatIds(asUuidOrNull(payload.branchId), supabase);
+      for (const chatId of chatIds) {
+        await sendTelegramMessage(html, chatId);
+      }
     } catch (telegramErr) {
       console.error("[telegram] internal error:", telegramErr);
       throw new Error("تعذر تأكيد الطلب في الوقت الحالي. يُرجى المحاولة مرة أخرى بعد قليل، أو التواصل مع المطعم مباشرة إذا كان الطلب عاجلًا.");

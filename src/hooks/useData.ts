@@ -9,6 +9,7 @@ import {
   getProductById,
   getBranches,
   getActiveBranches,
+  getTelegramSettings,
 } from "@/services/api";
 
 const FIVE_MINUTES = 5 * 60 * 1000;
@@ -98,5 +99,14 @@ export function useActiveBranches() {
     queryKey: ["activeBranches"],
     queryFn: getActiveBranches,
     staleTime: FIVE_MINUTES,
+  });
+}
+
+export function useTelegramSettings() {
+  return useQuery({
+    queryKey: ["telegramSettings"],
+    queryFn: getTelegramSettings,
+    // Short stale time — admin settings should stay current.
+    staleTime: 30 * 1000,
   });
 }

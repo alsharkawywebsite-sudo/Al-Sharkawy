@@ -340,6 +340,38 @@ export async function updateSiteSetting(key: string, value: string): Promise<voi
   }
 }
 
+// ---- Telegram Settings (admin-only, stored in telegram_settings) -----------
+// telegram_settings has no public SELECT — only authenticated admins can read.
+// The edge function reads it via service role key.
+
+export async function getTelegramSettings(): Promise<Record<string, string>> {
+  const { data, error } = await supabase.from("telegram_settings").select("key, value");
+  if (error) throw error;
+  return (data ?? []).reduce((acc: Record<string, string>, curr: { key: string; value: string | null }) => {
+    if (curr.value !== null) acc[curr.key] = curr.value;
+    return acc;
+  }, {});
+}
+
+export async function updateTelegramSetting(key: string, value: string): Promise<void> {
+  const { error } = await supabase
+    .from("telegram_settings")
+    .upsert({ key, value, updated_at: new Date().toISOString() });
+  if (error) throw error;
+}
+
+export async function sendTelegramTest(
+  target: "owner" | "branch",
+  branchId?: string,
+  branchName?: string
+): Promise<void> {
+  const { data, error } = await supabase.functions.invoke("test-telegram", {
+    body: { target, branchId, branchName },
+  });
+  if (error) throw toError(error, "تعذر إرسال رسالة الاختبار");
+  if (data?.error) throw new Error(data.error);
+}
+
 // ---- Branches -------------------------------------------------------------
 
 export async function getBranches(): Promise<Branch[]> {
@@ -413,4 +445,7 @@ export const api = {
   createBranch,
   updateBranch,
   deleteBranch,
+  getTelegramSettings,
+  updateTelegramSetting,
+  sendTelegramTest,
 };
