@@ -892,7 +892,7 @@
       "file_type": "code",
       "norm_label": "menuhero()",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L46"
+      "source_location": "L44"
     },
     {
       "id": "src_routes_menu_menupage",
@@ -903,7 +903,7 @@
       "file_type": "code",
       "norm_label": "menupage()",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L113"
+      "source_location": "L111"
     },
     {
       "id": "src_routes_menu_sortproducts",
@@ -914,7 +914,7 @@
       "file_type": "code",
       "norm_label": "sortproducts()",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L80"
+      "source_location": "L78"
     },
     {
       "id": "src_routes_offer_id_offerdetailpage",
@@ -2541,7 +2541,7 @@
       "file_type": "code",
       "norm_label": "route",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L24"
+      "source_location": "L23"
     },
     {
       "id": "src_routes_offer_id",
@@ -10575,7 +10575,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L116",
+      "source_location": "L114",
       "weight": 1.0
     },
     {
@@ -10587,7 +10587,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L117",
+      "source_location": "L115",
       "weight": 1.0
     },
     {
@@ -10599,7 +10599,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L118",
+      "source_location": "L116",
       "weight": 1.0
     },
     {
@@ -10611,7 +10611,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L119",
+      "source_location": "L117",
       "weight": 1.0
     },
     {
@@ -10623,7 +10623,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L137",
+      "source_location": "L135",
       "weight": 1.0
     },
     {
@@ -10635,7 +10635,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L257",
+      "source_location": "L221",
       "weight": 1.0
     },
     {
@@ -10647,7 +10647,7 @@
       "confidence_score": 1.0,
       "context": "call",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L86",
+      "source_location": "L84",
       "weight": 1.0
     },
     {
@@ -22578,7 +22578,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L24",
+      "source_location": "L23",
       "weight": 1.0
     },
     {
@@ -22589,7 +22589,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L46",
+      "source_location": "L44",
       "weight": 1.0
     },
     {
@@ -22600,7 +22600,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L80",
+      "source_location": "L78",
       "weight": 1.0
     },
     {
@@ -24384,7 +24384,7 @@
       "confidence_score": 0.85,
       "context": "collection",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L43",
+      "source_location": "L41",
       "weight": 1.0
     },
     {
@@ -24396,7 +24396,7 @@
       "confidence_score": 0.85,
       "context": "collection",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L34",
+      "source_location": "L32",
       "weight": 1.0
     },
     {
@@ -24408,7 +24408,7 @@
       "confidence_score": 0.85,
       "context": "collection",
       "source_file": "src/routes/menu.tsx",
-      "source_location": "L39",
+      "source_location": "L37",
       "weight": 1.0
     },
     {

@@ -39,7 +39,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Edit2, Trash2, Plus, X, Star } from "lucide-react";
+import { Edit2, Trash2, Plus, X, Star, ArrowUp, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 import { useSiteSettings } from "@/hooks/useData";
 
@@ -67,6 +67,27 @@ function AdminProducts() {
 
   // Featured State
   const [selectedFeatured, setSelectedFeatured] = useState<string[]>([]);
+
+  // Category Products Order Map
+  const categoryOrderMap: Record<string, string[]> = useMemo(() => {
+    if (!settings?.category_product_order) return {};
+    try {
+      return JSON.parse(settings.category_product_order);
+    } catch {
+      return {};
+    }
+  }, [settings]);
+
+  const saveOrderMut = useMutation({
+    mutationFn: async (newMap: Record<string, string[]>) => {
+      await api.updateSiteSetting("category_product_order", JSON.stringify(newMap));
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["siteSettings"] });
+      refetchSettings();
+    },
+    onError: () => toast.error("تعذر حفظ الترتيب"),
+  });
 
   // Form State
   const [formData, setFormData] = useState({
@@ -123,8 +144,43 @@ function AdminProducts() {
       }
     });
 
+    // Sort products inside each category by categoryOrderMap
+    map.forEach((items, catId) => {
+      const orderList = categoryOrderMap[catId] || [];
+      if (orderList.length > 0) {
+        items.sort((a, b) => {
+          const idxA = orderList.indexOf(a.id);
+          const idxB = orderList.indexOf(b.id);
+          if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+          if (idxA !== -1) return -1;
+          if (idxB !== -1) return 1;
+          return 0;
+        });
+      }
+    });
+
     return { map, unassigned };
-  }, [categories, products]);
+  }, [categories, products, categoryOrderMap]);
+
+  const handleMoveProduct = (categoryId: string, index: number, direction: "up" | "down") => {
+    const currentProds = groupedProducts.map.get(categoryId) || [];
+    const newItems = [...currentProds];
+    const targetIndex = direction === "up" ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= newItems.length) return;
+
+    const temp = newItems[index];
+    newItems[index] = newItems[targetIndex];
+    newItems[targetIndex] = temp;
+
+    const newOrderIds = newItems.map((p) => p.id);
+    const updatedMap = {
+      ...categoryOrderMap,
+      [categoryId]: newOrderIds,
+    };
+
+    saveOrderMut.mutate(updatedMap);
+    toast.success("تم تحديث ترتيب الطبق");
+  };
 
   const handleOpenEdit = (prod: Product) => {
     setEditingProd(prod);
@@ -335,18 +391,24 @@ function AdminProducts() {
                     <Table>
                       <TableHeader>
                         <TableRow className="bg-alabaster/30">
+                          <TableHead className="text-right whitespace-nowrap w-20">الترتيب</TableHead>
                           <TableHead className="text-right whitespace-nowrap w-16">الصورة</TableHead>
                           <TableHead className="text-right whitespace-nowrap">الاسم</TableHead>
                           <TableHead className="text-right whitespace-nowrap">السعر</TableHead>
                           <TableHead className="text-right whitespace-nowrap">الحالة</TableHead>
-                          <TableHead className="text-right whitespace-nowrap w-24">إجراءات</TableHead>
+                          <TableHead className="text-right whitespace-nowrap w-36">إجراءات</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {catProds.map((prod: Product) => {
+                        {catProds.map((prod: Product, idx: number) => {
                           const hasSizes = prod.product_sizes && prod.product_sizes.length > 0;
                           return (
                             <TableRow key={prod.id}>
+                              <TableCell>
+                                <span className="inline-flex items-center justify-center min-w-7 h-7 px-2 rounded-lg bg-black/5 font-mono text-xs font-bold text-ink">
+                                  #{idx + 1}
+                                </span>
+                              </TableCell>
                               <TableCell>
                                 {prod.image_url ? (
                                   <img
@@ -380,12 +442,33 @@ function AdminProducts() {
                                 </span>
                               </TableCell>
                               <TableCell>
-                                <div className="flex gap-1.5">
+                                <div className="flex items-center gap-1">
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 hover:bg-black/5 disabled:opacity-30"
+                                    disabled={idx === 0 || saveOrderMut.isPending}
+                                    onClick={() => handleMoveProduct(cat.id, idx, "up")}
+                                    title="تقديم لأعلى"
+                                  >
+                                    <ArrowUp className="w-4 h-4 text-ink" />
+                                  </Button>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-8 w-8 hover:bg-black/5 disabled:opacity-30"
+                                    disabled={idx === catProds.length - 1 || saveOrderMut.isPending}
+                                    onClick={() => handleMoveProduct(cat.id, idx, "down")}
+                                    title="تأخير لأسفل"
+                                  >
+                                    <ArrowDown className="w-4 h-4 text-ink" />
+                                  </Button>
                                   <Button
                                     variant="outline"
                                     size="icon"
                                     className="h-8 w-8"
                                     onClick={() => handleOpenEdit(prod)}
+                                    title="تعديل"
                                   >
                                     <Edit2 className="w-3.5 h-3.5" />
                                   </Button>
@@ -394,6 +477,7 @@ function AdminProducts() {
                                     size="icon"
                                     className="h-8 w-8"
                                     onClick={() => handleOpenDelete(prod)}
+                                    title="حذف"
                                   >
                                     <Trash2 className="w-3.5 h-3.5" />
                                   </Button>

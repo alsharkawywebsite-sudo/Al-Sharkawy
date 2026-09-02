@@ -1091,6 +1091,11 @@
       "degree": 11
     },
     {
+      "id": "src_services_api_getcategories",
+      "label": "getCategories()",
+      "degree": 10
+    },
+    {
       "id": "src_hooks_usedata_usesitesettings",
       "label": "useSiteSettings()",
       "degree": 10
@@ -1098,11 +1103,6 @@
     {
       "id": "src_components_ui_button_button",
       "label": "Button",
-      "degree": 10
-    },
-    {
-      "id": "src_services_api_getcategories",
-      "label": "getCategories()",
       "degree": 10
     }
   ],
@@ -1152,15 +1152,15 @@
       "why": "connects across different repos/directories; semantically similar concepts with no structural link"
     },
     {
-      "source": "MenubarShortcut()",
+      "source": "ProductCardSkeleton()",
       "target": "cn()",
       "source_files": [
-        "src/components/ui/menubar.tsx",
+        "src/components/ProductCardSkeleton.tsx",
         "src/lib/utils.ts"
       ],
       "confidence": "EXTRACTED",
       "relation": "calls",
-      "why": "bridges separate communities; peripheral node `MenubarShortcut()` unexpectedly reaches hub `cn()`"
+      "why": "bridges separate communities; peripheral node `ProductCardSkeleton()` unexpectedly reaches hub `cn()`"
     }
   ],
   "tokens": {

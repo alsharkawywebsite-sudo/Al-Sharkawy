@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Search, Star, Heart, ShoppingCart } from "lucide-react";
 import { publicToast as toast } from "@/store/toast";
 import heroGrill from "@/assets/hero-grill.webp";
-import { useMenuCategories, useMenuItems } from "@/hooks/useData";
+import { useMenuCategories, useMenuItems, useSiteSettings } from "@/hooks/useData";
 import { getCategories, getMenuItems } from "@/services/api";
 import { useCart } from "@/store/cart";
 import { useFavorites } from "@/store/favorites";
@@ -77,6 +77,7 @@ function MenuPage() {
   const { category: activeCategoryId } = Route.useSearch();
   const { data: menuCategories, isLoading: isCatLoading, isError: isCatErr } = useMenuCategories();
   const { data: menuItems, isLoading: isItemsLoading, isError: isItemsErr } = useMenuItems();
+  const { data: settings } = useSiteSettings();
   const { addItem } = useCart();
   const { isFavorite, toggle } = useFavorites();
   const [query, setQuery] = useState("");
@@ -84,6 +85,15 @@ function MenuPage() {
 
   const categories = menuCategories ?? [];
   const items = menuItems ?? [];
+
+  const categoryOrderMap: Record<string, string[]> = useMemo(() => {
+    if (!settings?.category_product_order) return {};
+    try {
+      return JSON.parse(settings.category_product_order);
+    } catch {
+      return {};
+    }
+  }, [settings]);
 
   const filteredItems = useMemo(() => {
     const q = deferredQuery.trim().toLowerCase();
@@ -183,8 +193,20 @@ function MenuPage() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6">
               {categories.map((cat) => {
                 if (activeCategoryId && activeCategoryId !== cat.id) return null;
-                const catItems = filteredItems.filter((it) => it.category_id === cat.id);
-                if (catItems.length === 0) return null;
+                const rawCatItems = filteredItems.filter((it) => it.category_id === cat.id);
+                if (rawCatItems.length === 0) return null;
+
+                const orderList = categoryOrderMap[cat.id] || [];
+                const catItems = orderList.length === 0
+                  ? rawCatItems
+                  : [...rawCatItems].sort((a, b) => {
+                      const idxA = orderList.indexOf(a.id);
+                      const idxB = orderList.indexOf(b.id);
+                      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+                      if (idxA !== -1) return -1;
+                      if (idxB !== -1) return 1;
+                      return 0;
+                    });
 
                 return (
                   <section key={cat.id} id={`cat-${cat.slug}`} className="mb-12 scroll-mt-32">

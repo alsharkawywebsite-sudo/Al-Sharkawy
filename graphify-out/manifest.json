@@ -1,7 +1,7 @@
 {
   ".wrangler/deploy/config.json": {
-    "mtime": 1788314930.522643,
-    "seen": 1788314941.381202,
+    "mtime": 1788315778.460962,
+    "seen": 1788315797.7853036,
     "ast_hash": "5f1dbab534773e1ff0b9dc7737990b3e",
     "semantic_hash": "5f1dbab534773e1ff0b9dc7737990b3e"
   },
@@ -438,10 +438,10 @@
     "semantic_hash": "aeacff73e4185464b7e0b9ad95b311f2"
   },
   "src/routes/admin/products.tsx": {
-    "mtime": 1788314907.703852,
-    "seen": 1788314941.3844438,
-    "ast_hash": "30d8269ef3bfbe29e5cdde30fa9d3d44",
-    "semantic_hash": "30d8269ef3bfbe29e5cdde30fa9d3d44"
+    "mtime": 1788315756.8181577,
+    "seen": 1788315797.7885427,
+    "ast_hash": "2b5cde21e2957bb05fed0540530ed785",
+    "semantic_hash": "2b5cde21e2957bb05fed0540530ed785"
   },
   "src/routes/admin/settings.tsx": {
     "mtime": 1787797650.9188695,
@@ -480,10 +480,10 @@
     "semantic_hash": "122c822209a64d1e8694eff5f461d025"
   },
   "src/routes/menu.tsx": {
-    "mtime": 1788314779.3640275,
-    "seen": 1788314941.3846958,
-    "ast_hash": "13b60295c26bdae13a415e1de13face2",
-    "semantic_hash": "13b60295c26bdae13a415e1de13face2"
+    "mtime": 1788315642.4351916,
+    "seen": 1788315797.788796,
+    "ast_hash": "209a9dc50cca5ca069e5deb0e3f5a0d7",
+    "semantic_hash": "209a9dc50cca5ca069e5deb0e3f5a0d7"
   },
   "src/routes/offer.$id.tsx": {
     "mtime": 1787798999.9460583,
@@ -516,10 +516,10 @@
     "semantic_hash": "c7bbc49bb70e318af618d92775ee0f27"
   },
   "src/services/api.ts": {
-    "mtime": 1788314326.554142,
-    "seen": 1788314536.325533,
-    "ast_hash": "b7ff4c2b307664cfb566172453eb1f22",
-    "semantic_hash": "b7ff4c2b307664cfb566172453eb1f22"
+    "mtime": 1788315128.3118412,
+    "seen": 1788315797.7890015,
+    "ast_hash": "5453180ea9044819f93613615b7ec799",
+    "semantic_hash": "5453180ea9044819f93613615b7ec799"
   },
   "src/start.ts": {
     "mtime": 1787797650.9218695,
@@ -658,11 +658,5 @@
     "seen": 1788313908.7507148,
     "ast_hash": "6dd61f95ca91451b8ecbdaf4fdcc3334",
     "semantic_hash": "6dd61f95ca91451b8ecbdaf4fdcc3334"
-  },
-  "supabase/migrations/20260902000000_products_sort_order.sql": {
-    "mtime": 1788314294.9464276,
-    "seen": 1788314536.3259966,
-    "ast_hash": "f9a7e0da43ad50c201f515bd7c0a067d",
-    "semantic_hash": "f9a7e0da43ad50c201f515bd7c0a067d"
   }
 }
