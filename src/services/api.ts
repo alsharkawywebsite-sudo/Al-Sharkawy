@@ -365,8 +365,15 @@ export async function sendTelegramTest(
   branchId?: string,
   branchName?: string
 ): Promise<void> {
+  const { data: { session } } = await supabase.auth.getSession();
+  const headers: Record<string, string> = {};
+  if (session?.access_token) {
+    headers.Authorization = `Bearer ${session.access_token}`;
+  }
+
   const { data, error } = await supabase.functions.invoke("test-telegram", {
     body: { target, branchId, branchName },
+    headers,
   });
   if (error) throw toError(error, "تعذر إرسال رسالة الاختبار");
   if (data?.error) throw new Error(data.error);
