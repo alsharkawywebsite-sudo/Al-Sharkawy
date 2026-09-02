@@ -26,8 +26,8 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const adminClient = createClient(supabaseUrl, supabaseServiceKey);
 
-    const token = authHeader.replace(/^Bearer\s+/i, "").trim();
-    const { data: { user }, error: userError } = await adminClient.auth.getUser(token);
+    const jwtToken = authHeader.replace(/^Bearer\s+/i, "").trim();
+    const { data: { user }, error: userError } = await adminClient.auth.getUser(jwtToken);
     if (userError || !user) {
       return new Response(JSON.stringify({ error: "Unauthorized: Invalid or expired token" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -62,8 +62,8 @@ serve(async (req) => {
       if (row.value !== null) settings[row.key] = row.value;
     }
 
-    const token = settings["telegram_bot_token"] || Deno.env.get("TELEGRAM_BOT_TOKEN");
-    if (!token) {
+    const botToken = settings["telegram_bot_token"] || Deno.env.get("TELEGRAM_BOT_TOKEN");
+    if (!botToken) {
       return new Response(JSON.stringify({ error: "Bot Token غير محفوظ. أضفه في إعدادات Telegram أولًا." }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 400,
@@ -96,7 +96,7 @@ serve(async (req) => {
       `⏰ ${new Date().toLocaleString("ar-EG", { timeZone: "Africa/Cairo" })}`,
     ].join("\n");
 
-    const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
