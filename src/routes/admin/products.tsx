@@ -281,8 +281,8 @@ function AdminProducts() {
     if (selectedFeatured.includes(id)) {
       setSelectedFeatured(selectedFeatured.filter((pid) => pid !== id));
     } else {
-      if (selectedFeatured.length >= 4) {
-        toast.error("يمكنك اختيار 4 منتجات كحد أقصى");
+      if (selectedFeatured.length >= 8) {
+        toast.error("يمكنك اختيار 8 منتجات كحد أقصى");
         return;
       }
       setSelectedFeatured([...selectedFeatured, id]);
@@ -814,8 +814,8 @@ function AdminProducts() {
           </DialogHeader>
           <div className="py-4 flex-1 overflow-y-auto">
             <p className="text-sm text-gray-500 mb-4">
-              اختر 4 منتجات بحد أقصى لعرضها في الصفحة الرئيسية.
-              (تم اختيار {selectedFeatured.length} من 4)
+              اختر حتى 8 منتجات لعرضها في الصفحة الرئيسية.
+              (تم اختيار {selectedFeatured.length} من 8)
             </p>
             <div className="space-y-2">
               {products

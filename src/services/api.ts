@@ -130,7 +130,7 @@ export async function getFeaturedProducts(): Promise<Product[]> {
     .select(PUBLIC_PRODUCT_SELECT)
     .eq("is_active", true)
     .order("created_at", { ascending: false })
-    .limit(4);
+    .limit(8);
   if (error) throw error;
   return (data ?? []) as Product[];
 }

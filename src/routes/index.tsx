@@ -218,10 +218,10 @@ function FeaturedSection() {
 
         {isLoading ? (
           <div className="mt-6">
-            <ProductCardSkeletonGrid count={4} />
+            <ProductCardSkeletonGrid count={8} />
           </div>
         ) : (
-        <div className="mt-6 grid grid-cols-2 gap-2.5 sm:gap-5 md:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 gap-2.5 sm:gap-5 sm:grid-cols-3 md:grid-cols-4">
           {safeFeatured.map((p) => {
             const size = p.product_sizes?.[0];
             const { original, final, hasDiscount } = getProductDisplayPrice(p, size);
