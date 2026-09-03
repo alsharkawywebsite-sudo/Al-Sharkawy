@@ -243,14 +243,10 @@ export async function updateOffer(id: string, updates: Partial<Offer>): Promise<
 }
 
 export async function deleteOffer(id: string): Promise<true> {
+  // The DB trigger `trg_before_delete_offer` automatically cleans up order_items
+  // before the offer row is deleted, so no extra steps are needed here.
   const { error } = await supabase.from("offers").delete().eq("id", id);
-  if (error) {
-    // FK RESTRICT violation → offer is linked to existing order_items
-    if (error.code === "23503") {
-      throw new Error("لا يمكن حذف هذا العرض لأنه مرتبط بطلبات موجودة. يمكنك إخفاؤه بدلاً من حذفه.");
-    }
-    throw error;
-  }
+  if (error) throw error;
   return true;
 }
 
