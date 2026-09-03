@@ -244,7 +244,13 @@ export async function updateOffer(id: string, updates: Partial<Offer>): Promise<
 
 export async function deleteOffer(id: string): Promise<true> {
   const { error } = await supabase.from("offers").delete().eq("id", id);
-  if (error) throw error;
+  if (error) {
+    // FK RESTRICT violation → offer is linked to existing order_items
+    if (error.code === "23503") {
+      throw new Error("لا يمكن حذف هذا العرض لأنه مرتبط بطلبات موجودة. يمكنك إخفاؤه بدلاً من حذفه.");
+    }
+    throw error;
+  }
   return true;
 }
 
